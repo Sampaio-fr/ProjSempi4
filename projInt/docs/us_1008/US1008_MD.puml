@@ -1,0 +1,36 @@
+@startuml
+rectangle "<<Aggregate>> Student" #hotpink{
+
+    entity Student<<Entity>><<Root>>
+    object MechanographicNumber<<Value Object>>
+    Student "1" -->"1"MechanographicNumber: has a
+}
+
+rectangle "<<Aggregate>> Enrollment" #slategrey {
+
+    entity Enrollment<<Entity>>
+    object EnrollmentState<<Value Object>>
+
+     Enrollment"1"-->"1"EnrollmentState : has an
+}
+rectangle "<<Aggregate>> Course" #lightskyblue{
+
+    entity Course<<Root>><<Entity>>
+    object Id<<Value Object>><<Identify>>
+    object CourseState<<Value Object>>
+    object CourseEnrollmentState <<Value Object>>
+    object Edition <<Value Object>>
+    object CourseDescription <<Value Object>>
+    object CourseTitle <<Value Object>>
+
+    Course"1" --> "1"CourseTitle: has a
+    Course"1" --> "1"Id : has a
+    Course"1" --> "1"CourseDescription : has a
+    Course"1"-->"1"CourseState : has a
+    Course"1"-->"1"CourseEnrollmentState: has an
+    Course"1" -->"1"Edition : has a
+    Course"1" -->"1"ChargeTeacher: needs a
+}
+Student "1"-->"1..*" Enrollment: can
+Enrollment "1"-->"1" Course : is related to a >
+@enduml

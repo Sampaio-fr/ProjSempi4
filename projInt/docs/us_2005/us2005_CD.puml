@@ -1,0 +1,47 @@
+@startuml
+
+package presentation {
+  class StudentGradesUI {
+    + doShow(): boolean
+     + headline(): String
+  }
+}
+
+package application {
+  class StudentGradeController {
+    + listStudentGrades(): List<Grade>
+  }
+}
+
+package service {
+  class StudentManagementService {
+    + listStudentGrades(): List<Grade>
+  }
+}
+
+package persistence {
+  class PersistenceContext {
+    + repositories(): RepositoryFactory
+  }
+
+  interface RepositoryFactory {
+    + studentRepository(): StudentRepository
+  }
+
+  interface StudentRepository {
+    + findStudentByEmail(Student: student): Student
+  }
+  JpaStudentRepository -up-|> StudentRepository
+  class JpaStudentRepository {
+      + findStudentByEmail(Student: student): Student
+    }
+
+}
+
+
+StudentGradesUI --> StudentGradeController
+StudentGradeController --> StudentManagementService
+StudentManagementService --> PersistenceContext
+PersistenceContext -->RepositoryFactory
+RepositoryFactory --> StudentRepository
+@enduml

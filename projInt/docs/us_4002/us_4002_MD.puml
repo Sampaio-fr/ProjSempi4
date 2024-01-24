@@ -1,0 +1,45 @@
+@startuml
+
+rectangle "<<Aggregate>> User" #bbaabb{
+
+    entity User<<Root>><<Entity>><<Strategy>>
+    object BirthDate<<Value Object>>
+    object TaxNumber<<Value Object>><<Id>>
+    object FullName<<Value Object>>
+    object ShortName<<Value Object>>
+
+    User"1" -up-> "1"BirthDate : has a
+    User"1" -left-> "1"TaxNumber : has a
+    User"1" --> "1" FullName : has a
+    User "1" -up->"1"ShortName : has a
+}
+
+rectangle "<<Aggregate>> Meeting" #limegreen{
+
+    entity Meeting<<Root>><<Entity>>
+    object MeetingState<<Value Object>>
+    Meeting "1"-->"1"MeetingState: has a
+}
+
+rectangle "<<Aggregate>> Notification" #lightpink{
+
+    entity Notification<<Root>><<Entity>>
+    object TypeOfNotification<<Value Object>>
+    object NotificationDescription<<Value Object>>
+    Notification "1"-->"1" TypeOfNotification: has a
+    Notification "1"--->"1" NotificationDescription : has a
+}
+
+rectangle "<<Aggregate>> Invitation" #wheat{
+    entity Invitation<<Entity>><<Root>>
+    object InvitationState<<Value Object>>
+    Meeting"1"-->"1"Invitation
+
+    Invitation "1"-->"1" InvitationState: has a
+    Invitation "1...*"-->"1" User: is sent to
+    Invitation "1"-->"1" Notification: generates
+}
+
+
+
+@enduml

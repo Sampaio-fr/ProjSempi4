@@ -1,0 +1,46 @@
+@startuml
+
+ListMeetingParticipantsUI .down.> ListMeetingParticipantsController
+
+ListMeetingParticipantsController --> MeetingManagementService
+
+MeetingManagementService --> PersistenceContext
+ListMeetingParticipantsController --> PersistenceContext
+PersistenceContext --> RepositoryFactory
+RepositoryFactory --> MeetingRepository
+RepositoryFactory --> ParticipantRepository
+
+class ListMeetingParticipantsUI{
++ doShow()
+}
+
+class ListMeetingParticipantsController{
++ userMeetings()
+}
+
+class MeetingManagementService{
++ findOwnerMeeting()
++ meetingOwnerList()
+}
+
+class PersistenceContext{
++ repositories()
+}
+
+class RepositoryFactory{
++ courseRepository()
+}
+
+class MeetingRepository{
+    + findAll()
+    + meetingOwnerList()
+    + save()
+ }
+
+ class ParticipantRepository{
+    +meetingParticipants()
+ }
+
+
+
+@enduml

@@ -1,0 +1,110 @@
+@startuml
+
+autonumber
+
+actor Student as usr
+participant ":TakeFormativeExamUI" as ui
+participant "TakeFormativeExamController" as ctr
+
+participant "StudentManagementService" as stuService
+participant "FormativeExamManagemantService" as serv
+
+participant ":PersistenceContext" as pc
+participant ":RepositoryFactory" as rf
+
+database ":StudentRepository" as sr
+database ":ExamFormativeRepository" as formativeRepo
+
+participant ":Enrollment" as er
+participant ":Course" as cr
+participant ":Student" as st
+participant ":ExamFormative" as ex
+
+participant "FormativeExamParser" as examParser
+participant "FormativeExamEvaluationListener" as eel
+
+participant "DisplayFormativeExam" as display
+
+usr -> ui : show()
+
+activate ui
+ui -> ui : doShow()
+ui -> ctr : findFormativeExams()
+activate ctr
+ctr -> stuService : findStudentByEmail()t
+activate stuService
+
+stuService -> pc : repositories()
+
+activate pc
+pc -> rf : studentRepository()
+deactivate pc
+
+stuService -> sr: findStudentByEmail()
+activate sr
+sr --> stuService:
+
+deactivate serv
+deactivate stuService
+deactivate sr
+
+ctr -> st : Student.findEnrollments()
+activate st
+st --> ctr : Student Enrollments
+deactivate st
+
+ctr -> er : Enrollment.enrollState()
+activate er
+er --> ctr :
+deactivate er
+
+ctr -> er : Enrollment.course()
+activate er
+er --> ctr :
+deactivate er
+
+ctr -> serv: findFormativeExams()
+activate serv
+serv -> formativeRepo: examsByCourse()
+
+activate formativeRepo
+formativeRepo --> serv:
+deactivate formativeRepo
+serv--> ctr:
+deactivate serv
+ctr --> ui : All Active Formative Exams
+deactivate ctr
+
+ui --> usr : Show List
+usr -> ui : Chooses Formative Exam
+
+ui -> ctr : doFormativeExamEvaluation(selectedExam)
+activate ctr
+ctr -> ex : examStruct()
+activate ex
+ex --> ctr :
+deactivate ex
+
+ctr -> examParser: start()
+activate examParser
+examParser --> ctr :
+deactivate examParser
+
+ctr -> eel : create
+activate eel
+eel --> ctr:
+deactivate eel
+
+ctr -> ctr: showEvaluationResults
+
+ctr -> display:showEvaluationResults
+activate display
+display --> ctr:
+deactivate display
+
+ctr --> ui : Formative Exam Evaluation Details
+deactivate ctr
+ui --> usr : Shows Evaluation Details
+deactivate ui
+
+@enduml

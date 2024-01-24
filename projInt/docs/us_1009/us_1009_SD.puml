@@ -1,0 +1,210 @@
+@startuml
+'http://plantuml.com/skinparam.html
+autonumber
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor Student as Actor
+participant ":EnrollmentApprovalUI" as UI <<presentation>>
+participant ":EnrollmentApprovalController" as Controller <<application>>
+participant ":EnrollmentApprovalService" as Service <<application>>
+participant ":EnrollmentManagementService" as Service2 <<application>>
+participant "EnrollmentApprovalBuilder:\nEnrollmentApprovalBuilder" as EnrollmentApprovalBuilder <<builder>>
+participant "course:\nCourse" as course <<domain>>
+participant "student: Student" as student <<domain>>
+participant ":PersistenceContext" as Persistence <<persistence>>
+participant ":RepositoryFactory" as RepositoryFactory <<factory>>
+participant "EnrollmentApproval:\nEnrollmentApproval" as EnrollmentApproval <<domain>>
+database ":EnrollmentApprovalRepository" as EnrollmentApprovalRepository <<repository>>
+database ":EnrollmentRepository" as EnrollmentRepository <<repository>>
+database ":StudentRepository" as StudentRepository <<repository>>
+database ":CourseRepository" as CourseRepository <<repository>>
+database ":JPAEnrollmentApprovalRepository" as JPAEnrollmentApprovalRepository <<repository>>
+database ":JPAEnrollmentRepository" as JPAEnrollmentRepository <<repository>>
+database ":JPAStudentRepository" as JPAStudentRepository <<repository>>
+database ":JPACourseRepository" as JPACourseRepository <<repository>>
+
+
+
+
+activate Actor
+Actor -> UI: ask to approve/reject enrollment application in a course
+activate UI
+
+    UI --> Controller: create()
+    activate Controller
+    deactivate Controller
+    UI -> Controller: findEnrollmentApplication()
+    activate Controller
+
+
+
+    Controller -> Service: create()
+    activate Service
+    Service --> Persistence: repositories()
+
+    activate Persistence
+    Persistence --> RepositoryFactory: getRepositoryFactory()
+    activate RepositoryFactory
+    RepositoryFactory --> CourseRepository: courseRepository()
+
+    activate CourseRepository
+    deactivate CourseRepository
+    RepositoryFactory --> EnrollmentApprovalRepository: enrollmentApprovalRepository()
+    activate EnrollmentApprovalRepository
+    deactivate EnrollmentApprovalRepository
+    RepositoryFactory --> EnrollmentRepository: enrollmentRepository()
+    activate EnrollmentRepository
+    deactivate EnrollmentRepository
+    RepositoryFactory --> StudentRepository: studentRepository()
+    activate StudentRepository
+    deactivate StudentRepository
+    deactivate RepositoryFactory
+    deactivate Persistence
+    deactivate Service
+
+
+    Controller -> Service: findEnrollmentApplicationToEvaluate()
+    activate Service
+
+
+    Service -> EnrollmentApprovalRepository: findEnrollmentApplicationToEvaluate()
+   activate EnrollmentApprovalRepository
+    EnrollmentApprovalRepository -> JPAEnrollmentApprovalRepository: findEnrollmentApplicationToEvaluate()
+    activate JPAEnrollmentApprovalRepository
+    deactivate JPAEnrollmentApprovalRepository
+
+    deactivate EnrollmentApprovalRepository
+
+    note left
+    find enrollment application in
+    state WAITING
+    end note
+
+    Service --> Controller: List<EnrollmentApplication>
+    deactivate Service
+
+    Controller --> UI: List<EnrollmentApplication>
+    deactivate Controller
+
+    UI --> Actor: shows list of enrollment applications and asks to select one
+
+    deactivate UI
+
+    Actor -> UI: selects enrollment application
+    activate UI
+
+    UI --> Actor: asks to approve/reject enrollment application and requests data
+    deactivate UI
+
+    Actor -> UI: aprove/reject enrollment application and types requested data
+    activate UI
+
+    UI -> Controller: createEnrollmentApproval(enrollment, answer, explanation)
+    activate Controller
+
+    Controller --> Service2: create()
+    activate Service2
+    deactivate Service2
+
+
+
+
+
+
+
+
+
+    Controller -> Service2: updateEnrollment(enrollment,answer)
+    activate Service2
+        Service2 --> Persistence: repositories()
+        activate Persistence
+        Persistence --> RepositoryFactory: getRepositoryFactory()
+        activate RepositoryFactory
+        RepositoryFactory --> EnrollmentRepository: enrollmentRepository()
+        activate EnrollmentRepository
+        deactivate EnrollmentRepository
+        deactivate RepositoryFactory
+        deactivate Persistence
+        Service2 -> EnrollmentRepository: save(enrollment)
+        activate EnrollmentRepository
+        EnrollmentRepository -> JPAEnrollmentRepository: save(enrollment)
+activate JPAEnrollmentRepository
+deactivate JPAEnrollmentRepository
+deactivate EnrollmentRepository
+    deactivate Service2
+    deactivate EnrollmentRepository
+    Controller --> EnrollmentApprovalBuilder: createEnrollmentApproval(explanation, enrollment1, answer)
+    activate EnrollmentApprovalBuilder
+
+    EnrollmentApprovalBuilder -> EnrollmentApproval : createEnrollmentApproval(explanation, enrollment1, answer)
+
+    activate EnrollmentApproval
+    deactivate EnrollmentApproval
+    deactivate EnrollmentApprovalBuilder
+
+        alt [Approved]
+        Controller -> Service  : saveEnrollmentApproved(enrollmentApproval)
+        activate Service
+
+        Service -> student : addEnrollment(enrollment))
+        activate student
+        deactivate student
+
+        Service -> course : addEnrollment(enrollment))
+        activate course
+        deactivate course
+
+         Service -> StudentRepository : save(student)
+         activate StudentRepository
+         StudentRepository -> JPAStudentRepository : save(student)
+         activate JPAStudentRepository
+         deactivate JPAStudentRepository
+         deactivate StudentRepository
+
+         Service -> CourseRepository : save(course)
+         activate CourseRepository
+         CourseRepository -> JPACourseRepository : save(course)
+         activate JPACourseRepository
+         deactivate JPACourseRepository
+         deactivate CourseRepository
+        else [Denied]
+        Controller -> Service  : saveEnrollmentDenied(enrollmentApproval)
+
+        end
+
+
+Service -> EnrollmentApprovalRepository : save(enrollmentApproval)
+    activate EnrollmentApprovalRepository
+    EnrollmentApprovalRepository -> JPAEnrollmentApprovalRepository : save(enrollmentApproval)
+    activate JPAEnrollmentApprovalRepository
+    deactivate JPAEnrollmentApprovalRepository
+    deactivate EnrollmentApprovalRepository
+    deactivate Service
+
+    deactivate Persistence
+
+    Controller -> RepositoryFactory: enrollmentApplicationEvaluationRepository = enrollmentApplicationEvaluations()
+    activate RepositoryFactory
+    deactivate RepositoryFactory
+
+    Controller -> EnrollmentApprovalRepository: save(enrollmentApplicationEvaluation)
+    activate EnrollmentApprovalRepository
+     EnrollmentApprovalRepository ->JPAEnrollmentApprovalRepository: save(enrollmentApplicationEvaluation)
+    activate JPAEnrollmentApprovalRepository
+    deactivate JPAEnrollmentApprovalRepository
+    deactivate EnrollmentApprovalRepository
+    deactivate Controller
+
+
+
+    deactivate Controller
+    UI --> Actor: informs operation sucess
+    deactivate UI
+    deactivate Actor
+
+
+@enduml

@@ -1,0 +1,108 @@
+@startuml
+
+skinparam defaultFontName FG Virgil
+
+class Teacher {
+    -id: int
+    -name: string
+    -email: string
+}
+
+class CreateQuestionUI {
+    +listCourses(): List<Course>
+    +createQuestion(selectedCourse: Course, path: string): void
+    +informOperationResult(success: boolean): void
+}
+
+class CreateQuestionController {
+    -questionManagementService: QuestionManagementService
+    +listCourses(): List<Course>
+    +validateQuestion(path: string): boolean
+    +createQuestion(selectedCourse: Course, path: string): void
+    +saveQuestion(question: Question): void
+}
+
+class QuestionManagementService {
+    -questionRepository: QuestionRepository
+    -teacherRepository: TeacherRepository
+    -courseRepository: CourseRepository
+    +listCourses(): List<Course>
+    +validateQuestion(path: string): boolean
+    +readFileToString(path: string): string
+    +saveQuestion(question: Question): void
+    +createQuestion(path: string, selectedCourse: Course): void
+}
+
+class AuthzRegistry {
+    +authorizationService(): void
+}
+
+class Question {
+    -id: int
+    -type: QuestionType
+    -text: string
+    -course: Course
+}
+
+class Course {
+    -id: int
+    -name: string
+}
+
+class PersistenceContext {
+    +getRepositoryFactory(): RepositoryFactory
+}
+
+Interface RepositoryFactory {
+    +courseRepository(): CourseRepository
+    +questionRepository(): QuestionRepository
+    +teacherRepository(): TeacherRepository
+}
+
+Interface QuestionRepository {
+    +save(question: Question): void
+}
+
+Interface TeacherRepository {
+    +findTeacherByEmail(email: string): Teacher
+}
+
+Interface CourseRepository {
+    +coursesByTeachers(teacher: Teacher): List<Course>
+}
+
+class JPAQuestionRepository {
+    +save(question: Question): void
+}
+
+class JPATeacherRepository {
+    +findTeacherByEmail(email: string): Teacher
+}
+
+class JPACourseRepository {
+    +coursesByTeachers(teacher: Teacher): List<Course>
+}
+
+CreateQuestionUI ..> CreateQuestionController
+CreateQuestionController --> QuestionManagementService
+
+QuestionManagementService --> AuthzRegistry
+QuestionManagementService --> PersistenceContext
+
+QuestionManagementService --> Question
+QuestionManagementService --> Teacher
+QuestionManagementService --> Course
+
+PersistenceContext --> RepositoryFactory
+
+RepositoryFactory --> CourseRepository
+RepositoryFactory --> QuestionRepository
+RepositoryFactory --> TeacherRepository
+
+CourseRepository --> JPACourseRepository
+QuestionRepository --> JPAQuestionRepository
+TeacherRepository --> JPATeacherRepository
+
+
+
+@enduml

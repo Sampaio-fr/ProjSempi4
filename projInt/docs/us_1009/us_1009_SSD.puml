@@ -1,0 +1,24 @@
+@startuml
+autonumber
+
+actor "Manager" as Manager
+
+activate Manager
+Manager -> ":System" : ask to approve/reject enrollment application in a course
+activate ":System"
+":System" --> Manager : shows list of enrollment applications and asks to select one
+deactivate ":System"
+Manager -> ":System" : selects enrollment application
+activate ":System"
+
+":System" -->Manager : asks to approve/reject enrollment application and requests data
+deactivate ":System"
+
+Manager -> ":System" : aprove/reject enrollment application and types requested data
+activate ":System"
+
+":System" --> Manager : informs operation success
+deactivate ":System"
+deactivate Manager
+
+@enduml

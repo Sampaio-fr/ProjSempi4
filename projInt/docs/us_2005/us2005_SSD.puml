@@ -1,0 +1,12 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor Student as user
+participant System as sys
+
+autonumber
+
+user -> sys: Requests listing of grades
+sys --> user: Lists of grades
+
+@enduml

@@ -1,0 +1,120 @@
+@startuml
+
+
+skinparam defaultFontName FG Virgil
+
+class Teacher {
+    -id: int
+    -name: string
+    -email: string
+}
+
+class CreateFormativeExamUI {
+   +doShow(): boolean
+   +headline():String
+}
+
+class CreateFormativeExamController {
+    -examManagementService: FormativeExamManagemantService
+    +listCourses(): Iterable<Course>
+    +validateFormativeExam(path: string): void
+    +createQuestionnaireTextFile(examName: String): String
+    +writeQuestionnaireTextFile(info: string, filePath: String): void
+    +selectedQuestion(questionType:QuestionType,selectedQuestion:Set<Question>):Question
+    +saveFormativeExam(examTitle: String, examStructure: String,course:Course): void
+}
+
+class FormativeExamManagemantService {
+    -examFormativeRepository: ExamFormativeRepository
+    -teacherRepository: TeacherRepository
+    -courseRepository: CourseRepository
+    -questionRepository: QuestionRepository
+    +listCourses(): Iterable<Course>
+    +getRandomQuestionByType(questionType:QuestionType,selectedQuestion:Set<Question>):Question
+    +validateExam(path: string): void
+    +saveExamFormative(examTitle:String, examStructure: String, selectCourse:Course): ExamFormative
+    -createFormativeExam(examTitle:String,examStructure: String, selectedCourse: Course):ExamFormative
+}
+
+ class AuthorizationService {
+      + ensureAuthenticatedUserHasAnyOf(Roles:role): void
+      + session(): String
+    }
+
+class ExamFormative {
+    -id: int
+    -text: string
+    -course: Course
+    -teacher: Teacher
+}
+
+class Course {
+    -id: int
+    -name: string
+}
+
+Interface PersistenceContext {
+    +getRepositoryFactory(): RepositoryFactory
+}
+
+Interface RepositoryFactory {
+    +courseRepository(): CourseRepository
+    +examFormativeRepository(): ExamFormativeRepository
+    +teacherRepository(): TeacherRepository
+    +questionRepository(): QuestionRepository
+}
+
+Interface ExamFormativeRepository {
+    +save(examF: ExamFormative): void
+}
+
+Interface TeacherRepository {
+    +findTeacherByEmail(email: string): Teacher
+}
+
+Interface CourseRepository {
+    +save(course: Course): void
+}
+
+class JPAExamFormativeRepository {
+    +save(examF: ExamFormative): void
+}
+
+Interface QuestionRepository {
+    +listQuestionsByType(questionType:QuestionType):List<Question>
+}
+
+class JPAQuestionRepository{
+     +listQuestionsByType(questionType:QuestionType):List<Question>
+}
+
+
+class JPATeacherRepository {
+    +findTeacherByEmail(email: string): Teacher
+}
+
+class JPACourseRepository {
+    +save(course: Course): void
+}
+
+CreateFormativeExamUI ..> CreateFormativeExamController
+CreateFormativeExamController --> FormativeExamManagemantService
+
+FormativeExamManagemantService --> AuthorizationService
+FormativeExamManagemantService --> PersistenceContext
+
+FormativeExamManagemantService --> Course
+FormativeExamManagemantService --> ExamFormative
+FormativeExamManagemantService --> Teacher
+PersistenceContext --> RepositoryFactory
+
+RepositoryFactory --> ExamFormativeRepository
+RepositoryFactory --> TeacherRepository
+RepositoryFactory --> CourseRepository
+RepositoryFactory --> QuestionRepository
+
+QuestionRepository <|-- JPAQuestionRepository
+ExamFormativeRepository <|-- JPAExamFormativeRepository
+TeacherRepository <|-- JPATeacherRepository
+CourseRepository <|-- JPACourseRepository
+@enduml

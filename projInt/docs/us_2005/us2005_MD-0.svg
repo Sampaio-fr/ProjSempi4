@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="277px" preserveAspectRatio="none" style="width:755px;height:277px;background:#FFFFFF;" version="1.1" viewBox="0 0 755 277" width="755px" zoomAndPan="magnify"><defs/><g><!--MD5=[b645c19d3073beb2fc9f71ee976e8626]
+cluster <<Aggregate>> Student--><g id="cluster_&lt;&lt;Aggregate&gt;&gt; Student"><rect fill="#FF69B4" height="264" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;" width="200" x="7" y="7"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="164" x="25" y="24.1074">&lt;&lt;Aggregate&gt;&gt; Student</text></g><!--MD5=[6f04b9b8f17ad43d3e21063898720276]
+cluster <<Aggregate>> Grade--><g id="cluster_&lt;&lt;Aggregate&gt;&gt; Grade"><rect fill="#FFFF00" height="264" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;" width="518" x="231" y="7"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="152" x="414" y="24.1074">&lt;&lt;Aggregate&gt;&gt; Grade</text></g><!--MD5=[d6181cb537bdc20c0a3007a98a56832d]
+class Student--><g id="elem_Student"><rect codeLine="6" fill="#F1F1F1" height="76.543" id="Student" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="81" x="98.5" y="44"/><ellipse cx="113.5" cy="74.2715" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M112.3594,75.0684 L112.3594,77.5684 L116.6875,77.5684 L116.6875,76.6465 Q116.6875,76.0371 116.9219,75.7715 Q117.1719,75.5059 117.5469,75.5059 Q117.9219,75.5059 118.1563,75.7715 Q118.3906,76.0371 118.3906,76.6465 L118.3906,79.2715 L110.3906,79.2715 Q109.7656,79.2715 109.5,79.0371 Q109.25,78.8027 109.25,78.4121 Q109.25,78.0371 109.5156,77.8027 Q109.7813,77.5684 110.3906,77.5684 L110.6563,77.5684 L110.6563,70.9121 L110.3906,70.9121 Q109.7656,70.9121 109.5,70.6777 Q109.25,70.4434 109.25,70.0527 Q109.25,69.6777 109.5,69.4434 Q109.7656,69.209 110.3906,69.209 L118.0156,69.209 L118.0156,71.8027 Q118.0156,72.4121 117.7813,72.6777 Q117.5625,72.9277 117.1719,72.9277 Q116.7969,72.9277 116.5625,72.6777 Q116.3281,72.4121 116.3281,71.8027 L116.3281,70.9121 L112.3594,70.9121 L112.3594,73.3652 L113.8438,73.3652 Q113.8438,72.709 113.9688,72.5215 Q114.2344,72.1152 114.7031,72.1152 Q115.0781,72.1152 115.3125,72.3809 Q115.5469,72.6309 115.5469,73.2402 L115.5469,75.209 Q115.5469,75.7559 115.4219,75.9434 Q115.1563,76.334 114.7031,76.334 Q114.2344,76.334 113.9688,75.9277 Q113.8438,75.7402 113.8438,75.0684 L112.3594,75.0684 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="44" x="130" y="61.9492">«Entity»</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="40" x="132" y="77.9102">«Root»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="49" x="127.5" y="96.0293">Student</text><line style="stroke:#181818;stroke-width:0.5;" x1="99.5" x2="178.5" y1="104.543" y2="104.543"/><line style="stroke:#181818;stroke-width:0.5;" x1="99.5" x2="178.5" y1="112.543" y2="112.543"/></g><g id="elem_MechanographicNumber"><rect fill="#F1F1F1" height="54.582" style="stroke:#181818;stroke-width:0.5;" width="168" x="23" y="200"/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="85" x="64.5" y="212.9492">«Value Object»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="154" x="30" y="233.0684">MechanographicNumber</text><line style="stroke:#181818;stroke-width:0.5;" x1="24" x2="190" y1="238.582" y2="238.582"/></g><!--MD5=[64e7a81d370390ac66d73872e4f36773]
+class Grade--><g id="elem_Grade"><rect codeLine="14" fill="#F1F1F1" height="76.543" id="Grade" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="72" x="393" y="44"/><ellipse cx="408" cy="74.2715" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M406.8594,75.0684 L406.8594,77.5684 L411.1875,77.5684 L411.1875,76.6465 Q411.1875,76.0371 411.4219,75.7715 Q411.6719,75.5059 412.0469,75.5059 Q412.4219,75.5059 412.6563,75.7715 Q412.8906,76.0371 412.8906,76.6465 L412.8906,79.2715 L404.8906,79.2715 Q404.2656,79.2715 404,79.0371 Q403.75,78.8027 403.75,78.4121 Q403.75,78.0371 404.0156,77.8027 Q404.2813,77.5684 404.8906,77.5684 L405.1563,77.5684 L405.1563,70.9121 L404.8906,70.9121 Q404.2656,70.9121 404,70.6777 Q403.75,70.4434 403.75,70.0527 Q403.75,69.6777 404,69.4434 Q404.2656,69.209 404.8906,69.209 L412.5156,69.209 L412.5156,71.8027 Q412.5156,72.4121 412.2813,72.6777 Q412.0625,72.9277 411.6719,72.9277 Q411.2969,72.9277 411.0625,72.6777 Q410.8281,72.4121 410.8281,71.8027 L410.8281,70.9121 L406.8594,70.9121 L406.8594,73.3652 L408.3438,73.3652 Q408.3438,72.709 408.4688,72.5215 Q408.7344,72.1152 409.2031,72.1152 Q409.5781,72.1152 409.8125,72.3809 Q410.0469,72.6309 410.0469,73.2402 L410.0469,75.209 Q410.0469,75.7559 409.9219,75.9434 Q409.6563,76.334 409.2031,76.334 Q408.7344,76.334 408.4688,75.9277 Q408.3438,75.7402 408.3438,75.0684 L406.8594,75.0684 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="44" x="420" y="61.9492">«Entity»</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="40" x="422" y="77.9102">«Root»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="40" x="422" y="96.0293">Grade</text><line style="stroke:#181818;stroke-width:0.5;" x1="394" x2="464" y1="104.543" y2="104.543"/><line style="stroke:#181818;stroke-width:0.5;" x1="394" x2="464" y1="112.543" y2="112.543"/></g><g id="elem_Course"><rect fill="#F1F1F1" height="54.582" style="stroke:#181818;stroke-width:0.5;" width="95" x="247.5" y="200"/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="85" x="252.5" y="212.9492">«Value Object»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="46" x="272" y="233.0684">Course</text><line style="stroke:#181818;stroke-width:0.5;" x1="248.5" x2="341.5" y1="238.582" y2="238.582"/></g><g id="elem_Exam"><rect fill="#F1F1F1" height="54.582" style="stroke:#181818;stroke-width:0.5;" width="95" x="377.5" y="200"/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="85" x="382.5" y="212.9492">«Value Object»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="34" x="408" y="233.0684">Exam</text><line style="stroke:#181818;stroke-width:0.5;" x1="378.5" x2="471.5" y1="238.582" y2="238.582"/></g><g id="elem_examGrade"><rect fill="#F1F1F1" height="54.582" style="stroke:#181818;stroke-width:0.5;" width="95" x="507.5" y="200"/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="85" x="512.5" y="212.9492">«Value Object»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="73" x="518.5" y="233.0684">examGrade</text><line style="stroke:#181818;stroke-width:0.5;" x1="508.5" x2="601.5" y1="238.582" y2="238.582"/></g><g id="elem_myGrade"><rect fill="#F1F1F1" height="54.582" style="stroke:#181818;stroke-width:0.5;" width="95" x="637.5" y="200"/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="85" x="642.5" y="212.9492">«Value Object»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="58" x="656" y="233.0684">myGrade</text><line style="stroke:#181818;stroke-width:0.5;" x1="638.5" x2="731.5" y1="238.582" y2="238.582"/></g><!--MD5=[98c7668d4def7ca1b45538dfd0d209a2]
+link Student to MechanographicNumber--><g id="link_Student_MechanographicNumber"><path codeLine="9" d="M130.59,121.07 C125.48,143.9 119.03,172.74 114.17,194.48 " fill="none" id="Student-to-MechanographicNumber" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="113.03,199.57,118.9091,191.6684,114.1282,194.6921,111.1045,189.9112,113.03,199.57" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="32" x="124" y="166.0283">has a</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7" x="121.6918" y="142.6597">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7" x="106.5834" y="188.7068">1</text></g><!--MD5=[ef8c801c605ff829cda796350a086647]
+link Grade to Course--><g id="link_Grade_Course"><path codeLine="20" d="M392.93,99.4 C370.45,110.91 342.4,128.39 324,151 C313.65,163.72 306.71,180.55 302.22,195.09 " fill="none" id="Grade-to-Course" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="300.79,199.92,307.1972,192.4402,302.2202,195.1289,299.5314,190.1519,300.79,199.92" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="92" x="325" y="166.0283">is associated to</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7" x="377.7687" y="118.7442">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7" x="294.3196" y="188.6868">1</text></g><!--MD5=[bfcdb2f229b6396c80f70b5c44b7a90d]
+link Grade to Exam--><g id="link_Grade_Exam"><path codeLine="21" d="M427.95,121.07 C427.31,143.9 426.5,172.74 425.9,194.48 " fill="none" id="Grade-to-Exam" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="425.75,199.57,430.0054,190.6879,425.8928,194.572,422.0087,190.4594,425.75,199.57" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="60" x="428" y="166.0283">belongs to</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7" x="420.2248" y="142.6597">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7" x="418.1484" y="188.7068">1</text></g><!--MD5=[753c03a648528a0ec6c6cbaff0912d53]
+link Grade to examGrade--><g id="link_Grade_examGrade"><path codeLine="22" d="M465.21,117.67 C475.76,128.09 487.11,139.77 497,151 C509.47,165.16 522.36,181.71 532.81,195.7 " fill="none" id="Grade-to-examGrade" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="535.97,199.96,533.8084,190.3513,532.986,195.948,527.3893,195.1257,535.97,199.96" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="32" x="513" y="166.0283">has a</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7" x="473.0279" y="140.3695">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7" x="523.7599" y="188.736">1</text></g><!--MD5=[34de809a0879a8aa22b4de600c013b55]
+link Grade to myGrade--><g id="link_Grade_myGrade"><path codeLine="23" d="M465.25,102.73 C490.28,116.1 524.28,134.41 554,151 C580.97,166.05 610.83,183.22 635.22,197.38 " fill="none" id="Grade-to-myGrade" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="639.71,199.98,633.9367,192.0007,635.3865,197.4686,629.9185,198.9184,639.71,199.98" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="32" x="587" y="166.0283">has a</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7" x="473.0758" y="102.1413">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7" x="622.6471" y="189.6523">1</text></g><!--MD5=[73a4bbe8a4626e4e72b2aec588b8576d]
+link Student to Grade--><g id="link_Student_Grade"><path codeLine="25" d="M179.63,82.5 C234.6,82.5 332.14,82.5 387.53,82.5 " fill="none" id="Student-to-Grade" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="392.76,82.5,383.76,78.5,387.76,82.5,383.76,86.5,392.76,82.5" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="21" x="275.75" y="75.5283">has</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7" x="187.4907" y="78.0809">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="20" x="365.1015" y="78.1825">0..*</text></g><!--MD5=[8664d448110315f792b2dbebd48157dc]
+@startuml
+'https://plantuml.com/class-diagram
+
+
+rectangle "<<Aggregate>> Student" #hotpink{
+
+    entity Student<<Entity>><<Root>>
+    object MechanographicNumber<<Value Object>>
+
+    Student "1" - ->"1"MechanographicNumber: has a
+}
+
+rectangle "<<Aggregate>> Grade" #yellow{
+
+    entity Grade<<Entity>><<Root>>
+    object Course<<Value Object>>
+    object Exam<<Value Object>>
+    object examGrade<<Value Object>>
+    object myGrade<<Value Object>>
+
+    Grade "1" - ->"1"Course: is associated to
+    Grade "1"- ->"1"Exam: belongs to
+    Grade "1"- ->"1"examGrade: has a
+    Grade "1"- ->"1"myGrade: has a
+
+    Student "1" -> "0..*" Grade : has
+}
+
+
+@enduml
+
+@startuml
+
+
+rectangle "<<Aggregate>> Student" #hotpink{
+
+    entity Student<<Entity>><<Root>>
+    object MechanographicNumber<<Value Object>>
+
+    Student "1" - ->"1"MechanographicNumber: has a
+}
+
+rectangle "<<Aggregate>> Grade" #yellow{
+
+    entity Grade<<Entity>><<Root>>
+    object Course<<Value Object>>
+    object Exam<<Value Object>>
+    object examGrade<<Value Object>>
+    object myGrade<<Value Object>>
+
+    Grade "1" - ->"1"Course: is associated to
+    Grade "1"- ->"1"Exam: belongs to
+    Grade "1"- ->"1"examGrade: has a
+    Grade "1"- ->"1"myGrade: has a
+
+    Student "1" -> "0..*" Grade : has
+}
+
+
+@enduml
+
+PlantUML version 1.2022.12(Sun Oct 23 19:12:26 WEST 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: Cp1252
+Language: pt
+Country: PT
+--></g></svg>

@@ -1,0 +1,83 @@
+@startuml
+
+hide field
+hide methods
+
+title Domain Driven Design
+
+skinparam linetype ortho
+
+rectangle "<<Aggregate>> Course" {
+
+    entity Course<<Root>><<Entity>>
+    object Id<<Value Object>><<Identify>>
+    object CourseState<<Value Object>>
+    object CourseEnrollmentState <<Value Object>>
+    object Edition <<Value Object>>
+    object CourseDescription <<Value Object>>
+    object CourseTitle <<Value Object>>
+    object ExamsList <<Value Object>>
+    object CourseEnrollmentsList <<Value Object>>
+
+    Course"1" --> "1"CourseTitle: has a
+    Course"1" --> "1"Id : has a
+    Course"1" --> "1"CourseDescription : has a
+    Course"1"-->"1"CourseState : has a
+    Course"1"-->"1"CourseEnrollmentState: has an
+    Course"1" -->"1"Edition : has a
+    Course"1" -->"*"ExamsList : has an
+    Course"1" -->"*"CourseEnrollmentsList : has an
+}
+
+rectangle "<<Aggregate>> Teacher" {
+
+    entity Teacher<<Entity>><<Root>>
+    object Acronym<<Value Object>>
+
+    Teacher"1" --> "1"Acronym : has a
+}
+
+rectangle "<<Aggregate>> Exam" {
+    entity Exam <<Root>><<Entity>>
+
+    object ExamTitle<<Value Object>>
+    object FeedBackType <<Value Object>>
+    object GradeType <<Value Object>>
+    object ExamStruct<<Value Object>>
+    object ExamState <<Value Object>>
+
+
+    Exam"1"-->"1"ExamTitle : needs
+    Exam"1"-->"1"ExamState : has a
+    Exam"1"-->"1"FeedBackType: has a
+    Exam"1"-->"1"GradeType: has a
+    Exam"1"-->"0..1"ExamStruct: contains
+    Exam "1"-->"1" Schedule: has a
+}
+
+rectangle "<<Aggregate>> Student" {
+
+    entity Student<<Entity>><<Root>>
+    object MechanographicNumber<<Value Object>>
+
+    Student "1" -->"1"MechanographicNumber: has a
+}
+
+rectangle "<<Aggregate>> Grade" {
+
+    entity Grade<<Entity>><<Root>>
+    Object TotalGrade<<Value Object>>
+    Object ParcialGrade<<Value Object>>
+
+    Grade "1" -->"1" TotalGrade : has a
+    Grade "1" -->"1" ParcialGrade : has a
+}
+
+Course"1" --> "*" Teacher : has
+Course"1" --> "*" Exam : has
+Course"1" --> "*" Student : has
+Student"1" --> "*" Grade : has
+Student"1" --> Exam : takes
+Grade"1" --> "*" Exam : has
+
+@enduml

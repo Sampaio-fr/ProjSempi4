@@ -1,0 +1,138 @@
+@startuml
+autonumber
+
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor Teacher as Actor
+participant ":CreateExamUI" as UI <<presentation>>
+participant ":CreateExamController" as Controller <<application>>
+participant ":ExamManagementService" as ExamManagementService <<application>>
+participant ":AuthzRegistry" as AuthzRegistry <<application>>
+participant ":Exam" as Exam <<Domain>>
+participant ":PersistenceContext" as Persistence <<persistence>>
+participant ":RepositoryFactory" as RepositoryFactory <<factory>>
+
+database ":ExamRepository" as ExamRepository <<repository>>
+database ":TeacherRepository" as TeacherRepository <<repository>>
+database ":CourseRepository" as CourseRepository <<repository>>
+
+database ":JPAExamRepository" as JPAExamRepository <<repository>>
+database ":JPATeacherRepository" as JPATeacherRepository <<repository>>
+database ":JPACourseRepository" as JPACourseRepository <<repository>>
+
+activate Actor
+Actor -> UI : ask to create exam
+activate UI
+UI->Controller:listCourses()
+activate Controller
+
+Controller-->ExamManagementService:listCourses()
+
+activate ExamManagementService
+ExamManagementService->AuthzRegistry: AuthzRegistry.authorizationService()
+
+activate AuthzRegistry
+deactivate AuthzRegistry
+ExamManagementService --> Persistence: create()
+activate Persistence
+
+
+Persistence -> RepositoryFactory: getRepositoryFactory();
+activate RepositoryFactory
+
+RepositoryFactory->CourseRepository: courseRepository()
+activate CourseRepository
+deactivate CourseRepository
+RepositoryFactory->ExamRepository:examRepository()
+activate ExamRepository
+deactivate ExamRepository
+RepositoryFactory->TeacherRepository:teacherRepository()
+activate TeacherRepository
+deactivate TeacherRepository
+
+deactivate RepositoryFactory
+deactivate Persistence
+
+ExamManagementService->TeacherRepository:findTeacherByEmail(systemUser.email())
+
+activate TeacherRepository
+TeacherRepository->JPATeacherRepository:findTeacherByEmail(systemUser.email())
+activate JPATeacherRepository
+deactivate JPATeacherRepository
+
+deactivate TeacherRepository
+deactivate ExamManagementService
+deactivate Controller
+
+
+UI --> Actor : shows list of course and asks to select one
+deactivate UI
+
+Actor -> UI : selects course
+activate UI
+UI -->Actor : asks for the exam input
+deactivate UI
+
+Actor -> UI : inputs the exam
+activate UI
+UI -> Controller:validateExam(path)
+activate Controller
+
+Controller -> ExamManagementService:validateExam(path)
+
+activate ExamManagementService
+
+deactivate ExamManagementService
+deactivate Controller
+
+UI->Controller:createExamFromPath(path,selectedCourse)
+activate Controller
+Controller->ExamManagementService:createExamFromPath(path,selectedCourse)
+activate ExamManagementService
+activate ExamManagementService
+deactivate ExamManagementService
+ExamManagementService->ExamManagementService:readFileToString(String filePath)
+activate ExamManagementService
+deactivate ExamManagementService
+ExamManagementService->Exam: new Exam(ExamType.SUMMATIVE,examText,selectedCourse,teacher)
+activate Exam
+deactivate Exam
+
+ExamManagementService -> TeacherRepository:findTeacherByEmail(systemUser.email())
+activate TeacherRepository
+deactivate TeacherRepository
+
+deactivate  ExamManagementService
+deactivate Controller
+
+UI->Controller:saveExam(selectedCourse,examUpdated)
+activate Controller
+Controller->ExamManagementService:saveExam(selectedCourse,examUpdated)
+activate ExamManagementService
+ExamManagementService->ExamRepository:save(examUpdated)
+activate ExamRepository
+ExamRepository-> JPAExamRepository:save(examUpdated)
+activate JPAExamRepository
+deactivate JPAExamRepository
+deactivate ExamRepository
+
+ExamManagementService->CourseRepository:save(selectedCourse)
+activate CourseRepository
+CourseRepository->JPACourseRepository:save(selectedCourse)
+activate JPACourseRepository
+deactivate JPACourseRepository
+deactivate CourseRepository
+
+
+deactivate ExamManagementService
+deactivate Controller
+
+UI --> Actor : informs operation success or failure
+deactivate UI
+deactivate Actor
+
+@enduml

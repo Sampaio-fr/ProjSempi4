@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="us-ascii" standalone="no"?>
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" contentStyleType="text/css"
+     height="917.9931px" preserveAspectRatio="none" style="width:351px;height:917px;background:#FFFFFF;" version="1.1"
+     viewBox="0 0 351 917" width="351.2111px" zoomAndPan="magnify">
+    <defs/>
+    <g>
+        <ellipse cx="61.7647" cy="19.3772" fill="#181818" rx="12.1107" ry="12.1107"
+                 style="stroke:none;stroke-width:1.2110726643598615;"/>
+        <g id="Close">
+            <rect fill="#F1F1F1" height="60.5536" rx="15.1384" ry="15.1384"
+                  style="stroke:#181818;stroke-width:0.6055363321799307;" width="67.8201" x="27.8547" y="127.1626"/>
+            <line style="stroke:#181818;stroke-width:0.6055363321799307;" x1="27.8547" x2="95.6747" y1="161.8249"
+                  y2="161.8249"/>
+            <text fill="#000000" font-family="sans-serif" font-size="16.955" lengthAdjust="spacing" textLength="43.5986"
+                  x="39.9654" y="151.5142">Close
+            </text>
+        </g>
+        <g id="Open">
+            <rect fill="#F1F1F1" height="60.5536" rx="15.1384" ry="15.1384"
+                  style="stroke:#181818;stroke-width:0.6055363321799307;" width="66.609" x="28.4602" y="283.391"/>
+            <line style="stroke:#181818;stroke-width:0.6055363321799307;" x1="28.4602" x2="95.0692" y1="318.0532"
+                  y2="318.0532"/>
+            <text fill="#000000" font-family="sans-serif" font-size="16.955" lengthAdjust="spacing" textLength="42.3875"
+                  x="40.5709" y="307.7426">Open
+            </text>
+        </g>
+        <g id="Enroll">
+            <rect fill="#F1F1F1" height="60.5536" rx="15.1384" ry="15.1384"
+                  style="stroke:#181818;stroke-width:0.6055363321799307;" width="67.8201" x="27.8547" y="439.6194"/>
+            <line style="stroke:#181818;stroke-width:0.6055363321799307;" x1="27.8547" x2="95.6747" y1="474.2816"
+                  y2="474.2816"/>
+            <text fill="#000000" font-family="sans-serif" font-size="16.955" lengthAdjust="spacing" textLength="43.5986"
+                  x="39.9654" y="463.9709">Enroll
+            </text>
+        </g>
+        <g id="InProgress">
+            <rect fill="#F1F1F1" height="60.5536" rx="15.1384" ry="15.1384"
+                  style="stroke:#181818;stroke-width:0.6055363321799307;" width="106.5744" x="8.4775" y="595.8478"/>
+            <line style="stroke:#181818;stroke-width:0.6055363321799307;" x1="8.4775" x2="115.0519" y1="630.51"
+                  y2="630.51"/>
+            <text fill="#000000" font-family="sans-serif" font-size="16.955" lengthAdjust="spacing" textLength="82.3529"
+                  x="20.5882" y="620.1993">InProgress
+            </text>
+        </g>
+        <g id="Closed">
+            <rect fill="#F1F1F1" height="60.5536" rx="15.1384" ry="15.1384"
+                  style="stroke:#181818;stroke-width:0.6055363321799307;" width="77.5087" x="23.0104" y="752.0761"/>
+            <line style="stroke:#181818;stroke-width:0.6055363321799307;" x1="23.0104" x2="100.519" y1="786.7383"
+                  y2="786.7383"/>
+            <text fill="#000000" font-family="sans-serif" font-size="16.955" lengthAdjust="spacing" textLength="53.2872"
+                  x="35.1211" y="776.4277">Closed
+            </text>
+        </g>
+        <ellipse cx="61.7647" cy="898.6159" fill="none" rx="12.1107" ry="12.1107"
+                 style="stroke:#181818;stroke-width:1.2110726643598615;"/>
+        <ellipse cx="62.3702" cy="899.2215" fill="#181818" rx="7.2664" ry="7.2664"
+                 style="stroke:none;stroke-width:1.2110726643598615;"/><!--link *start* to Close-->
+        <g id="link_*start*_Close">
+            <path d="M61.7647,31.6938 C61.7647,50.9498 61.7647,91.3149 61.7647,120.8893 " fill="none"
+                  id="*start*-to-Close" style="stroke:#181818;stroke-width:1.2110726643598615;"/>
+            <polygon fill="#181818"
+                     points="61.7647,127.0294,66.609,116.1298,61.7647,120.974,56.9204,116.1298,61.7647,127.0294"
+                     style="stroke:#181818;stroke-width:1.2110726643598615;"/>
+            <text fill="#000000" font-family="sans-serif" font-size="15.7439" lengthAdjust="spacing"
+                  textLength="168.3391" x="62.9758" y="86.0205">US1002 - Create course
+            </text>
+        </g><!--link Close to Open-->
+        <g id="link_Close_Open">
+            <path d="M61.7647,187.9464 C61.7647,213.282 61.7647,249.9775 61.7647,276.9844 " fill="none"
+                  id="Close-to-Open" style="stroke:#181818;stroke-width:1.2110726643598615;"/>
+            <polygon fill="#181818"
+                     points="61.7647,283.2699,66.609,272.3702,61.7647,277.2145,56.9204,272.3702,61.7647,283.2699"
+                     style="stroke:#181818;stroke-width:1.2110726643598615;"/>
+            <text fill="#000000" font-family="sans-serif" font-size="15.7439" lengthAdjust="spacing"
+                  textLength="181.6609" x="62.9758" y="242.2488">US1004.1 - Open courses
+            </text>
+        </g><!--link Open to Enroll-->
+        <g id="link_Open_Enroll">
+            <path d="M61.7647,344.1747 C61.7647,369.5104 61.7647,406.2059 61.7647,433.2128 " fill="none"
+                  id="Open-to-Enroll" style="stroke:#181818;stroke-width:1.2110726643598615;"/>
+            <polygon fill="#181818"
+                     points="61.7647,439.4983,66.609,428.5986,61.7647,433.4429,56.9204,428.5986,61.7647,439.4983"
+                     style="stroke:#181818;stroke-width:1.2110726643598615;"/>
+            <text fill="#000000" font-family="sans-serif" font-size="15.7439" lengthAdjust="spacing"
+                  textLength="267.6471" x="62.9758" y="398.4772">US1003.1 - Open enrollment in course
+            </text>
+        </g><!--link Enroll to InProgress-->
+        <g id="link_Enroll_InProgress">
+            <path d="M61.7647,500.4031 C61.7647,525.7388 61.7647,562.4343 61.7647,589.4412 " fill="none"
+                  id="Enroll-to-InProgress" style="stroke:#181818;stroke-width:1.2110726643598615;"/>
+            <polygon fill="#181818"
+                     points="61.7647,595.7266,66.609,584.827,61.7647,589.6713,56.9204,584.827,61.7647,595.7266"
+                     style="stroke:#181818;stroke-width:1.2110726643598615;"/>
+            <text fill="#000000" font-family="sans-serif" font-size="15.7439" lengthAdjust="spacing"
+                  textLength="278.5467" x="62.9758" y="554.7056">US1003.2 - Close enrollments in course
+            </text>
+        </g><!--link InProgress to Closed-->
+        <g id="link_InProgress_Closed">
+            <path d="M61.7647,656.6315 C61.7647,681.9671 61.7647,718.6626 61.7647,745.6696 " fill="none"
+                  id="InProgress-to-Closed" style="stroke:#181818;stroke-width:1.2110726643598615;"/>
+            <polygon fill="#181818"
+                     points="61.7647,751.955,66.609,741.0554,61.7647,745.8997,56.9204,741.0554,61.7647,751.955"
+                     style="stroke:#181818;stroke-width:1.2110726643598615;"/>
+            <text fill="#000000" font-family="sans-serif" font-size="15.7439" lengthAdjust="spacing"
+                  textLength="184.083" x="62.9758" y="710.934">US1004.2 - Close courses
+            </text>
+        </g><!--link Closed to *end*-->
+        <g id="link_Closed_*end*">
+            <path d="M61.7647,812.8841 C61.7647,834.2353 61.7647,862.4412 61.7647,880.2561 " fill="none"
+                  id="Closed-to-*end*" style="stroke:#181818;stroke-width:1.2110726643598615;"/>
+            <polygon fill="#181818"
+                     points="61.7647,886.3114,66.609,875.4118,61.7647,880.2561,56.9204,875.4118,61.7647,886.3114"
+                     style="stroke:#181818;stroke-width:1.2110726643598615;"/>
+        </g><!--SRC=[LT0z2y8m40RWFR_YDa58Fwmk7LoAWvE2E8b3Q8zQo4V9NV7lcyPgT4pol9StMJsOHwhpVDJAycHqrZgJ4oj6sGsgzye8GQtI2DMkWEVGyKC8WDlw3bBkeT6Ei8RhfIoA3KXeF8Oej6xoXC75SuZqDAA5XMwpCk2uywOKR5pEyc2zq_fZgsGn7XYq38DDbon-ZXxjsRlU8r6AnrwnHyhJtu2VrFTHNUgQ1gIoYvbv-0iXNW00]-->
+    </g>
+</svg>

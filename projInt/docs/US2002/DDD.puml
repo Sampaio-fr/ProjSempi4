@@ -1,0 +1,63 @@
+@startuml
+
+hide field
+hide methods
+
+title Domain Driven Design
+
+skinparam linetype ortho
+
+rectangle "<<Aggregate>> Course" {
+
+    entity Course<<Root>><<Entity>>
+    object Id<<Value Object>><<Identify>>
+    object CourseState<<Value Object>>
+    object CourseEnrollmentState <<Value Object>>
+    object Edition <<Value Object>>
+    object CourseDescription <<Value Object>>
+    object CourseTitle <<Value Object>>
+    object ExamsList <<Value Object>>
+    object CourseEnrollmentsList <<Value Object>>
+
+    Course"1" --> "1"CourseTitle: has a
+    Course"1" --> "1"Id : has a
+    Course"1" --> "1"CourseDescription : has a
+    Course"1"-->"1"CourseState : has a
+    Course"1"-->"1"CourseEnrollmentState: has an
+    Course"1" -->"1"Edition : has a
+    Course"1" -->"*"ExamsList : has an
+    Course"1" -->"*"CourseEnrollmentsList : has an
+}
+
+rectangle "<<Aggregate>> Sudent" {
+
+    entity Student<<Root>><<Entity>>
+    object MecNumber<<Value Object>><<Identify>>
+    object ECourseUser<<Value Object>>
+    object SystemUser <<Value Object>>
+    object StudentEnrollmentsList <<Value Object>>
+
+    Student"1" --> "1"MecNumber: has a
+    Student"1" --> "1"ECourseUser : is a
+    Student"1" --> "1"SystemUser : is a
+    Student"1" -->"*"StudentEnrollmentsList : has an
+}
+
+rectangle "<<Aggregate>> Enrollment" {
+
+    entity Enrollment<<Root>><<Entity>>
+    object EnrollmentID<<Value Object>><<Identify>>
+    object EnrollmentState<<Value Object>>
+    object EnrollmentCourse<<Value Object>>
+    object EnrollmentStudent <<Value Object>>
+
+    Enrollment"1" --> "1"EnrollmentID: has a
+    Enrollment"1" --> "1"EnrollmentState: has a
+    Enrollment"1" --> "1"EnrollmentCourse : has a
+    Enrollment"1" -->"1"EnrollmentStudent : has an
+}
+
+Student --> "1..*" Enrollment : does a
+Enrollment --> "1" Course : is associated with
+
+@enduml

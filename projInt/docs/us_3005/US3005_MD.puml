@@ -1,0 +1,63 @@
+@startuml
+
+rectangle "<<Aggregate>> Personal Information" #bbaabb{
+
+    entity User<<Root>><<Entity>><<Strategy>>
+    object BirthDate<<Value Object>>
+    object TaxNumber<<Value Object>><<Id>>
+    object FullName<<Value Object>>
+    object ShortName<<Value Object>>
+
+    User"1" -up-> "1"BirthDate : has a
+    User"1" -left-> "1"TaxNumber : has a
+    User"1" --> "1" FullName : has a
+    User "1" -up->"1"ShortName : has a
+}
+rectangle "<<Aggregate>> Cell" #aaabbb{
+     entity Cell <<Entity>><<Root>>
+     object Number <<Value Object>>
+     object Title <<Value Object>>
+     object Column <<Value Object>>
+     object Row <<Value Object>>
+
+         Column "1"-right->"1" Number : has
+         Column "1"-->"1" Title : has
+         Row "1"-left->"1" Number : has
+         Row "1"-->"1" Title : has
+             Cell"1"-->"1" Row : has a Posx
+             Cell"1"-->"1"Column : has a Posy
+}
+rectangle "<<Aggregate>> Shared Board" #business{
+
+    entity SharedBoard<<Root>><<Entity>>
+    object OwnerSharedBoard <<Value Object>>
+    object SharedBoardTitle <<Value Object>>
+
+    object SharedBoardState <<Value Object>>
+
+
+    SharedBoard"1"-->"1"OwnerSharedBoard: has a
+    SharedBoard"1"-up->"1"SharedBoardTitle : has a
+
+    SharedBoard"1"-->"1" SharedBoardState : has a
+
+    User"1"->"1"OwnerSharedBoard: is a
+
+    SharedBoard"1"-->"*"Cell : has a position
+
+}
+rectangle "<<Aggregate>> PostIt" #gold{
+
+    object Author <<Value Object>>
+    object Content <<Value Object>>
+    object TimeStamp <<Value Object>>
+    entity PostIt <<Entity>><<Root>>
+
+     PostIt"1"-->"1"TimeStamp: has
+     PostIt"1"-->"1"Content : has
+     PostIt"1"-->"1"Author : has a
+     Cell"1"-->"1"PostIt : PosPost
+}
+
+
+@enduml

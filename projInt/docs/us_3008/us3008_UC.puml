@@ -1,0 +1,8 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+actor User as User
+
+User --> (Undo the last post-it change)
+
+@enduml

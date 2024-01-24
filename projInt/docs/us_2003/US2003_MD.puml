@@ -1,0 +1,57 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+rectangle "<<Aggregate>> Exam" #EB937F  {
+    entity Exam <<Root>><<Entity>>
+    object ExamTitle<<Value Object>>
+    object ExamType <<Value Object>>
+
+    entity Header
+        object FeedBackType <<Value Object>>
+        object GradeType <<Value Object>>
+        object ExamDescription<<Value Object>>
+
+    object ExamState <<Value Object>>
+
+    Exam "1"-->"1"Header: has a
+    Exam"1"-->"1"ExamType: is of an
+    Exam"1"-->"1"ExamTitle : needs
+    Exam"1"-->"1"ExamState : has a
+    Header"1"-->"1"FeedBackType: has a
+    Header"1"-->"1"GradeType: has a
+    Header"1"-->"0..1"ExamDescription: contains
+    Exam "1"-->"1" Schedule: has a
+}
+rectangle "<<Aggregate>> Course" #lightskyblue{
+
+    entity Course<<Root>><<Entity>>
+    object Id<<Value Object>><<Identify>>
+    object CourseState<<Value Object>>
+    object CourseEnrollmentState <<Value Object>>
+    object Edition <<Value Object>>
+    object CourseDescription <<Value Object>>
+    object CourseTitle <<Value Object>>
+
+    Course"1" --> "1"CourseTitle: has a
+    Course"1" --> "1"Id : has a
+    Course"1" --> "1"CourseDescription : has a
+    Course"1"-->"1"CourseState : has a
+    Course"1"-->"1"CourseEnrollmentState: has an
+    Course"1" -->"1"Edition : has a
+}
+rectangle "<<Aggregate>> ChargeTeacher" #mediumslateblue{
+    entity "ChargeTeacher"<<Root>><<Entity>>
+}
+rectangle "<<Aggregate>> Teacher" #blueviolet{
+
+    entity Teacher<<Entity>><<Root>>
+    object Acronym<<Value Object>>
+
+    Teacher -up|> User: is a
+    Teacher"1" --> "1"Acronym : has a
+    ChargeTeacher "1"--|>"1" Teacher : is a
+}
+Course "1"-up->"*"Exam : is related to
+Course"1" -->"1"ChargeTeacher: needs a
+Course"1" -->"*"Teacher: has
+
+@enduml

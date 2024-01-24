@@ -1,0 +1,112 @@
+@startuml
+autonumber
+
+actor Teacher as Actor
+participant ":CreateFormativeExamUI" as UI <<presentation>>
+participant ":CreateFormativeExamController" as ctrl <<application>>
+participant ":ExamManagementService" as service <<application>>
+participant "systemUser: AuthorizationService" as auth <<application>>
+participant "systemUser :SystemUser" as user
+participant ":ExamFormative" as Exam <<Domain>>
+participant ":PersistenceContext" as persist <<persistence>>
+participant ":RepositoryFactory " as rfcls <<factory>>
+participant "factory :RepositoryFactory " as factory <<factory>>
+
+database ":ExamFormativeRepository" as examFRepo <<repository>>
+database ":TeacherRepository" as teacherRepo <<repository>>
+database ":CourseRepository" as courseRepo <<repository>>
+database ":QuestionRepository" as questionRepo <<repository>>
+
+
+activate Actor
+Actor -> UI : ask to create exam
+activate UI
+UI-->ctrl:listCourses()
+
+activate ctrl
+ctrl-->service:listCourses()
+
+activate service
+service-> auth: authorizationService()
+activate auth
+ref over auth
+Sequence Diagram - SD_Authentication
+end
+auth-->service: systemUser
+deactivate auth
+service -> user: email()
+activate user
+user-->service: emailStudent
+deactivate user
+service -> persist: factory = repositories()
+activate persist
+persist -> rfcls: create
+persist --> service: factory
+deactivate persist
+service -> factory: repoTeacher = teacherRepository()
+activate factory
+factory --> service: repoTeacher
+deactivate factory
+service -> teacherRepo: findTeacherByEmail(email)
+deactivate persist
+deactivate service
+deactivate ctrl
+UI --> Actor : shows list of course and asks to select one
+deactivate UI
+
+Actor -> UI : selects course
+activate UI
+UI -->Actor : request data(title,description, number of sections,\n sections title,description,number of questions and type)
+deactivate UI
+
+Actor -> UI : inputs the request data
+activate UI
+UI-->ctrl:createQuestionnaireTextFile(examTitle)
+activate ctrl
+deactivate ctrl
+loop for each section
+loop for each question
+UI->ctrl: selectedQuestion(selectedQuestionType, selectedQuestion)
+activate ctrl
+end
+end
+ctrl->service:getRandomQuestionByType(question,selectedQuestion)
+activate service
+service -> factory: repoQuestion = questionRepository()
+activate factory
+factory --> service: repoQuestion
+deactivate factory
+service -> questionRepo: listQuestionsByType(questionType)
+deactivate service
+deactivate ctrl
+UI->ctrl: writeQuestionnaireTextFile(examStructure,filePath)
+activate ctrl
+deactivate ctrl
+deactivate  service
+deactivate ctrl
+UI-->ctrl:validateExam(path)
+activate ctrl
+
+ctrl-->service:validateExam(path)
+
+activate service
+
+deactivate service
+deactivate ctrl
+
+UI-->ctrl:saveFormativeExam(examTitle,examStructure,selectedCourse)
+activate ctrl
+ctrl-->service:saveExamFormative(examTitle,examStructure,selectedCourse)
+activate service
+service-->examFRepo:save(examUpdated)
+activate examFRepo
+service-->courseRepo:save(selectedCourse)
+
+deactivate service
+deactivate ctrl
+
+UI --> Actor : informs operation success
+deactivate UI
+deactivate Actor
+
+@enduml

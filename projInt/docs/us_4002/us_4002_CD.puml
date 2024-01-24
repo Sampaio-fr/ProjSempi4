@@ -1,0 +1,110 @@
+
+@startuml
+
+class CancelMeetingUi{
++listOfMeetingsOwner()
++deleteMeeting(current)
+}
+class CancelMeetingController{
++Create()
++listOfMeetingsOwner()
++deleteMeeting(current)
+                               }
+class MeetingManagementService{
++authorizationService()
++Create()
+findAllNotificationsForThisMeeting(current)
++save(current)
++deleteNotifications(list)
+
+ }
+
+ class NotificationAcceptanceService{
+ +findAllNotificationsForThisMeeting(current)
+ +remove(notification)
+ +deleteSchedule(TimeTable current,Schedule schedule)
+ +save(current)
+
+  }
+
+
+
+
+class PersistenceContext{
++getRepositoryFactory()
+                                                  }
+interface RepositoryFactory{
++meetingRepository()
++scheduleRepository()
++timetableRepository()
++ecourseUserRepository()
+                                                     }
+interface MeetingRepository{
++listOfMeetingsOwner()
++save(meeting)
+                                                     }
+interface NotificationRepository{
++save(notification)
++findAllNotificationsForThisMeeting(current)
++remove(notification)
+                                                          }
+interface ScheduleRepository{
++save(schedule))
+                                                      }
+interface TimetableRepository{
++save(timeTable)
+                                                       }
+interface ECourseUserRepository{
++save(eCourseUser)
++ofIdentity(email)
+                                                         }
+
+class JPAMeetingRepository{
++save(meeting)
++listOfMeetingsOwner()
+                                                    }
+class JPANotificationRepository{
++save(notification)
++findAllNotificationsForThisMeeting(current)
++remove(notification)
+                                                         }
+class JPAScheduleRepository{
++save(schedule))
+                                                     }
+class JPATimetableRepository{
++save(timeTable)
+                                                      }
+class JPAECourseUserRepository{
++save(eCourseUser)
++ofIdentity(email)
+                                                        }
+
+
+
+CancelMeetingUi ..> CancelMeetingController
+CancelMeetingController --> MeetingManagementService
+MeetingManagementService --> NotificationAcceptanceService
+
+
+MeetingManagementService --> PersistenceContext
+NotificationAcceptanceService --> PersistenceContext
+PersistenceContext --> RepositoryFactory
+
+
+RepositoryFactory --> ECourseUserRepository
+RepositoryFactory --> NotificationRepository
+RepositoryFactory --> MeetingRepository
+RepositoryFactory --> ScheduleRepository
+RepositoryFactory --> TimetableRepository
+
+
+
+NotificationRepository --> JPANotificationRepository
+MeetingRepository --> JPAMeetingRepository
+ScheduleRepository --> JPAScheduleRepository
+TimetableRepository --> JPATimetableRepository
+ECourseUserRepository --> JPAECourseUserRepository
+
+
+@enduml
+

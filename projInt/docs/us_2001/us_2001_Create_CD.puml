@@ -1,0 +1,108 @@
+@startuml
+
+
+skinparam defaultFontName FG Virgil
+
+class Teacher {
+    -id: int
+    -name: string
+    -email: string
+}
+
+class CreateExamUI {
+    +listCourses(): List<Course>
+    +validateExam(path: string): boolean
+    +createExamFromPath(path: string, selectedCourse: Course): void
+    +informOperationResult(success: boolean): void
+}
+
+class CreateExamController {
+    -examManagementService: ExamManagementService
+    +listCourses(): List<Course>
+    +validateExam(path: string): boolean
+    +createExamFromPath(path: string, selectedCourse: Course): void
+    +saveExam(selectedCourse: Course, exam: Exam): void
+}
+
+class ExamManagementService {
+    -examRepository: ExamRepository
+    -teacherRepository: TeacherRepository
+    -courseRepository: CourseRepository
+    +listCourses(): List<Course>
+    +validateExam(path: string): boolean
+    +readFileToString(path: string): string
+    +saveExam(selectedCourse: Course, exam: Exam): void
+    +createExamFromPath(path: string, selectedCourse: Course): void
+}
+
+class AuthzRegistry {
+    +authorizationService(): void
+}
+
+class Exam {
+    -id: int
+    -type: ExamType
+    -text: string
+    -course: Course
+    -teacher: Teacher
+}
+
+class Course {
+    -id: int
+    -name: string
+}
+
+Interface PersistenceContext {
+    +getRepositoryFactory(): RepositoryFactory
+}
+
+Interface RepositoryFactory {
+    +courseRepository(): CourseRepository
+    +examRepository(): ExamRepository
+    +teacherRepository(): TeacherRepository
+}
+
+Interface ExamRepository {
+    +save(exam: Exam): void
+}
+
+Interface TeacherRepository {
+    +findTeacherByEmail(email: string): Teacher
+}
+
+Interface CourseRepository {
+    +save(course: Course): void
+}
+
+class JPAExamRepository {
+    +save(exam: Exam): void
+}
+
+class JPATeacherRepository {
+    +findTeacherByEmail(email: string): Teacher
+}
+
+class JPACourseRepository {
+    +save(course: Course): void
+}
+
+CreateExamUI ..> CreateExamController
+CreateExamController --> ExamManagementService
+
+ExamManagementService --> AuthzRegistry
+ExamManagementService --> PersistenceContext
+
+ExamManagementService --> Course
+ExamManagementService --> Exam
+ExamManagementService --> Teacher
+PersistenceContext --> RepositoryFactory
+
+RepositoryFactory --> ExamRepository
+RepositoryFactory --> TeacherRepository
+RepositoryFactory --> CourseRepository
+
+
+ExamRepository --> JPAExamRepository
+TeacherRepository --> JPATeacherRepository
+CourseRepository --> JPACourseRepository
+@enduml

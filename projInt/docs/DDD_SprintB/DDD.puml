@@ -1,0 +1,265 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide field
+hide methods
+
+title Domain Driven Design
+
+skinparam linetype ortho
+
+rectangle "<<Aggregate>> User" #bbaabb{
+
+    entity User<<Root>><<Entity>><<Strategy>>
+    object BirthDate<<Value Object>>
+    object TaxNumber<<Value Object>><<Id>>
+    object FullName<<Value Object>>
+    object ShortName<<Value Object>>
+
+    User"1" -up-> "1"BirthDate : has a
+    User"1" -left-> "1"TaxNumber : has a
+    User"1" --> "1" FullName : has a
+    User "1" -up->"1"ShortName : has a
+}
+
+rectangle "<<Aggregate>> Questions" #turquoise{
+
+     entity Question <<Root>><<Entity>>
+     object QuestionType <<Value Object>>
+     object Answer <<Value Object>>
+
+     Question "1"-->"1" QuestionType: is of a
+     Question "1"-->"1"Answer: has one
+}
+
+
+rectangle "<<Aggregate>> Teacher" #blueviolet{
+
+    entity Teacher<<Entity>><<Root>>
+    object Acronym<<Value Object>>
+
+    Teacher -up|> User: is a
+    Teacher"1" --> "1"Acronym : has a
+}
+
+rectangle "<<Aggregate>> Schedule" #darkcyan{
+
+ entity Schedule<<Root>><<Entity>>
+ object DateTime<<Value Object>>
+ object Duration<<Value Object>>
+
+ Schedule "1"-->"1" DateTime: has a
+ Schedule "1"-->"1" Duration: has a
+}
+
+rectangle "<<Aggregate>> Class" #deepskyblue{
+
+ entity Class<<Root>><<Entity>>
+ object ClassTitle<<value Object>>
+ object ClassType<<Value Object>>
+
+ Class "1"-->"1" ClassTitle: has a
+ Class "1"-->"1"  ClassType: is of a
+ Class "1"-->"1...*" Schedule: has a
+}
+
+rectangle "<<Aggregate>> Cell" #aaabbb{
+     entity Cell <<Entity>><<Root>>
+     object Number <<Value Object>>
+     object Title <<Value Object>>
+     object Column <<Value Object>>
+     object Row <<Value Object>>
+
+         Column "1"-right->"1" Number : has
+         Column "1"-->"1" Title : has
+         Row "1"-left->"1" Number : has
+         Row "1"-->"1" Title : has
+             Cell"1"-->"1" Row : has a Posx
+             Cell"1"-->"1"Column : has a Posy
+}
+
+
+rectangle "<<Aggregate>> Shared Board" #business{
+
+    entity SharedBoard<<Root>><<Entity>>
+    entity SharedBoardLog<<Entity>>
+    object OwnerSharedBoard <<Value Object>>
+    object SharedBoardTitle <<Value Object>>
+
+    object SharedBoardState <<Value Object>>
+
+
+    SharedBoard"1"-->"1"OwnerSharedBoard: has a
+    SharedBoard"1"-up->"1"SharedBoardTitle : has a
+    SharedBoard"1"-->"1" SharedBoardLog : has a
+    SharedBoard"1"-->"1" SharedBoardState : has a
+
+    User"1"->"1"OwnerSharedBoard: is a
+   
+    SharedBoard"1"-->"1"Cell : has a position
+    SharedBoardLog"1"-->"1"Cell : has a logCell
+
+}
+
+
+
+
+rectangle "<<Aggregate>> PostIt" #gold{
+
+    object Author <<Value Object>>
+    object Content <<Value Object>>
+    object TimeStamp <<Value Object>>
+    entity PostIt <<Entity>><<Root>>
+
+     PostIt"1"-->"1"TimeStamp: has
+     PostIt"1"-->"1"Content : has
+     PostIt"1"-->"1"Author : has a
+     Cell"1"-->"1"PostIt : PosPost
+}
+
+rectangle "<<Aggregate>> Course" #lightskyblue{
+
+    entity Course<<Root>><<Entity>>
+    object CourseState<<Value Object>>
+    object CourseEnrollmentState <<Value Object>>
+    object Edition <<Value Object>><<Identify>>
+    object CourseDescription <<Value Object>>
+    object CourseTitle <<Value Object>>
+
+    Course"1" --> "1"CourseTitle: has a
+    Course"1" --> "1"CourseDescription : has a
+    Course"1"-->"1"CourseState : has a
+    Course"1"-->"1"CourseEnrollmentState: has an
+    Course"1" -->"1"Edition : has a
+    Course"1" -->"*"Teacher: has many
+    Course"1" --->"1"Teacher: has one in charge
+}
+
+rectangle "<<Aggregate>> Exam" #EB937F  {
+    entity Exam <<Root>><<Entity>>
+    object ExamTitle<<Value Object>>
+    object ExamType <<Value Object>>
+
+    entity Header
+        object FeedBackType <<Value Object>>
+        object GradeType <<Value Object>>
+        object ExamDescription<<Value Object>>
+
+    object ExamState <<Value Object>>
+
+    Exam "1"-->"1"Header: has a
+    Exam"1"-->"1"ExamType: is of an
+    Exam"1"-->"1"ExamTitle : needs
+    Exam"1"-->"1"ExamState : has a
+    Header"1"-->"1"FeedBackType: has a
+    Header"1"-->"1"GradeType: has a
+    Header"1"-->"0..1"ExamDescription: contains
+    Exam "1"-->"1" Schedule: has a
+}
+
+rectangle "<<Aggregate>> Section" #indianRed{
+    entity Section<<Root>><<Entity>>
+    object SectionDescription<<ValueObject>>
+
+    Exam"1"-->"1...*"Section : contains >
+    Section"1"-->"1...*"Question: contains >
+    Section"1"-->"0..1"SectionDescription: has  a>
+}
+
+rectangle "<<Aggregate>> FinishedExam" #technology{
+
+    entity FinishedExam<<Root>><<Entity>>
+    object FinalGrade<<Value Object>>
+
+    FinishedExam "1"-->"1" FinalGrade: originates
+    FinishedExam "1"-up->"1"Exam: is related to a
+
+}
+
+rectangle "<<Aggregate>> Evaluation" #orchid{
+    entity Evaluation<<Root>><<Entity>>
+    object FeedBack<<Value Object>>
+    object Grade<<Value Object>>
+
+    FinishedExam "1"--->"1"Evaluation: has
+    Evaluation "1"-->"1"Grade: originates a
+    Evaluation "1"-->"1"FeedBack: is associated with a
+}
+
+
+rectangle "<<Aggregate>> Student" #hotpink{
+
+    entity Student<<Entity>><<Root>>
+    object MechanographicNumber<<Value Object>>
+
+    Student -up|> User
+    Student "1" -->"1"MechanographicNumber: has a
+    Student "1"-->"1"FinishedExam: answers
+}
+
+
+rectangle "<<Aggregate>> Meeting" #limegreen{
+
+    entity Meeting<<Root>><<Entity>>
+    object MeetingState<<Value Object>>
+    Meeting "1"-->"1"MeetingState: has a
+}
+
+rectangle "<<Aggregate>> Notification" #lightpink{
+
+    entity Notification<<Root>><<Entity>>
+    object TypeOfNotification<<Value Object>>
+    object NotificationDescription<<Value Object>>
+    Notification "1"-->"1" TypeOfNotification: has a
+    Notification "1"--->"1" NotificationDescription : has a
+    Class "1"-up->"1...*" Notification: originates
+}
+
+rectangle "<<Aggregate>> Invitation" #wheat{
+    entity Invitation<<Entity>><<Root>>
+    object InvitationState<<Value Object>>
+    Meeting"1"-->"1"Invitation
+
+    Invitation "1"-->"1" InvitationState: has a
+    Invitation "1...*"-->"1" User: is sent to
+    Invitation "1"-->"1" Notification: generates
+}
+
+
+rectangle "<<Aggregate>> Permission" #greenyellow{
+
+    entity Permission<<Root>><<Entity>>
+    object AccessLevel<<Value Object>>
+    Permission"1"-->"1"AccessLevel :  has  a
+}
+
+
+rectangle "<<Aggregate>> Enrollment" #slategrey {
+
+    entity Enrollment
+    object EnrollmentState<<Value Object>>
+     
+     Enrollment"1"-->"1"EnrollmentState : has an
+}
+
+rectangle "<<Aggregate>> EnrollmentApprovation" #slategrey {
+
+    entity EnrollmentApprovation
+    object Justification<<Value Object>>
+
+     EnrollmentApprovation"1"-->"1"Justification: has an
+     EnrollmentApprovation"1"-->"1..*"Enrollment: approves
+}
+
+
+Student "1"<--"1...*" Enrollment : makes an >
+Enrollment "1"-->"1" Course : is related to a >
+    Course "1"-up->"*"Exam : is related to
+    SharedBoard"1"-->"1"Notification : when updated sends
+    Notification "1"-up->"1...*" User : Informs
+    SharedBoard"1"-->"1"Permission : gives
+    Permission "1"-->"1...*" User : is associated to
+    Meeting"1"-->"1"Schedule : has a
+
+@enduml
+

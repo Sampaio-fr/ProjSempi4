@@ -1,0 +1,117 @@
+@startuml
+
+autonumber
+actor "User" as usr
+
+participant ":ShowSharedBoardUI" as ui
+participant ":ClientHandler" as srv
+participant ":ShowSharedBoardController" as ctrl
+participant ":SharedBoardService" as sbService
+participant "systemUser: AuthorizationService" as auth
+participant "sysuser :SystemUser" as user
+participant ":PersistenceContext" as persist <<persistence>>
+participant ":RepositoryFactory " as rfcls <<factory>>
+participant "factory: RepositoryFactory " as factory <<factory>>
+participant ":HttpServerBoard" as httpServer
+participant ":HttpsBoardRequest" as httpRequest
+participant ":HTTPmessage" as message
+participant ":GetSharedBoardApp" as sharedApp
+database "permissionRepo: PermissionRepository" as permissionRepo <<repository>>
+database "boardRepo: SharedBoardRepository" as boardRepo <<repository>>
+database "cellRepo: CellRepository" as cellRepo <<repository>>
+participant ":RcompService" as rcomp
+participant "formatMessage:FormateMessage" as msg
+
+activate usr
+usr -> ui : starts requesting the view of a board
+activate ui
+ui->srv: sent code message 6
+activate srv
+srv->ctrl: findWriteAdminPermissionBoards()
+activate ctrl
+ctrl->sbService: findAuthenticatedUser()
+activate sbService
+
+sbService->auth: authorizationService()
+activate auth
+ref over auth
+Sequence Diagram - SD_Authentication
+end
+auth -->sbService: sysUser
+deactivate auth
+sbService-> user: email()
+activate user
+user-->sbService:  email
+deactivate user
+deactivate auth
+sbService-->ctrl:email
+deactivate sbService
+ctrl->sbService: findWriteAdminPermissionBoards(email)
+activate sbService
+sbService->persist: factory = repositories()
+activate persist
+persist->rfcls: create
+persist-->sbService: factory
+deactivate persist
+sbService->factory: permissionRepo = permissionRepository()
+activate factory
+factory--> sbService: permissionRepo
+deactivate factory
+sbService-> permissionRepo: findWriteAdmin(email)
+deactivate sbService
+deactivate ctrl
+srv-->ui: sent code message 2 and the lists the boards
+deactivate srv
+ui --> usr : shows the list of shared boards available
+deactivate ui
+usr -> ui: inputs the shared board name
+activate ui
+ui->srv: sent code message 6 and board name
+activate srv
+srv->ctrl: sharedBoardByTitle(boardTitle)
+activate ctrl
+ctrl->persist: factory = repositories()
+activate persist
+persist->rfcls: create
+persist-->ctrl: factory
+deactivate persist
+ctrl->factory: boardRepo = sharedBoardRepository()
+activate factory
+factory--> ctrl: boardRepo
+deactivate factory
+deactivate ctrl
+
+srv-->ui:sent code message 2 and the list of cells
+deactivate srv
+
+ui ->httpServer: create()
+activate httpServer
+httpServer --> ui:
+
+ui -> httpServer: start()
+httpServer -> httpRequest:create()
+activate httpRequest
+httpRequest --> httpServer:
+httpServer -> httpRequest: run()
+
+httpRequest -> message: create()
+activate message
+message -> message: readHeaderLine()
+message --> httpRequest:
+deactivate message
+httpRequest -> message: setContentFromString
+activate message
+message --> httpRequest
+deactivate message
+httpRequest -> httpServer: boardcells()
+deactivate httpRequest
+
+httpServer -> sharedApp:getCellContent()
+activate sharedApp
+sharedApp -> httpServer:
+deactivate sharedApp
+deactivate httpServer
+ui --> usr: shows the view of a board
+deactivate ui
+
+@enduml

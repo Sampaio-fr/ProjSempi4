@@ -1,0 +1,71 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Manager" as man
+participant "BulkEnrollmentUI" as ui <<presentation>>
+participant "StudentEnrollmentController" as ctrl <<application>>
+participant "ReadCSVFileService" as readCsv <<service>>
+participant "EnrollmentManagementService" as enrollService <<service>>
+participant "PersistenceContext" as pc <<persistence>>
+participant "RepositoryFactory" as repFac <<factory>>
+database "EnrollmentRepository" as enrollRepo <<repository>>
+database "StudentRepository" as stdRepo <<repository>>
+database "CourseRepository" as courseRepo <<repository>>
+
+activate man
+man->ui: requests bulk enrollment of students via csv file
+activate ui
+ui--> man :requests file path
+deactivate ui
+man->ui: types requested data
+activate ui
+ui->ctrl: bulkEnrollmentInCourse(filePath)
+activate ctrl
+ctrl->readCsv: bulkEnrollmentInCourse(filePath)
+loop while has next line
+    activate readCsv
+    readCsv->enrollService: getStudentFromMecNum(menNum)
+    activate enrollService
+    enrollService->pc: rep = repositories()
+    activate pc
+    pc->repFac: create
+    pc->enrollService: rep
+    deactivate pc
+    enrollService->repFac: enrollRepo = rep.enrollmentRepository()
+    activate repFac
+    repFac-->enrollService: enrollRepo
+    deactivate repFac
+
+    enrollService->repFac: courseRepo = rep.courseRepository()
+    activate repFac
+    repFac-->enrollService: courseRepo
+    deactivate repFac
+
+    enrollService->repFac: studentRepo = rep.studentRepository()
+    activate repFac
+    repFac-->enrollService: studentRepo
+    deactivate repFac
+    enrollService->stdRepo: getStudentFromMecNumber(mecNum)
+    activate stdRepo
+    stdRepo --> enrollService: student
+    deactivate stdRepo
+    enrollService-->readCsv: student
+    readCsv->enrollService: getCourseFromCourseID(CourseID)
+    enrollService->courseRepo: getCourseFromCourseID(CourseID)
+    activate courseRepo
+    courseRepo --> enrollService: course
+    deactivate courseRepo
+    enrollService --> readCsv: course
+    readCsv -> enrollService : saveEnrollment(student.email,course)
+    enrollService->enrollRepo: saveEnrollment(student.email, course)
+    deactivate enrollService
+    end
+readCsv-->ctrl: operation success
+deactivate readCsv
+ctrl-->ui: operation success
+deactivate ctrl
+ui-->man: show operation success
+deactivate ui
+@enduml

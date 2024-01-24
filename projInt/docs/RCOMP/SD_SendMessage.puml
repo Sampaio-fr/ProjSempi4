@@ -1,0 +1,32 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant ":RcompService" as serv
+participant "formatMessage:FormateMessage" as msg
+
+[->serv: sendMessage(formatMessage,outputStream)
+activate serv
+serv -> msg: version
+activate msg
+msg-->serv
+deactivate msg
+serv -> msg: code
+activate msg
+msg-->serv
+deactivate msg
+serv -> msg: data_length_A
+activate msg
+msg-->serv
+deactivate msg
+serv -> msg: data_length_B
+activate msg
+msg-->serv
+deactivate msg
+serv -> msg: message
+activate msg
+msg-->serv
+deactivate msg
+deactivate serv
+
+@enduml

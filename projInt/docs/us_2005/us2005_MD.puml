@@ -1,0 +1,30 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+rectangle "<<Aggregate>> Student" #hotpink{
+
+    entity Student<<Entity>><<Root>>
+    object MechanographicNumber<<Value Object>>
+
+    Student "1" -->"1"MechanographicNumber: has a
+}
+
+rectangle "<<Aggregate>> Grade" #yellow{
+
+    entity Grade<<Entity>><<Root>>
+    object Course<<Value Object>>
+    object Exam<<Value Object>>
+    object examGrade<<Value Object>>
+    object myGrade<<Value Object>>
+
+    Grade "1" -->"1"Course: is associated to
+    Grade "1"-->"1"Exam: belongs to
+    Grade "1"-->"1"examGrade: has a
+    Grade "1"-->"1"myGrade: has a
+
+    Student "1" -> "0..*" Grade : has
+}
+
+
+@enduml

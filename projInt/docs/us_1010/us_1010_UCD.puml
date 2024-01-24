@@ -1,0 +1,8 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+:Teacher: as Admin
+
+Admin ---> (schedule a weekly class)
+
+@enduml

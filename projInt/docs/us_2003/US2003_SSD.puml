@@ -1,0 +1,22 @@
+@startuml
+
+autonumber
+actor "Teacher" as tic
+
+participant ":System" as sys
+
+
+activate tic
+tic -> sys : request the list of exams in a Course
+
+activate sys
+sys --> tic : list all Courses the Teacher is in
+deactivate sys
+tic -> sys : Selects the course
+
+activate sys
+sys --> tic : shows the list of exams of that course
+deactivate sys
+
+
+@enduml

@@ -1,0 +1,87 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor Manager as Actor
+participant ChangeCourseStateUI as UI
+control ChangeCourseStateController as Controller
+participant CourseManagementService as Service
+participant ":PersistenceContext" as pc
+participant ":RepositoryFactory " as factory
+
+database CourseRepository as CRep <<repository>>
+participant "selectedCourse:Course" as Course <<domain>>
+
+activate Actor
+Actor -> UI: asks to change course state
+activate UI
+UI->Controller: listCourses()
+activate Controller
+Controller->Service: listCourses()
+activate Service
+Service->pc: courseRepo = repositoryFactory()
+activate pc
+pc -> factory: courseRepository()
+activate factory
+deactivate factory
+deactivate pc
+Service -> CRep: allCourses()
+activate CRep
+CRep --> Service : allCourses
+deactivate CRep
+Service --> Controller: allCourses
+deactivate Service
+Controller --> UI : allCourses
+deactivate Controller
+UI--> Actor: asks to select the course : shows allCourses
+deactivate UI
+Actor -> UI: selects wanted course
+activate UI
+UI -> UI: c=selectedCourse
+UI -> Actor: asks if he wants to open or close the selected course
+deactivate UI
+
+alt open
+    Actor -> UI: open
+    activate UI
+    UI -> Controller: openCourse(selectedCourse)
+    activate Controller
+    Controller -> Course: selectedCourse.openCourse()
+    activate Course
+    |||
+    deactivate Course
+    Controller -> CRep: save(selectedCourse)
+    activate CRep
+        |||
+    deactivate CRep
+
+    deactivate Controller
+    deactivate UI
+
+else close
+    Actor -> UI: Close
+    activate UI
+    UI -> Controller: closeCourse(selectedCourse)
+    activate Controller
+    Controller -> Course: selectedCourse.closeCourse()
+    activate Course
+    |||
+    deactivate Course
+    Controller -> CRep: save(selectedCourse)
+    activate CRep
+            |||
+    deactivate CRep
+
+    deactivate Controller
+    deactivate UI
+
+end
+|||
+
+activate UI
+UI --> Actor: shows course actual state
+deactivate UI
+
+deactivate Actor
+@enduml

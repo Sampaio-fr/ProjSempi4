@@ -1,0 +1,29 @@
+@startuml
+autonumber
+
+actor "Manager/Teacher/Student" as Manager
+
+activate Manager
+Manager -> ":System" : ask to Update a Post-It
+deactivate Manager
+activate ":System"
+":System" --> Manager :shows list of SharedBoards where to Update a Post-It
+activate Manager
+deactivate ":System"
+
+Manager -> ":System" : selects a SharedBoard where to Update a Post-It
+activate ":System"
+deactivate Manager
+
+":System" --> Manager : shows list of Cells where to Update a Post-It
+deactivate ":System"
+activate Manager
+
+Manager -> ":System" : selects a Cell where to Update a Post-It and also the content
+deactivate Manager
+activate ":System"
+":System" --> Manager : Informs the success or failure of the post-It
+deactivate ":System"
+activate Manager
+
+@enduml

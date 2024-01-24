@@ -1,0 +1,36 @@
+@startuml
+skinparam linetype ortho
+rectangle "<<Aggregate>> ChargeTeacher" #mediumslateblue{
+    entity "ChargeTeacher"<<Root>><<Entity>>
+}
+
+rectangle "<<Aggregate>> Teacher" #blueviolet{
+
+    entity Teacher<<Entity>><<Root>>
+    object Acronym<<Value Object>>
+
+    Teacher -up|> User: is a
+    Teacher"1" --> "1"Acronym : has a
+    ChargeTeacher "1"--|>"1" Teacher : is a
+}
+
+rectangle "<<Aggregate>> Course" #lightskyblue{
+
+    entity Course<<Root>><<Entity>>
+    object Id<<Value Object>><<Identify>>
+    object CourseState<<Value Object>>
+    object Edition <<Value Object>>
+    object CourseDescription <<Value Object>>
+    object CourseTitle <<Value Object>>
+
+    Course"1" --> "1"CourseTitle: has a
+    Course"1" --> "1"Id : has a
+    Course"1" --> "1"CourseDescription : has a
+    Course"1"-->"1"CourseState : has a
+    Course"1" -->"1"Edition : has a
+    Course"1" --->"1"ChargeTeacher: needs a
+    Course"1" -->"1...*"Teacher
+}
+
+
+@enduml

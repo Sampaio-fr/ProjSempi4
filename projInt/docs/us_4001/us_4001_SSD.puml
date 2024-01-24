@@ -1,0 +1,24 @@
+@startuml
+autonumber
+
+actor "Manager/Teacher/Student" as Manager
+
+activate Manager
+Manager -> ":System" : ask to create a Meeting
+activate ":System"
+":System" --> Manager : asks for input information
+deactivate ":System"
+Manager -> ":System" : inputs the information
+activate ":System"
+
+":System" -->Manager : shows list of Users
+deactivate ":System"
+
+Manager -> ":System" : selects Users for a meeting
+activate ":System"
+
+":System" --> Manager : informs operation success or uncess
+deactivate ":System"
+deactivate Manager
+
+@enduml

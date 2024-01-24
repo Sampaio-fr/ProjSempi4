@@ -1,0 +1,11 @@
+@startuml
+
+Actor Student
+
+activate Student
+Student -> System: i want to see my exams
+activate System
+System --> Student: Lists all student exams
+deactivate System
+
+@enduml

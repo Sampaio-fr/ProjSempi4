@@ -1,0 +1,20 @@
+@startuml
+
+Actor Student
+
+activate Student
+Student -> System: I want to take a Formative Exam
+activate System
+System --> Student: Shows available formative exams
+deactivate System
+Student -> System: Selects the formative exam
+activate System
+System --> Student: Creates the Exam
+deactivate System
+Student -> System: Does the Formative Exam
+activate System
+System --> Student: Prints Evaluation Details
+deactivate System
+deactivate Student
+
+@enduml

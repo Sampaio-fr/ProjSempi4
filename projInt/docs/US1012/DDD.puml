@@ -1,0 +1,83 @@
+@startuml
+
+hide field
+hide methods
+
+title Domain Driven Design
+
+skinparam linetype ortho
+
+rectangle "<<Aggregate>> Course" {
+
+    entity Course<<Root>><<Entity>>
+    object Id<<Value Object>><<Identify>>
+    object CourseState<<Value Object>>
+    object CourseEnrollmentState <<Value Object>>
+    object Edition <<Value Object>>
+    object CourseDescription <<Value Object>>
+    object CourseTitle <<Value Object>>
+    object ExamsList <<Value Object>>
+    object CourseEnrollmentsList <<Value Object>>
+
+    Course"1" --> "1"CourseTitle: has a
+    Course"1" --> "1"Id : has a
+    Course"1" --> "1"CourseDescription : has a
+    Course"1"-->"1"CourseState : has a
+    Course"1"-->"1"CourseEnrollmentState: has an
+    Course"1" -->"1"Edition : has a
+    Course"1" -->"*"ExamsList : has an
+    Course"1" -->"*"CourseEnrollmentsList : has an
+}
+
+rectangle "<<Aggregate>> Teacher" {
+
+    entity Teacher<<Root>><<Entity>>
+    object Acronym<<Value Object>><<Identify>>
+    object ECourseUser<<Value Object>>
+    object SystemUser <<Value Object>>
+    object TimeTable <<Value Object>>
+    object CourseList <<Value Object>>
+
+    Teacher"1" --> "1"Acronym: identifies
+    Teacher"1" --> "1"ECourseUser : is a
+    Teacher"1" --> "1"SystemUser : is a
+    Teacher"1" --> "*"CourseList : has an
+    Teacher"1"-->"*"TimeTable : has a
+}
+
+rectangle "<<Aggregate>> Lecture" {
+
+    entity Lecture<<Root>><<Entity>>
+    object LectureId<<Value Object>><<Identify>>
+    object LectureTitle<<Value Object>>
+    object LectureType <<Value Object>>
+    object LectureSchedule <<Value Object>>
+    object LectureCourse <<Value Object>>
+
+    Lecture"1" --> "1"LectureId: identifies
+    Lecture"1" --> "1"LectureTitle : has a
+    Lecture"1" --> "1"LectureType : has a
+    Lecture"1" --> "1"LectureSchedule : has a
+    Lecture"1"-->"1"LectureCourse : has a
+}
+
+rectangle "<<Aggregate>> Schedule" {
+
+    entity Schedule<<Root>><<Entity>>
+    object ScheduleId<<Value Object>><<Identify>>
+    object InitialDate<<Value Object>>
+    object FinalDate <<Value Object>>
+    object Duration <<Value Object>>
+
+    Schedule"1" --> "1"ScheduleId: identifies
+    Schedule"1" --> "1"InitialDate : has a
+    Schedule"1" --> "1"FinalDate : has a
+    Schedule"1" --> "1"Duration : has a
+}
+
+Course"1" --> "*" Teacher : has
+Course "1" --> "*" Lecture : has
+TimeTable"1" --> "1..*" Schedule : has
+Schedule "1"--> "1" Lecture : is associated with
+
+@enduml

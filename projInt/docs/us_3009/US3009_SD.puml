@@ -1,0 +1,146 @@
+@startuml
+
+autonumber
+actor "User" as usr
+
+participant ":ClientHandler" as sys
+participant ":ViewBoardHistoryController" as ctrl
+participant ":SharedBoardService" as sbService
+participant ":ViewBoardHistoryService" as viewService
+participant "systemUser: AuthorizationService" as auth
+participant "sysuser :SystemUser" as user
+participant ":RcompService" as serv
+participant ":RcompService" as rcomServ
+participant "formatMessage:FormateMessage" as msg
+participant ":PersistenceContext" as persist <<persistence>>
+participant ":RepositoryFactory " as rfcls <<factory>>
+participant "factory: RepositoryFactory " as factory <<factory>>
+database "permissionRepo: PermissionRepository" as permissionRepo <<repository>>
+database "boardRepo: SharedBoardRepository" as boardRepo <<repository>>
+database "boardLogRepo: SharedBoardLogRepository" as boardLogRepo <<repository>>
+
+activate usr
+usr -> sys : requests to see the history of updates in a board
+activate sys
+sys->ctrl: findWriteAdminPermissionBoards()
+activate ctrl
+ctrl->sbService: findAuthenticatedUser()
+activate sbService
+
+sbService->auth: authorizationService()
+activate auth
+ref over auth
+Sequence Diagram - SD_Authentication
+end
+auth -->sbService: sysUser
+deactivate auth
+sbService-> user: email()
+activate user
+user-->sbService:  email
+deactivate user
+deactivate auth
+sbService-->ctrl:email
+deactivate sbService
+ctrl->sbService: findWriteAdminPermissionBoards(email)
+activate sbService
+sbService->persist: factory = repositories()
+activate persist
+persist->rfcls: create
+persist-->sbService: factory
+deactivate persist
+sbService->factory: permissionRepo = permissionRepository()
+activate factory
+factory--> sbService: permissionRepo
+deactivate factory
+sbService-> permissionRepo: findWriteAdmin(email)
+deactivate sbService
+deactivate ctrl
+sys->msg:create
+sys->rcomServ: sendMessage(formatMessage,outputStream)
+activate rcomServ
+ref over rcomServ
+Sequence Diagram - SD_SendMessage
+end
+rcomServ-->sys
+deactivate rcomServ
+sys->rcomServ: readData(inputStream)
+activate rcomServ
+rcomServ->msg: create
+rcomServ-->sys
+deactivate rcomServ
+sys --> usr : shows the list of shared boards available
+deactivate sys
+
+usr -> sys: inputs the shared board name
+activate sys
+sys->ctrl: viewSharedBoardHistory(boardTitle)
+activate ctrl
+ctrl->viewService: viewBoardHistory(boardTitle)
+activate viewService
+viewService->persist: factory = repositories()
+activate persist
+persist->rfcls: create
+persist-->viewService: factory
+deactivate persist
+viewService->factory: boardRepo = sharedBoardRepository()
+activate factory
+factory--> viewService: boardRepo
+deactivate factory
+viewService-> boardRepo: findSharedBoardByTitle(boardTitle)
+activate boardRepo
+boardRepo-->viewService: sharedBoard
+deactivate boardRepo
+viewService->factory: boardLogRepo = sharedBoardLogRepository()
+activate factory
+factory--> viewService: boardLogRepo
+deactivate factory
+viewService->boardLogRepo:findSharedBoardHistory(sharedBoard)
+activate boardLogRepo
+boardLogRepo-->viewService: sharedBoardLog
+deactivate boardLogRepo
+deactivate viewService
+deactivate ctrl
+sys->ctrl: viewBoardCellsHistory(sharedBoardLog)
+activate ctrl
+ctrl->viewService: viewCellsHistory(sharedBoardLog)
+deactivate ctrl
+activate viewService
+viewService->boardLogRepo: findCellsHistory(sharedBoardLog)
+activate boardLogRepo
+boardLogRepo-->viewService:cells
+deactivate boardLogRepo
+deactivate viewService
+sys->rcomServ: sendMessage(formatMessage,outputStream)
+activate rcomServ
+ref over rcomServ
+Sequence Diagram - SD_SendMessage
+end
+rcomServ-->sys
+deactivate rcomServ
+sys->rcomServ: readData(inputStream)
+activate rcomServ
+rcomServ->msg: create
+rcomServ-->sys
+deactivate rcomServ
+sys->ctrl: viewBoardPostItHistory(cells)
+activate ctrl
+ctrl->viewService:viewPostItHistory(cells)
+activate viewService
+deactivate viewService
+deactivate ctrl
+activate rcomServ
+ref over rcomServ
+Sequence Diagram - SD_SendMessage
+end
+rcomServ-->sys
+deactivate rcomServ
+sys->rcomServ: readData(inputStream)
+activate rcomServ
+rcomServ->msg: create
+rcomServ-->sys
+deactivate rcomServ
+sys --> usr: shows the history of updates
+deactivate sys
+
+
+@enduml

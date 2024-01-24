@@ -1,0 +1,7 @@
+@startuml
+
+:Teacher: as Teacher
+
+Teacher ---> (Change Lecture Schedule)
+
+@enduml

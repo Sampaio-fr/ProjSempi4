@@ -1,0 +1,8 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+:Manager: as man
+
+man ---> (Enroll students in bulk with csv file)
+
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+
+Student ---> (Take an Exam)
+
+@enduml

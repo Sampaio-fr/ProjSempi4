@@ -1,0 +1,5 @@
+@startuml
+
+Teacher ---> (List grades from course)
+
+@enduml

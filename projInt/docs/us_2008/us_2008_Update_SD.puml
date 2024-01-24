@@ -1,0 +1,147 @@
+@startuml
+autonumber
+
+actor Teacher as Actor
+participant ":UpdateFormativeExamUI" as UI <<presentation>>
+participant ":UpdateFormativeExamController" as Controller <<application>>
+participant ":ExamManagementService" as ExamManagementService <<application>>
+participant ":AuthzRegistry" as AuthzRegistry <<application>>
+participant ":Exam" as Exam <<Domain>>
+participant ":PersistenceContext" as Persistence <<persistence>>
+participant ":RepositoryFactory" as RepositoryFactory <<factory>>
+
+database ":ExamRepository" as ExamRepository <<repository>>
+database ":TeacherRepository" as TeacherRepository <<repository>>
+database ":CourseRepository" as CourseRepository <<repository>>
+
+database ":JPAExamRepository" as JPAExamRepository <<repository>>
+database ":JPATeacherRepository" as JPATeacherRepository <<repository>>
+database ":JPACourseRepository" as JPACourseRepository <<repository>>
+
+participant "selectedExam:ExamFormative" as ExamFormative <<domain>>
+
+activate Actor
+Actor -> UI : ask to update exam
+activate UI
+UI-->Controller:findCourses()
+
+activate Controller
+Controller-->ExamManagementService:listCourses()
+
+activate ExamManagementService
+ExamManagementService-->AuthzRegistry: AuthzRegistry.authorizationService()
+
+activate AuthzRegistry
+deactivate AuthzRegistry
+ExamManagementService --> Persistence: create()
+activate Persistence
+
+
+Persistence --> RepositoryFactory: getRepositoryFactory();
+activate RepositoryFactory
+
+RepositoryFactory-->CourseRepository: courseRepository()
+activate CourseRepository
+deactivate CourseRepository
+RepositoryFactory-->ExamRepository:examRepository()
+activate ExamRepository
+deactivate ExamRepository
+RepositoryFactory-->TeacherRepository:teacherRepository()
+activate TeacherRepository
+deactivate TeacherRepository
+
+deactivate RepositoryFactory
+deactivate Persistence
+
+ExamManagementService-->TeacherRepository:findTeacherByEmail(systemUser.email())
+
+activate TeacherRepository
+TeacherRepository-->JPATeacherRepository:findTeacherByEmail(systemUser.email())
+activate JPATeacherRepository
+deactivate JPATeacherRepository
+
+deactivate TeacherRepository
+deactivate ExamManagementService
+
+
+UI --> Actor : shows list of course and asks to select one
+deactivate UI
+
+Actor -> UI : selects course
+activate UI
+
+UI -> Controller :findExams(updated)
+activate Controller
+Controller -> ExamManagementService :findExams(updated)
+activate ExamManagementService
+ExamManagementService-->TeacherRepository:findTeacherByEmail(systemUser.email())
+activate TeacherRepository
+TeacherRepository --> JPATeacherRepository:findTeacherByEmail(systemUser.email())
+activate JPATeacherRepository
+deactivate JPATeacherRepository
+deactivate TeacherRepository
+
+ExamManagementService-->ExamRepository:examsByCourseAndTeacher(course,teacher)
+activate ExamRepository
+ExamRepository-->JPAExamRepository:examsByCourseAndTeacher(course,teacher)
+activate JPAExamRepository
+deactivate JPAExamRepository
+deactivate ExamRepository
+deactivate ExamManagementService
+deactivate Controller
+
+UI --> Actor : shows list of formative exam and asks to select one
+deactivate UI
+
+Actor -> UI : selects formative exam
+activate UI
+
+UI -->Actor : asks for the changes in exam input
+deactivate UI
+Actor -> UI : inputs the exam changes
+activate UI
+UI -> Controller: hasSection
+activate Controller
+Controller -> ExamFormative : examStruct
+activate ExamFormative
+ExamFormative --> Controller:
+deactivate ExamFormative
+
+UI -> Controller: updateSection(selectedExam,section, input)
+Controller-> Controller:filePath(exam)
+Controller -> ExamManagementService: updateSection(filepath),section,input)
+
+
+UI -> Controller: validateFormativeExam(exam)
+Controller-> Controller:filePath(exam)
+Controller -> ExamManagementService: validateExam(filepath)
+activate ExamManagementService
+deactivate ExamManagementService
+
+
+UI-->Controller:saveUpdatedExam(examUpdated))
+Controller-> Controller:filePath(exam)
+Controller-->ExamManagementService:saveUpdatedExam(filepath,examUpdated)
+activate ExamManagementService
+ExamManagementService -> ExamManagementService: readFileToString(filepath)
+ExamManagementService -> ExamFormative:updateExamStruct(readFileToString(filepath)
+activate ExamFormative
+ExamFormative --> ExamManagementService:
+deactivate ExamFormative
+ExamManagementService-->ExamRepository:save(examUpdated)
+activate ExamRepository
+ExamRepository-->JPAExamRepository:save(examUpdated)
+activate JPAExamRepository
+deactivate JPAExamRepository
+deactivate ExamRepository
+deactivate ExamManagementService
+
+deactivate ExamManagementService
+deactivate Controller
+deactivate Controller
+
+UI --> Actor : informs operation success or failure
+deactivate UI
+deactivate Actor
+
+@enduml

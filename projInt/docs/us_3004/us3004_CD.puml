@@ -1,0 +1,88 @@
+@startuml
+
+package presentation {
+  class ShareBoardUI {
+    + shareBoardUI(Socket socket, DataInputStream inputStream, \nDataOutputStream outputStream, BufferedReader bufferedReader): void
+  }
+}
+
+package application {
+  class ShareBoardController {
+    + listOwnedBoards(): Iterable<SharedBoard>
+    + readPermission(SharedBoard board, String email): void
+    + writePermission(SharedBoard board, String email): void
+  }
+}
+
+package service {
+  class ShareBoardManagementService {
+    + listOwnedBoards(): Iterable<SharedBoard>
+    + readPermission(SharedBoard board, String email): void
+    + writePermission(SharedBoard board, String email): void
+  }
+}
+
+package persistence {
+  class PersistenceContext {
+    + repositories(): RepositoryFactory
+  }
+
+  interface RepositoryFactory {
+    + sharedBoardRepository(): SharedBoardRepository
+    + cellRepository(): CellRepository
+  }
+
+  interface SharedBoardRepository {
+    + save(sharedBoard: SharedBoard): void
+  }
+  JpaSharedBoardRepository -up-|> SharedBoardRepository
+  class JpaSharedBoardRepository {
+      + save(sharedBoard: SharedBoard): void
+    }
+
+  interface CellRepository {
+    + save(cell: Cell): void
+  }
+  JpaCellRepository -up-|> CellRepository
+
+  class JpaCellRepository {
+      + save(cell: Cell): void
+    }
+}
+
+
+Client .down.> ShareBoardUI : Uses
+
+
+class Client {
+  +main(String[] args): void
+}
+
+class ClientHandler {
+  + shareBoard(FormatMessage message): void
+
+}
+
+class RcompService {
+  +sendMessage(socket, message, outputStream)
+  +readData(socket, inputStream)
+}
+
+class FormatMessage
+
+
+ClientHandler -down-> RcompService : Sends/Receives Messages
+ShareBoardUI -down-> RcompService : Sends/Receives Messages
+Server -down-> ClientHandler : Uses
+RcompService -down-> FormatMessage : Uses
+
+
+
+
+ShareBoardUI --> ShareBoardController
+ShareBoardController --> ShareBoardManagementService
+ShareBoardManagementService --> PersistenceContext
+PersistenceContext -->RepositoryFactory
+RepositoryFactory --> SharedBoardRepository
+RepositoryFactory --> CellRepository
+@enduml

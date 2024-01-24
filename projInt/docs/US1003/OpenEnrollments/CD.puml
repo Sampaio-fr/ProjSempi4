@@ -1,0 +1,40 @@
+@startuml
+
+class OpenEnrollmentsAction{
+    + show()
+}
+class OpenEnrollmentsUI {
+    + doShow()
+}
+
+class CourseStateManagementController {
+    + changeCourseStateToEnroll()
+}
+
+class CourseManagementService {
+    + openCourses()
+}
+
+class PersistenceContext {
+    + repositories()
+}
+
+interface RepositoryFactory {
+    + courseRepository()
+}
+
+interface CourseRepository {
+    + findOpen()
+    + save()
+}
+
+OpenEnrollmentsAction .down.> OpenEnrollmentsUI
+OpenEnrollmentsUI .down.> CourseStateManagementController
+
+CourseStateManagementController -down-> CourseManagementService
+
+CourseManagementService --> PersistenceContext
+PersistenceContext --> RepositoryFactory
+RepositoryFactory --> CourseRepository
+
+@enduml

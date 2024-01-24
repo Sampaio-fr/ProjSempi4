@@ -1,0 +1,39 @@
+@startuml
+
+
+ChangeCourseStateUI .down.> ChangeCourseStateController
+
+ChangeCourseStateController -down-> CourseManagementService
+
+
+CourseManagementService --> PersistenceContext
+PersistenceContext --> RepositoryFactory
+RepositoryFactory --> CourseRepository
+
+class ChangeCourseStateUI{
++ doShow()
+}
+
+class ChangeCourseStateController{
++ changeCourseStateToEnroll()
+}
+
+class CourseManagementService{
++ openCourses()
++ closeCourses()
+}
+
+class PersistenceContext{
++ repositories()
+}
+
+class RepositoryFactory{
++ courseRepository()
+}
+
+class CourseRepository{
+    + findAll()
+    + save()
+    }
+
+@enduml

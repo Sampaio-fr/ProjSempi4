@@ -1,0 +1,113 @@
+@startuml
+
+@startuml
+
+class MeetingRequestsUI{
++listOfNotifications()
++notificationOption(current,answer)
+}
+class MeetingRequestsController{
++Create()
++viewNotifications()
++notificationOption(current,flag)
+                               }
+class NotificationAcceptanceService{
++authorizationService()
++Create()
++findUser()
++session().get().authenticatedUser().email()
++ofIdentity(email)
++findListNotificationsByUser(eCourseUser)
++save(notification)
++createParticipant(notification)
++save(meeting)
++save(timeTable)
++save(eCourseUser)
+
+                                   }
+class ParticipantService{
++save(participant)
+                        }
+class AuthorizationService{
++session().get().authenticatedUser().email()
+                          }
+class AuthzRegistry{
++authorizationService()
+                                             }
+class PersistenceContext{
++getRepositoryFactory()
+                                                  }
+interface RepositoryFactory{
++meetingRepository()
++scheduleRepository()
++timetableRepository()
++ecourseUserRepository()
+                                                     }
+interface MeetingRepository{
++save(meeting)
+                                                     }
+interface NotificationRepository{
++save(notification)
++findListNotificationsByUser(eCourseUser)
+                                                          }
+interface ScheduleRepository{
++save(schedule))
+                                                      }
+interface TimetableRepository{
++save(timeTable)
+                                                       }
+interface ECourseUserRepository{
++save(eCourseUser)
++ofIdentity(email)
+                                                         }
+interface ParticipantRepository{
++save(participant)
+                                                         }
+class JPAMeetingRepository{
++save(meeting)
+                                                    }
+class JPANotificationRepository{
++save(notification)
++findListNotificationsByUser(eCourseUser)
+                                                         }
+class JPAScheduleRepository{
++save(schedule))
+                                                     }
+class JPATimetableRepository{
++save(timeTable)
+                                                      }
+class JPAECourseUserRepository{
++save(eCourseUser)
++ofIdentity(email)
+                                                        }
+class JPAParticipantRepository{
++save(participant)
+                                                        }
+
+
+MeetingRequestsUI ..> MeetingRequestsController
+MeetingRequestsController --> NotificationAcceptanceService
+
+NotificationAcceptanceService --> AuthzRegistry
+NotificationAcceptanceService --> ParticipantService
+ParticipantService --> PersistenceContext
+
+NotificationAcceptanceService --> PersistenceContext
+PersistenceContext --> RepositoryFactory
+
+NotificationAcceptanceService --> AuthorizationService
+RepositoryFactory --> ECourseUserRepository
+RepositoryFactory --> NotificationRepository
+RepositoryFactory --> MeetingRepository
+RepositoryFactory --> ScheduleRepository
+RepositoryFactory --> TimetableRepository
+MeetingRepository --> JPAMeetingRepository
+RepositoryFactory --> ParticipantRepository
+NotificationRepository --> JPANotificationRepository
+ScheduleRepository --> JPAScheduleRepository
+TimetableRepository --> JPATimetableRepository
+ECourseUserRepository --> JPAECourseUserRepository
+ParticipantRepository --> JPAParticipantRepository
+
+@enduml
+

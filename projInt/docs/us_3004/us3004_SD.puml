@@ -1,0 +1,132 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor "User" as user
+participant "Client" as client <<server>>
+participant "ShareBoardUI" as ui <<presentation>>
+participant "ClientHandler" as clientHandler <<server>>
+participant "RcompService" as rcompService <<service>>
+participant "ShareBoardController" as ctrl <<application>>
+participant "AuthenticationService" as auth <<service>>
+participant "sysuser SystemUser" as sys
+participant "ShareBoardManagementService" as boardService <<service>>
+participant "PersistenceContext" as pc <<persistence>>
+participant "RepositoryFactory" as repFac <<factory>>
+participant "Permission" as Perm
+database "PermissionRepository" as permRepo <<repository>>
+database "SharedBoardRepository" as boardRepo <<repository>>
+database "ECourseUserRepository" as ecourseUserRepo <<repository>>
+
+
+autonumber
+
+activate user
+
+user -> client : Does Login
+activate client
+client --> user : shows User menu
+user -> client : Requests to share a board owned by the user
+client -> ui : shareBoardUI(socket, inputStream,\n outputStream, bufferedReader)
+deactivate client
+activate ui
+ui -> rcompService : sendMessage(socket, formatMessage, outputStream)
+activate rcompService
+rcompService --> clientHandler: readData(socket, dataInputStream)
+deactivate rcompService
+activate clientHandler
+clientHandler -> clientHandler : shareBoard(message)
+clientHandler -> ctrl: listOwnedBoards()
+activate ctrl
+ctrl -> auth: sysuser = getSystemUser()
+activate auth
+ref over auth
+Sequence Diagram - SD_Authentication
+end
+auth--> ctrl: sysuser
+deactivate auth
+ctrl -> boardService: ListOwnedBoards(email)
+activate boardService
+boardService->pc: factory = repositories()
+activate pc
+pc->repFac: create
+pc->boardService: factory
+deactivate pc
+boardService -> boardRepo: boardRepo = sharedBoardRepository()
+boardRepo -> boardService : boardRepo
+boardService -> boardRepo: ListOwnedBoards(email)
+activate boardRepo
+boardRepo --> boardService: ListOwnedBoards
+deactivate boardRepo
+boardService --> ctrl: ListOwnedBoards
+deactivate boardService
+ctrl --> clientHandler: ListOwnedBoards
+deactivate ctrl
+clientHandler -> rcompService : sendMessage(socket, formatMessage, outputStream)
+deactivate clientHandler
+activate rcompService
+rcompService --> ui: readData(socket, dataInputStream)
+deactivate rcompService
+
+deactivate boardService
+ui --> user: Lists boards owned by the user and asks to select one
+user -> ui: Selects a board
+user <-- ui: Requests data (email, permission)
+user -> ui: Types requested data (email, permission)
+
+alt Read Permission
+
+ui -> rcompService : sendMessage(socket, formatMessage, outputStream)
+activate rcompService
+rcompService --> clientHandler: readData(socket, dataInputStream)
+deactivate rcompService
+activate clientHandler
+clientHandler -> clientHandler : shareBoard(message)
+clientHandler->ctrl : readPermission(selectedBoard, email)
+activate ctrl
+ctrl -> boardService: readPermission(selectedBoard, email)
+activate boardService
+boardService -> ecourseUserRepo: ecourseUserRepo = ecourseUserRepository()
+ecourseUserRepo -> boardService : ecourseUserRepo
+boardService -> ecourseUserRepo : eCourseUserByEmail(email)
+ecourseUserRepo -> boardService : eCourseUser
+boardService -> Perm** : create(selectedBoard, eCourseUser)
+boardService -> boardService : Permission.readPermission()
+boardService -> permRepo: permRepo = permissionRepository()
+permRepo -> boardService : permRepo
+boardService -> permRepo : save()
+
+else Write Permission
+
+ui -> rcompService : sendMessage(socket, formatMessage, outputStream)
+activate rcompService
+rcompService --> clientHandler: readData(socket, dataInputStream)
+deactivate rcompService
+clientHandler -> clientHandler : shareBoard(message)
+clientHandler->ctrl : writePermission(selectedBoard, email)
+
+ctrl -> boardService: writePermission(selectedBoard, email)
+
+boardService -> ecourseUserRepo: ecourseUserRepo = ecourseUserRepository()
+ecourseUserRepo -> boardService : ecourseUserRepo
+boardService -> ecourseUserRepo : eCourseUserByEmail(email)
+ecourseUserRepo -> boardService : eCourseUser
+boardService -> Perm** : create(selectedBoard, eCourseUser)
+boardService -> boardService : Permission.writePermission()
+boardService -> permRepo: permRepo = permissionRepository()
+permRepo -> boardService : permRepo
+boardService -> permRepo : save()
+
+end
+
+boardService --> ctrl : Operation success
+deactivate boardService
+ctrl --> clientHandler : Operation success
+deactivate ctrl
+clientHandler -> rcompService : sendMessage(socket, formatMessage, outputStream)
+deactivate clientHandler
+activate rcompService
+rcompService --> ui: readData(socket, dataInputStream)
+deactivate rcompService
+ui --> user : Operation success
+deactivate ui
+@enduml

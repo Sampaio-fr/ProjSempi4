@@ -1,0 +1,86 @@
+@startuml
+
+actor Student as usr
+participant ":ListExamsGradesUI" as ui
+participant ":ListExamsGradesController" as ctr
+participant ":ListExamsGradesService" as serv
+participant ":PersistenceContext" as pc
+participant ":RepositoryFactory" as rf
+database ":StudentRepository" as sr
+database ":GradeRepository" as gr
+participant ":Enrollment" as er
+participant ":Course" as cr
+participant ":Student" as st
+participant ":Exams" as ex
+participant ":ExamEvaluationListener" as eel
+
+usr -> ui : show()
+
+activate ui
+ui -> ui : doShow()
+ui -> ctr : listActiveExams()
+
+activate ctr
+ctr -> serv : findStudentByEmail()
+
+activate serv
+serv -> pc : repositories()
+
+activate pc
+pc -> rf : studentRepository()
+
+activate rf
+rf -> sr : get()
+activate sr
+deactivate rf
+deactivate pc
+deactivate serv
+
+sr --> ctr : Student
+deactivate sr
+
+
+ctr -> er : Student.findEnrollments()
+activate er
+er --> ctr : Student Enrollments
+deactivate er
+
+loop
+
+ctr -> cr : Enrollment.getCourse()
+activate cr
+cr --> ctr : Course
+deactivate cr
+
+ctr -> ex : Course.findExamList()
+activate ex
+ex --> ctr : Course Active Exams
+deactivate ex
+
+end
+
+ctr --> ui : All Active Exams List
+deactivate ctr
+
+ui --> usr : Show List
+
+usr -> ui : Chooses Exam
+ui -> ctr : doExamEvaluation(selectedExam)
+activate ctr
+ctr -> eel : doEvaluation()
+activate eel
+eel --> ctr : Exam Evaluation Details
+deactivate eel
+ctr -> st : save(grade)
+activate st
+st --> ctr : Student
+deactivate st
+ctr -> sr : save(student)
+activate sr
+sr --> ctr
+deactivate sr
+ctr --> ui : Exam Evaluation Details
+ui --> usr : Shows Evaluation Details
+deactivate ui
+
+@enduml

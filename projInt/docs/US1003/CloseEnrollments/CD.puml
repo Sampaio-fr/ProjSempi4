@@ -1,0 +1,40 @@
+@startuml
+
+class CloseEnrollmentsAction{
+    + show()
+}
+class CloseEnrollmentsUI {
+    + doShow()
+}
+
+class CourseStateManagementController {
+    + changeCourseStateToInProgress()
+}
+
+class CourseManagementService {
+    + enrollStateCourses()
+}
+
+class PersistenceContext {
+    + repositories()
+}
+
+interface RepositoryFactory {
+    + courseRepository()
+}
+
+interface CourseRepository {
+    + findEnrollStateCourses()
+    + save()
+}
+
+CloseEnrollmentsAction .down.> CloseEnrollmentsUI
+CloseEnrollmentsUI .down.> CourseStateManagementController
+
+CourseStateManagementController -down-> CourseManagementService
+
+CourseManagementService --> PersistenceContext
+PersistenceContext --> RepositoryFactory
+RepositoryFactory --> CourseRepository
+
+@enduml

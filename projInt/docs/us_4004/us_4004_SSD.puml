@@ -1,0 +1,16 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+actor User as Actor
+
+activate Actor
+Actor -> System: asks to view list of participants in meeting
+activate System
+System--> Actor: show all meetings he created
+Actor -> System: selects wanted meeting
+System --> Actor:shows participants and their status
+deactivate System
+
+deactivate Actor
+@enduml

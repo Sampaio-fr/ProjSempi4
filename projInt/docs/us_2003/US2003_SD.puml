@@ -1,0 +1,88 @@
+@startuml
+
+autonumber
+actor "Teacher" as tic
+
+participant ":ListCourseExamsUI" as ui <<presentation>>
+participant ":ListCourseExamsController" as ctrl <<application>>
+participant "systemUser :AuthorizationService" as auth <<service>>
+participant "sysuser :SystemUser" as sys
+participant "listService:ListUserCourseService" as tc <<service>>
+participant ":PersistenceContext" as persist <<persistence>>
+participant ":RepositoryFactory " as rfcls <<factory>>
+participant "factory :RepositoryFactory " as factory <<factory>>
+Database "courseRepo:CourseRepository" as repoCourse <<repository>>
+Database "teacherRepo :TeacherRepository" as repoTeacher <<repository>>
+Database "examRepo :ExamRepository" as repoExam <<repository>>
+
+
+activate tic
+
+tic -> ui : request the list of exams in a Course
+activate ui
+ui -> ctrl : teacherCourse = listCoursesByUser()
+activate ctrl
+ctrl -> auth: authorizationService()
+activate auth
+ref over auth
+Sequence Diagram - SD_Authentication
+end
+auth--> ctrl: sysUser
+deactivate auth
+ctrl-> sys: email()
+activate sys
+sys-->ctrl:  email
+deactivate sys
+ctrl -> tc: listCoursesByTeacher(email)
+activate tc
+tc -> persist: factory = repositories()
+activate persist
+persist -> rfcls: create
+persist --> tc: factory
+deactivate persist
+tc -> factory: repoTeacher = teacherRepository()
+activate factory
+factory --> tc: repoTeacher
+deactivate factory
+tc -> repoTeacher: findTeacherByEmail(email)
+deactivate persist
+tc -> factory: repoCourse = courseRepository()
+activate factory
+factory --> tc: repoCourse
+deactivate factory
+tc -> repoCourse: coursesByTeachers(teacher)
+
+deactivate repoCourse
+deactivate tc
+deactivate ctrl
+
+
+ui --> tic : list all Courses the Teacher is in
+
+deactivate ui
+
+tic -> ui : Selects the course
+
+activate ui
+ui->ctrl: examsList = listExamsByCourse(course)
+activate ctrl
+ctrl -> persist: factory = repositories()
+activate persist
+persist -> rfcls: create
+persist --> ctrl: factory
+deactivate persist
+ctrl -> factory: examRepo = examRepository()
+activate factory
+factory-->ctrl: examRepo
+deactivate factory
+ctrl -> repoExam:  examsByCourse(course)
+deactivate repoExam
+deactivate ctrl
+
+ui --> tic : shows the list of exams of that course
+
+
+deactivate ui
+
+
+@enduml

@@ -1,0 +1,65 @@
+@startuml
+package "Persistence"{
+class PersistenceContext {
+    + repositories(): RepositoryFactory
+}
+class RepositoryFactory {
+     + courseRepository(): CourseRepository
+     + studentRepository(): studentRepository
+     + teacherRepository(): teacherRepository
+}
+class CourseRepository {
+    + coursesByTeacher(email: EmailAddress): List<Course>
+    + coursesByStudent(email: EmailAddress): List<Course>
+    + listCourses(): List<Course>
+}
+
+class StudentRepository {
+    + studentByEmail(email: EmailAddress): Iterable<Student>
+}
+class TeacherRepository{
+ + teacherByEmail(email: EmailAddress): Iterable<Teacher>
+}
+}
+
+
+package "Service"{
+class ListUserCoursesService {
+    + listCourseByTeacher(email: EmailAddress): List<Course>
+    + listCourseEnrolled(email: EmailAddress): List<Course>
+    + listCourseAvailable(): List<Course>
+    + listCourses(email: EmailAddress): List<Course>
+}
+class AuthenticationService{
+ + getSystemUser(): SystemUser
+}
+}
+
+package "Application" {
+class ListCoursesController {
+    + listCourseByUser(): List<Course>
+}
+}
+package "Presentation"  {
+class ListCoursesUI {
+    +doShow(): boolean
+}
+}
+
+
+ListCoursesUI --> ListCoursesController : the controller
+ListCoursesController --> ListUserCoursesService :service
+ListUserCoursesService --> PersistenceContext
+PersistenceContext --> RepositoryFactory
+RepositoryFactory --> CourseRepository
+RepositoryFactory --> StudentRepository
+RepositoryFactory --> TeacherRepository
+ListCoursesController --> PersistenceContext
+ListCoursesController --> AuthenticationService
+
+
+
+
+
+
+@enduml

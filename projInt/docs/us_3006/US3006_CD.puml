@@ -1,0 +1,151 @@
+@startuml
+
+class Client {
+  +createPostIt(socket, inputStream, outputStream, bufferedReader)
+}
+
+class ClientHandler {
+  +createPostIT(message)
+  +findWriteAdminPermissionBoards()
+  +findSharedBoardString(message)
+  +findEmptyCells(sharedBoard)
+  +createPostIt(cell, title, description)
+}
+
+class Server
+
+class CreatePostItUI
+
+class CreatePostItController {
+  +findWriteAdminPermissionBoards()
+  +findSharedBoardString(message)
+  +findEmptyCells(sharedBoard)
+}
+
+class PostItManagementService {
+  +create()
+  +findWriteAdminPermissionBoards()
+  +findSharedBoardString(message)
+  +findEmptyCells(sharedBoard)
+  +createPostIt(cell, title, description)
+}
+
+class RcompService {
+  +sendMessage(socket, message, outputStream)
+  +readData(socket, inputStream)
+}
+
+class FormatMessage
+
+class PostIt
+
+class PostItLog
+
+class CellLog
+
+class SharedBoardLog
+
+class PersistenceContext
+
+interface RepositoryFactory {
+  +getRepositoryFactory()
+  +sharedBoardRepository()
+  +cellRepository()
+  +postItRepository()
+  +sharedBoardLogRepository()
+  +cellLogRepository()
+  +postItLogRepository()
+}
+
+interface SharedBoardRepository {
+  +findWriteAdminPermissionBoards()
+  +findSharedBoardLogContainsSharedBoard(sharedBoard)
+}
+
+interface CellRepository {
+  +findEmptyCells(sharedBoard)
+  +save(cell)
+}
+
+interface PostItRepository {
+  +save(postIt)
+}
+
+interface SharedBoardLogRepository {
+  +findSharedBoardLogContainsSharedBoard(sharedBoard)
+}
+
+interface CellLogRepository {
+  +findCellLogContainsCell(cell)
+  +save(cellLog)
+}
+
+interface PostItLogRepository {
+  +save(postItLog)
+}
+
+class JPASharedBoardRepository {
+  +findWriteAdminPermissionBoards()
+  +findSharedBoardLogContainsSharedBoard(sharedBoard)
+}
+
+class JPACellRepository {
+  +findEmptyCells(sharedBoard)
+  +findCell(id)
+  +save(cell)
+}
+
+class JPAPostItRepository {
+  +save(postIt)
+}
+
+class JPASharedBoardLogRepository {
+  +findSharedBoardLogContainsSharedBoard(sharedBoard)
+}
+
+class JPACellLogRepository {
+  +findCellLogContainsCell(cell)
+  +save(cellLog)
+}
+
+class JPAPostItLogRepository {
+  +save(postItLog)
+}
+
+
+Client .down.> CreatePostItUI : Uses
+
+
+CreatePostItUI -down-> CreatePostItController : Uses
+CreatePostItController -down-> PostItManagementService : Uses
+
+ClientHandler -down-> RcompService : Sends/Receives Messages
+CreatePostItUI -down-> RcompService : Sends/Receives Messages
+Server -down-> ClientHandler : Uses
+RcompService -down-> FormatMessage : Uses
+
+PostItManagementService -down-> PostIt : Uses
+PostItManagementService -down-> PostItLog : Uses
+PostItManagementService -down-> CellLog : Uses
+
+
+
+PostItManagementService -down-> PersistenceContext : Uses
+PersistenceContext -down-> RepositoryFactory
+
+RepositoryFactory -down-> SharedBoardLog : Uses
+RepositoryFactory -down-> SharedBoardRepository : Uses
+RepositoryFactory -down-> CellRepository : Uses
+RepositoryFactory -down-> PostItRepository : Uses
+RepositoryFactory -down-> SharedBoardLogRepository : Uses
+RepositoryFactory -down-> CellLogRepository : Uses
+RepositoryFactory -down-> PostItLogRepository : Uses
+
+SharedBoardRepository -down-> JPASharedBoardRepository : Creates
+CellRepository -down-> JPACellRepository : Creates
+PostItRepository -down-> JPAPostItRepository : Creates
+SharedBoardLogRepository -down-> JPASharedBoardLogRepository : Creates
+CellLogRepository -down-> JPACellLogRepository : Creates
+PostItLogRepository -down-> JPAPostItLogRepository : Creates
+
+@enduml

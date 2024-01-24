@@ -1,0 +1,20 @@
+@startuml
+
+Actor Teacher
+
+activate Teacher
+Teacher -> System: i want to change a lecture schedule
+activate System
+System --> Teacher: shows the teacher lectures
+deactivate System
+Teacher -> System: selects the lectures
+activate System
+System --> Teacher: asks for te lecture new date and duration
+deactivate System
+Teacher -> System : inserts the asked data
+activate System
+System --> Teacher: informs the operation success
+deactivate System
+deactivate Teacher
+
+@enduml

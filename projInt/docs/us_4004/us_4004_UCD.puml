@@ -1,0 +1,8 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+:User: as Admin
+
+Admin ---> (list users invited to my meeting and their status)
+
+@enduml

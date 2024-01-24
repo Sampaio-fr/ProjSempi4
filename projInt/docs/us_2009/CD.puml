@@ -1,0 +1,94 @@
+@startuml
+
+class TakeFormativeExamUI {
+    + doShow()
+}
+
+class TakeFormativeExamController {
+    + findFormativeExams()
+    + doFormativeExamEvaluation(exam)
+    + validateAnswer(answer)
+    + validateAnswerList(answerList)
+    + validateMatchingAnswer(leftAnswer, rightAnswer)
+    + showOptions(displayHeader, optionsList)
+    + showEvaluationResults(gradesList, studentGrades, correctAnswersList, studentAnswersList, feedbackList)
+}
+
+class FormativeExamEvaluationListener{
+    + enterStart(ExamGrammarParser.StartContext ctx)
+    + enterTitle(ExamGrammarParser.TitleContext ctx)
+    + enterDescription(ExamGrammarParser.DescriptionContext ctx)
+    + enterMultiple_choice_question(ExamGrammarParser.Multiple_choice_questionContext ctx)
+    + enterOpen_question(ExamGrammarParser.Open_questionContext ctx)
+    + enterMissing_words_question(ExamGrammarParser.Missing_words_questionContext ctx)
+    + enterTrue_false_question(ExamGrammarParser.True_false_questionContext ctx)
+    + enterMatching_question(ExamGrammarParser.Matching_questionContext ctx)
+    - validateAnswer(String answer)
+    - validateAnswerList(List<String> answerList)
+    - validateMatchingAnswer(String leftAnswer, String rightAnswer)
+    - saveFeedback(ExamGrammarParser.FeedbackContext feedback)
+}
+
+class DisplayFormativeExam {
+     + validateAnswer(answer)
+     + validateAnswerList(answerList)
+     + validateMatchingAnswer(leftAnswer, rightAnswer)
+     + showOptions(displayHeader, optionsList)
+     + showEvaluationResults(gradesList, studentGrades, correctAnswersList, studentAnswersList, feedbackList)
+}
+
+interface DisplayFormativeExam <<interface>>{
+    validateAnswer(answer)
+    validateAnswerList(answerList)
+    validateMatchingAnswer(leftAnswer, rightAnswer)
+    showOptions(displayHeader, optionsList)
+    showEvaluationResults(gradesList, studentGrades, correctAnswersList, studentAnswersList, feedbackList)
+}
+
+class FormativeExamManagemantService {
+    + findFormativeExams(course)
+    + listCourses()
+    + getRandomQuestionByType(questionType, selectedQuestions)
+    + validateExam(path)
+    + createFormativeExam(examTitle, examStructure, selectedCourse)
+    + saveExamFormative(examTitle, examStructure, selectedCourse)
+    + saveUpdatedExam(struct, exam)
+}
+
+class StudentManagementService{
+    + findStudentByEmail()
+}
+
+class PersistenceContext {
+    + repositories()
+}
+
+interface RepositoryFactory {
+    + studentRepository()
+    + examFormativeRepository()
+}
+
+interface StudentRepository {
+    + findStudentByEmail()
+    + save()
+}
+
+interface ExamFormativeRepository {
+    + save()
+}
+
+TakeFormativeExamUI .down.> TakeFormativeExamController
+
+TakeFormativeExamController -down-> FormativeExamEvaluationListener
+TakeFormativeExamController -down-> DisplayFormativeExam
+DisplayFormativeExam <.down. DisplayFormativeExam
+TakeFormativeExamController -down-> FormativeExamManagemantService
+TakeFormativeExamController -down-> StudentManagementService
+
+FormativeExamManagemantService --> PersistenceContext
+StudentManagementService --> PersistenceContext
+PersistenceContext --> RepositoryFactory
+RepositoryFactory --> StudentRepository
+RepositoryFactory --> ExamFormativeRepository
+
+@enduml

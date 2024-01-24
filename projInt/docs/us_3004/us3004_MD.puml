@@ -1,0 +1,55 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+rectangle "<<Aggregate>> User" #bbaabb{
+
+    entity User<<Root>><<Entity>><<Strategy>>
+    object BirthDate<<Value Object>>
+    object TaxNumber<<Value Object>><<Id>>
+    object FullName<<Value Object>>
+    object ShortName<<Value Object>>
+
+    User"1" -up-> "1"BirthDate : has a
+    User"1" -left-> "1"TaxNumber : has a
+    User"1" --> "1" FullName : has a
+    User "1" -up->"1"ShortName : has a
+}
+
+
+
+
+rectangle "<<Aggregate>> Shared Board" #business{
+
+    entity SharedBoard<<Root>><<Entity>>
+    entity SharedBoardLog<<Entity>>
+    object OwnerSharedBoard <<Value Object>>
+    object SharedBoardTitle <<Value Object>>
+
+    object SharedBoardState <<Value Object>>
+
+
+    SharedBoard"1"-->"1"OwnerSharedBoard: has a
+    SharedBoard"1"-up->"1"SharedBoardTitle : has a
+    SharedBoard"1"-->"1" SharedBoardLog : has a
+    SharedBoard"1"-->"1" SharedBoardState : has a
+
+    User"1"->"1"OwnerSharedBoard: is a
+
+
+
+}
+
+
+
+rectangle "<<Aggregate>> Permission" #greenyellow{
+
+    entity Permission<<Root>><<Entity>>
+    object AccessLevel<<Value Object>>
+    Permission"1"-->"1"AccessLevel :  has  a
+}
+
+    SharedBoard"1"-->"1"Permission : gives
+    Permission "1"-up->"1...*" User : is associated to
+
+
+@enduml

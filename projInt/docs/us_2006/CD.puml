@@ -1,0 +1,61 @@
+@startuml
+
+class ListCourseGradesAction{
+    + show()
+}
+class ListCourseGradesUI {
+    + doShow()
+}
+
+class ListCourseGradesController {
+    + myCourses()
+    + courseGrades(course)
+}
+
+class Course {
+    + studentSet()
+}
+
+class Student {
+    + getGradeList()
+}
+
+class Grade {
+    + retrieveExamGrade()
+    + retrieveStudentGrade()
+    + findGradeExams()
+    + findGradeCourse()
+}
+
+class ListUserCourseService {
+    + listCoursesByTeacher(emailAddress)
+}
+
+class PersistenceContext {
+    + repositories()
+}
+
+interface RepositoryFactory {
+    + teacherRepository()
+}
+
+interface TeacherRepository {
+    coursesByTeachers(teacher)
+}
+
+
+ListCourseGradesAction .down.> ListCourseGradesUI
+ListCourseGradesUI .down.> ListCourseGradesController
+
+ListCourseGradesController -down-> ListUserCourseService
+ListCourseGradesController -down-> Course
+ListCourseGradesController -down-> Student
+ListCourseGradesController -down-> Grade
+
+ListUserCourseService --> PersistenceContext
+PersistenceContext --> RepositoryFactory
+RepositoryFactory --> TeacherRepository
+
+
+
+@enduml

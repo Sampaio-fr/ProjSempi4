@@ -1,0 +1,150 @@
+@startuml
+'http://plantuml.com/skinparam.html
+autonumber
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor "Manager/Teacher/Student" as Manager
+participant ":CancelMeetingUI" as UI <<presentation>>
+participant ":CancelMeetingController" as Controller <<application>>
+participant ":MeetingManagementService" as Service <<application>>
+participant ":NotificationAcceptanceService" as Service2 <<application>>
+
+participant ":PersistenceContext" as Persistence <<persistence>>
+participant ":RepositoryFactory" as RepositoryFactory <<factory>>
+
+
+database ":MeetingRepository" as MeetingRepository <<repository>>
+database ":NotificationRepository" as NotificationRepository <<repository>>
+database ":ScheduleRepository" as ScheduleRepository <<repository>>
+database ":TimetableRepository" as TimetableRepository <<repository>>
+database ":ECourseUserRepository" as ECourseUserRepository <<repository>>
+
+
+database ":JPAMeetingRepository" as JPAMeetingRepository <<repository>>
+database ":JPANotificationRepository" as JPANotificationRepository <<repository>>
+database ":JPAScheduleRepository" as JPAScheduleRepository <<repository>>
+database ":JPATimetableRepository" as JPATimetableRepository <<repository>>
+database ":JPAECourseUserRepository" as JPAECourseUserRepository <<repository>>
+
+
+
+activate Manager
+Manager -> UI : ask to cancel a Meeting
+activate UI
+UI -> Controller : listOfMeetingsOwner()
+activate Controller
+Controller --> Service :Create()
+activate Service
+Service --> Persistence: create()
+activate Persistence
+Persistence -> RepositoryFactory: getRepositoryFactory();
+activate RepositoryFactory
+
+RepositoryFactory->MeetingRepository: meetingRepository()
+activate MeetingRepository
+deactivate MeetingRepository
+
+RepositoryFactory->ScheduleRepository: scheduleRepository()
+activate ScheduleRepository
+deactivate ScheduleRepository
+
+RepositoryFactory->TimetableRepository: timetableRepository()
+activate TimetableRepository
+deactivate TimetableRepository
+
+RepositoryFactory->ECourseUserRepository: eCourseUserRepository()
+activate ECourseUserRepository
+deactivate ECourseUserRepository
+deactivate RepositoryFactory
+deactivate Persistence
+deactivate Service
+
+
+Controller -> Service : listOfMeetingsOwner()
+activate Service
+Service -> MeetingRepository : listOfMeetingsOwner()
+activate MeetingRepository
+MeetingRepository -> JPAMeetingRepository : listOfMeetingsOwner()
+activate JPAMeetingRepository
+deactivate JPAMeetingRepository
+deactivate MeetingRepository
+deactivate Service
+deactivate Controller
+
+UI --> Manager :shows list of Meetings to cancel
+deactivate UI
+Manager -> UI : selects a meeting to cancel
+activate UI
+UI -> Controller : deleteMeeting(current)
+activate Controller
+Controller -> Service : deleteMeeting(current)
+activate Service
+Service -> Service2 : findAllNotificationsForThisMeeting(current)
+activate Service2
+
+Service2 -> NotificationRepository : findAllNotificationsForThisMeeting(current)
+activate NotificationRepository
+NotificationRepository -> JPANotificationRepository : findAllNotificationsForThisMeeting(current)
+activate JPANotificationRepository
+deactivate JPANotificationRepository
+deactivate JPANotificationRepository
+deactivate Service2
+
+Service -> MeetingRepository : save(current)
+activate MeetingRepository
+
+MeetingRepository -> JPAMeetingRepository : save(current)
+
+activate JPAMeetingRepository
+deactivate JPAMeetingRepository
+deactivate MeetingRepository
+
+
+Service -> Service2 : deleteNotifications(list)
+activate Service2
+ loop list
+
+Service2 -> NotificationRepository : remove(notification)
+activate NotificationRepository
+NotificationRepository -> JPANotificationRepository : remove(notification)
+activate JPANotificationRepository
+deactivate JPANotificationRepository
+deactivate NotificationRepository
+
+end
+
+
+
+ loop ecourseList
+
+Service2 -> Service2 : deleteSchedule(TimeTable current,Schedule schedule)
+activate Service2
+
+Service2 -> TimetableRepository : save(current))
+activate TimetableRepository
+
+TimetableRepository -> JPATimetableRepository : save(current)
+activate JPATimetableRepository
+deactivate JPATimetableRepository
+deactivate TimetableRepository
+
+deactivate Service2
+end
+deactivate Service2
+
+deactivate Service
+deactivate Controller
+
+
+
+UI --> Manager : informs operation success or unsucess
+deactivate UI
+deactivate Manager
+
+
+
+@enduml

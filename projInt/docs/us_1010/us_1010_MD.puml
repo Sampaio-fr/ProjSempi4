@@ -1,0 +1,71 @@
+@startuml
+
+rectangle "<<Aggregate>> Course" #lightskyblue{
+
+    entity Course<<Root>><<Entity>>
+    object Id<<Value Object>><<Identify>>
+    object CourseState<<Value Object>>
+    object Edition <<Value Object>>
+    object CourseDescription <<Value Object>>
+    object CourseTitle <<Value Object>>
+
+    Course"1" --> "1"CourseTitle: has a
+    Course"1" --> "1"Id : has a
+    Course"1" --> "1"CourseDescription : has a
+    Course"1"-->"1"CourseState : has a
+    Course"1" -->"1"Edition : has a
+}
+
+rectangle "<<Aggregate>> Teacher" #blueviolet{
+
+    entity Teacher<<Entity>><<Root>>
+    object Acronym<<Value Object>>
+
+    Teacher -up|> User: is a
+    Teacher"1" --> "1"Acronym : has a
+    ChargeTeacher "1"--|>"1" Teacher : is a
+}
+
+rectangle "<<Aggregate>> Schedule" #darkcyan{
+
+ entity Schedule<<Root>><<Entity>>
+ object InitialDate<<Value Object>>
+ object FinalDate<<Value Object>>
+ object Duration<<Value Object>>
+
+ Schedule "1"-->"1" InitialDate: has a
+ Schedule "1"-->"1" FinalDate: has a
+ Schedule "1"-->"1" Duration: has a
+}
+
+rectangle "<<Aggregate>> Lecture" #deepskyblue{
+
+ entity Lecture<<Root>><<Entity>>
+ object ClassTitle<<value Object>>
+ object ClassType<<Value Object>>
+
+ Class "1"-->"1" ClassTitle: has a
+ Class "1"-->"1"  ClassType: is of a
+ Class "1"-->"1...*" Schedule: has a
+}
+rectangle "<<Aggregate>> Student" #hotpink{
+
+    entity Student<<Entity>><<Root>>
+    object MechanographicNumber<<Value Object>>
+
+    Student -up|> User
+    Student "1" -->"1"MechanographicNumber: has a
+    Student "1"-->"1"FinishedExam: answers
+}
+rectangle "<<Aggregate>> TimeTable" #pink{
+
+    entity TimeTable<<Entity>><<Root>>
+
+}
+
+TimeTable "1"--> "1...*"Schedule
+Course"1" -->"1...*"
+
+
+
+@enduml

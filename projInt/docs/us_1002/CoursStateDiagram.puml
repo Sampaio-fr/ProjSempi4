@@ -1,0 +1,14 @@
+@startuml
+'https://plantuml.com/state-diagram
+
+scale 350 width
+
+  [*] --> Close: US1002 - Create course
+  Close  --> Open : US1004.1 - Open courses
+  Open --> Enroll : US1003.1 - Open enrollment in course
+  Enroll --> InProgress : US1003.2 - Close enrollments in course
+  InProgress --> Closed : US1004.2 - Close courses
+  Closed --> [*]
+
+
+@enduml

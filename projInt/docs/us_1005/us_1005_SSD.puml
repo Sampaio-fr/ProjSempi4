@@ -1,0 +1,24 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+actor Manager as Actor
+
+activate Actor
+Actor -> System: asks to set teachers to a course
+activate System
+System--> Actor: listExistentCourses
+Actor -> System: selectedCourse
+System --> Actor: asks to confirm the selectedCourse
+Actor -> System: confirms selection
+System --> Actor: asks to choose the charge teacher: listRegisteredTeachers
+Actor -> System: selectedChargeTeacher
+System --> Actor: asks to confirm the selectedCourse
+Actor -> System: confirms selection
+loop
+System --> Actor:listRegisteredTeachers
+Actor -> System: selects teacher
+end loop
+deactivate System
+deactivate Actor
+@enduml

@@ -1,0 +1,103 @@
+@startuml
+participant Actor
+Actor -> ActivateUserUI : doShow(): boolean
+activate ActivateUserUI
+create ArrayList
+ActivateUserUI -> ArrayList : <<create>>(): ArrayList
+activate ArrayList
+ArrayList --> ActivateUserUI
+deactivate ArrayList
+ActivateUserUI -> ActivateUserController : deactivedUsers(): Iterable<SystemUser>
+activate ActivateUserController
+ActivateUserController -> AuthorizationService : ensureAuthenticatedUserHasAnyOf(actions: ): void
+activate AuthorizationService
+AuthorizationService --> ActivateUserController
+deactivate AuthorizationService
+ActivateUserController -> UserManagementService : deactivatedUsers(): Iterable<SystemUser>
+activate UserManagementService
+UserManagementService --> ActivateUserController
+deactivate UserManagementService
+ActivateUserController --> ActivateUserUI
+deactivate ActivateUserController
+ActivateUserUI -> Iterable : iterator(): Iterator<T>
+activate Iterable
+Iterable --> ActivateUserUI
+deactivate Iterable
+ActivateUserUI -> Iterator : hasNext(): boolean
+activate Iterator
+Iterator --> ActivateUserUI
+deactivate Iterator
+ActivateUserUI -> PrintStream : println(x: String): void
+activate PrintStream
+PrintStream --> ActivateUserUI
+deactivate PrintStream
+ActivateUserUI -> PrintStream : println(x: String): void
+activate PrintStream
+PrintStream --> ActivateUserUI
+deactivate PrintStream
+ActivateUserUI -> PrintStream : printf(format: String, args: ): PrintStream
+activate PrintStream
+PrintStream --> ActivateUserUI
+deactivate PrintStream
+ActivateUserUI -> List : add(e: E): boolean
+activate List
+List --> ActivateUserUI
+deactivate List
+ActivateUserUI -> SystemUser : username(): Username
+activate SystemUser
+SystemUser --> ActivateUserUI
+deactivate SystemUser
+ActivateUserUI -> SystemUser : name(): Name
+activate SystemUser
+SystemUser --> ActivateUserUI
+deactivate SystemUser
+ActivateUserUI -> Name : firstName(): String
+activate Name
+Name --> ActivateUserUI
+deactivate Name
+ActivateUserUI -> SystemUser : name(): Name
+activate SystemUser
+SystemUser --> ActivateUserUI
+deactivate SystemUser
+ActivateUserUI -> Name : lastName(): String
+activate Name
+Name --> ActivateUserUI
+deactivate Name
+ActivateUserUI -> PrintStream : printf(format: String, args: ): PrintStream
+activate PrintStream
+PrintStream --> ActivateUserUI
+deactivate PrintStream
+ActivateUserUI -> Console : readInteger(prompt: String): int
+activate Console
+Console --> ActivateUserUI
+deactivate Console
+ActivateUserUI -> PrintStream : println(x: String): void
+activate PrintStream
+PrintStream --> ActivateUserUI
+deactivate PrintStream
+ActivateUserUI -> List : get(index: int): E
+activate List
+List --> ActivateUserUI
+deactivate List
+ActivateUserUI -> ActivateUserController : activateUser(user: SystemUser): SystemUser
+activate ActivateUserController
+ActivateUserController -> AuthorizationService : ensureAuthenticatedUserHasAnyOf(actions: ): void
+activate AuthorizationService
+AuthorizationService --> ActivateUserController
+deactivate AuthorizationService
+ActivateUserController -> UserManagementService : activateUser(user: SystemUser): SystemUser
+activate UserManagementService
+UserManagementService --> ActivateUserController
+deactivate UserManagementService
+ActivateUserController --> ActivateUserUI
+deactivate ActivateUserController
+ActivateUserUI -> Logger : error(s: String, throwable: Throwable): void
+activate Logger
+Logger --> ActivateUserUI
+deactivate Logger
+ActivateUserUI -> PrintStream : println(x: String): void
+activate PrintStream
+PrintStream --> ActivateUserUI
+deactivate PrintStream
+return
+@enduml

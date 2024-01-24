@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor User as user
+participant System as sys
+
+autonumber
+
+    user -> sys: Requests to undo a post-it in a shared board
+    sys --> user: Lists boards with write permission or owned by the user
+    user -> sys: Selects a board
+    user <-- sys: Shows cells and requests data (cell)
+    user -> sys: Types requested data (cell)
+    user <-- sys: shows operation success
+@enduml

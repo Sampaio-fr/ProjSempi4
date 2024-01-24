@@ -1,0 +1,21 @@
+@startuml
+autonumber
+
+actor "Manager/Teacher/Student" as Manager
+
+activate Manager
+Manager -> ":System" : ask to view a list of Notifications
+activate ":System"
+":System" --> Manager :shows list of Notifications
+deactivate ":System"
+Manager -> ":System" : selects a Notification
+activate ":System"
+":System" --> Manager :Asks to accept or reject a Notification
+deactivate ":System"
+Manager -> ":System" : responds to the Notification
+activate ":System"
+":System" --> Manager :informs success or failure to the notification
+deactivate ":System"
+deactivate Manager
+
+@enduml

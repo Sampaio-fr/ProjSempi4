@@ -1,0 +1,88 @@
+@startuml
+
+
+class ClientHandler {
+  + findWriteAdminPermissionBoards(): Iterable<Board>
+  + viewSharedBoardHistory(boardTitle: String): BoardHistory
+}
+
+class ViewBoardHistoryController {
+  + viewBoardHistory(boardTitle: String): BoardHistory
+  + viewCellsHistory(boardLog: BoardLog): List<Cell>
+  + viewPostItHistory(cells: List<Cell>): List<PostIt>
+}
+
+class SharedBoardService {
+  + findAuthenticatedUser(): SystemUser
+}
+
+class ViewBoardHistoryService {
+  + viewBoardHistory(boardTitle: String): BoardHistory
+  + viewCellsHistory(boardLog: BoardLog): List<Cell>
+  + viewPostItHistory(cells: List<Cell>): List<PostIt>
+}
+
+class RcompService {
+  + sendMessage(message: FormateMessage, outputStream: OutputStream): void
+  + readData(inputStream: InputStream): void
+}
+
+class AuthorizationService {
+  + ensureAuthenticatedUserHasAnyOf(roles: Role): void
+  + session(): String
+}
+
+
+class FormateMessage {
+  +FormateMessage(version,code,message)
+}
+
+class PersistenceContext {
+  + repositories(): RepositoryFactory
+}
+
+interface RepositoryFactory {
+  + permissionRepository(): PermissionRepository
+  + sharedBoardRepository(): SharedBoardRepository
+  + sharedBoardLogRepository(): SharedBoardLogRepository
+}
+
+interface PermissionRepository {
+  + findWriteAdmin(email: String): Permission
+}
+class JPAPermissionRepository {
+  + findWriteAdmin(email: String): Permission
+}
+
+interface SharedBoardRepository {
+  + findSharedBoardByTitle(boardTitle: String): Board
+}
+class JPASharedBoardRepository {
+  + findSharedBoardByTitle(boardTitle: String): Board
+}
+
+interface SharedBoardLogRepository {
+  + findCellsHistory(boardLog: BoardLog): List<Cell>
+}
+class JPASharedBoardLogRepository {
+  + findCellsHistory(boardLog: BoardLog): List<Cell>
+}
+
+ClientHandler-->ViewBoardHistoryController
+ClientHandler-->RcompService
+ClientHandler-->FormateMessage
+RcompService-->FormateMessage:uses
+ViewBoardHistoryController-->ViewBoardHistoryService
+ViewBoardHistoryController-->SharedBoardService
+ViewBoardHistoryService--> PersistenceContext
+SharedBoardService--> PersistenceContext
+PersistenceContext-->RepositoryFactory
+RepositoryFactory-->SharedBoardRepository
+RepositoryFactory-->SharedBoardLogRepository
+RepositoryFactory-->PermissionRepository
+SharedBoardService-->AuthorizationService
+JPAPermissionRepository-up-|>PermissionRepository
+JPASharedBoardLogRepository-up-|> SharedBoardLogRepository
+JPASharedBoardRepository-up-|>SharedBoardRepository
+@enduml
+

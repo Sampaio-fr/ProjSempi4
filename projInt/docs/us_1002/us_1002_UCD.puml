@@ -1,0 +1,8 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+:Manager: as Admin
+
+Admin ---> (Create the Course)
+
+@enduml

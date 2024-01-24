@@ -1,0 +1,18 @@
+@startuml
+autonumber
+
+actor "Manager/Teacher/Student" as Manager
+
+activate Manager
+Manager -> ":System" : ask to cancel a Meeting
+activate ":System"
+":System" --> Manager :shows list of Meetings to cancel
+deactivate ":System"
+Manager -> ":System" : selects a meeting to cancel
+activate ":System"
+
+":System" --> Manager : informs operation success or unsucess
+deactivate ":System"
+deactivate Manager
+
+@enduml

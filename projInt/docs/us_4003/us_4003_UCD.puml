@@ -1,0 +1,10 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+
+
+Admin ---> (I want to accept or reject a meeting request)
+Teacher ---> (I want to accept or reject a meeting request)
+Student ---> (I want to accept or reject a meeting request)
+
+@enduml

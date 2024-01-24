@@ -1,0 +1,136 @@
+@startuml
+
+package presentation {
+  class UndoPostItUI {
+    + doShow(): boolean
+     + headline(): String
+  }
+}
+
+  class ClientHandler {
+    + run(): void
+    + undoPostIT(FormatMessage message): void
+  }
+
+
+package application {
+  class UndoPostItController {
+    + findUpdatedOccupiedCells(SharedBoard board): List<Cell>
+    + findWriteAdminPermissionBoards(): List<String>
+    + findAutenticatedUser(): EmailAddress
+    + undoPostIt(Cell cell): void
+    + findSharedBoardString(String id): SharedBoard
+  }
+}
+
+package service {
+  class PostItManagement {
+    + undoPostIt(Cell cell): void
+  }
+}
+
+package persistence {
+  class PersistenceContext {
+    + repositories(): RepositoryFactory
+  }
+
+  interface RepositoryFactory {
+    + sharedBoardLogRepository(): SharedBoardLogRepository
+    + cellRepository(): CellRepository
+    + cellLogRepository(): CellLogRepository
+    + postItLogRepository(): PostItLogRepository
+    + postItRepository(): PostItRepository
+  }
+
+  interface SharedBoardLogRepository {
+    + save(sharedBoard: SharedBoard): void
+    + findSharedBoardLogContainsSharedBoard(sharedBoard: SharedBoard): SharedBoard
+  }
+  JpaSharedBoardLogRepository -up-|> SharedBoardLogRepository
+  class JpaSharedBoardLogRepository {
+      + save(sharedBoard: SharedBoard): void
+      + findSharedBoardLogContainsSharedBoard(SharedBoard sharedBoard): SharedBoard
+    }
+
+  interface CellLogRepository {
+    + save(cell: Cell): void
+    + findCellLogContainsCell(Cell cell): CellLog
+  }
+  JpaCellLogRepository -up-|> CellLogRepository
+  class JpaCellLogRepository {
+      + save(cell: Cell): void
+      + findCellLogContainsCell(Cell cell): CellLog
+    }
+
+  interface CellRepository {
+      + save(cell: Cell): void
+  }
+  JpaCellRepository -up-|> CellRepository
+  class JpaCellRepository {
+  + save(cell: Cell): void
+  }
+
+  interface PostItLogRepository {
+    + save(cell: Cell): void
+    + findLastPostItLog(PostIt postItLog): PostItLog
+    }
+    JpaPostItLogRepository -up-|> PostItLogRepository
+    class JpaPostItLogRepository {
+        + save(cell: Cell): void
+        + findLastPostItLog(PostIt postItLog): PostItLog
+      }
+
+    interface PostItRepository {
+        + save(cell: Cell): void
+    }
+    JpaPostItRepository -up-|> PostItRepository
+    class JpaPostItRepository {
+    + save(cell: Cell): void
+    }
+
+
+}
+
+
+
+Client .down.> UndoPostItUI : Uses
+
+
+class Client {
+  +createPostIt(socket, inputStream, outputStream, bufferedReader)
+}
+
+class ClientHandler {
+  +createPostIT(message)
+  +findWriteAdminPermissionBoards()
+  +findSharedBoardString(message)
+  +findEmptyCells(sharedBoard)
+  +createPostIt(cell, title, description)
+}
+
+class RcompService {
+  +sendMessage(socket, message, outputStream)
+  +readData(socket, inputStream)
+}
+
+class FormatMessage
+
+
+ClientHandler -down-> RcompService : Sends/Receives Messages
+UndoPostItUI -down-> RcompService : Sends/Receives Messages
+Server -down-> ClientHandler : Uses
+RcompService -down-> FormatMessage : Uses
+
+
+
+UndoPostItUI --> ClientHandler
+ClientHandler --> UndoPostItController
+UndoPostItController --> PostItManagement
+PostItManagement --> PersistenceContext
+PersistenceContext -->RepositoryFactory
+RepositoryFactory --> SharedBoardLogRepository
+RepositoryFactory --> CellLogRepository
+RepositoryFactory --> CellRepository
+RepositoryFactory --> PostItLogRepository
+RepositoryFactory --> PostItRepository
+@enduml

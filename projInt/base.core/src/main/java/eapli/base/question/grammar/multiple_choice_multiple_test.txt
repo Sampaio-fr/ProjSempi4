@@ -1,0 +1,9 @@
+#MULTIPLE choice;
+#10;
+
+QUESTION DESCRIPTION;
+{=ANSWER1; >feedback 1;
+=ANSWER2; >feedback2;
+~Answer3;
+>feedback 3;
+}

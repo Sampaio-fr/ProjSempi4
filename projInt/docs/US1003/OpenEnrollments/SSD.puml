@@ -1,0 +1,16 @@
+@startuml
+
+Actor Admin
+
+activate Admin
+Admin -> System: i want to open enrollments
+activate System
+System --> Admin: shows open courses
+deactivate System
+Admin -> System: selects the course
+activate System
+System --> Admin: informs that the operation was successful
+deactivate System
+deactivate Admin
+
+@enduml

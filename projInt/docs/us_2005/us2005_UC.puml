@@ -1,0 +1,8 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+actor Student as User
+
+User --> (List of Grades)
+
+@enduml

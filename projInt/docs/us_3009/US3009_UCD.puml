@@ -1,0 +1,8 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+:User: as u
+
+u ---> (I want to view the history of updates on a board)
+
+@enduml

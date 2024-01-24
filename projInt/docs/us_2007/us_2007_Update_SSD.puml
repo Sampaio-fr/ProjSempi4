@@ -1,0 +1,26 @@
+@startuml
+autonumber
+
+actor "Teacher" as Manager
+
+
+activate Manager
+Manager -> ":System" : ask to create question
+activate ":System"
+":System" --> Manager : shows list of course and asks to select one
+deactivate ":System"
+Manager -> ":System" : selects course
+activate ":System"
+":System" --> Manager : shows list of questions and asks to select one
+deactivate ":System"
+Manager -> ":System" : selects question
+activate ":System"
+":System" -->Manager : asks for the question change input
+deactivate ":System"
+Manager -> ":System" : inputs the question change
+activate ":System"
+":System" --> Manager : informs operation success or failure
+deactivate ":System"
+deactivate Manager
+
+@enduml

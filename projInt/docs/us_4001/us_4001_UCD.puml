@@ -1,0 +1,10 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+
+
+Admin ---> (Create Meeting)
+Teacher ---> (Create Meeting)
+Student ---> (Create Meeting)
+
+@enduml

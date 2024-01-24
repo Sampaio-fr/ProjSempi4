@@ -1,0 +1,94 @@
+@startuml
+
+class TakeExamAction{
+    + show()
+}
+
+class TakeExamUI {
+    + doShow()
+}
+
+class TakeExamController {
+    + findActiveExams()
+    + doExamEvaluation()
+    + setDisplayExam(displayExam)
+    + validateAnswer(answer)
+    + validateAnswerList(answerList)
+    + validateMatchingAnswer(leftAnswer, rightAnswer)
+    + showOptions(displayHeader, optionsList)
+    + showEvaluationResults(gradesList, studentGrades, correctAnswersList, studentAnswersList, feedbackList)
+}
+
+class ExamEvaluationListener{
+    + enterStart(ExamGrammarParser.StartContext ctx)
+    + enterTitle(ExamGrammarParser.TitleContext ctx)
+    + enterDescription(ExamGrammarParser.DescriptionContext ctx)
+    + enterMultiple_choice_question(ExamGrammarParser.Multiple_choice_questionContext ctx)
+    + enterOpen_question(ExamGrammarParser.Open_questionContext ctx)
+    + enterMissing_words_question(ExamGrammarParser.Missing_words_questionContext ctx)
+    + enterTrue_false_question(ExamGrammarParser.True_false_questionContext ctx)
+    + enterMatching_question(ExamGrammarParser.Matching_questionContext ctx)
+    - validateAnswer(String answer)
+    - validateAnswerList(List<String> answerList)
+    - validateMatchingAnswer(String leftAnswer, String rightAnswer)
+    - saveFeedback(ExamGrammarParser.FeedbackContext feedback)
+}
+
+class DisplayExamImpl {
+     + validateAnswer(answer)
+     + validateAnswerList(answerList)
+     + validateMatchingAnswer(leftAnswer, rightAnswer)
+     + showOptions(displayHeader, optionsList)
+     + showEvaluationResults(gradesList, studentGrades, correctAnswersList, studentAnswersList, feedbackList)
+}
+
+interface DisplayExam{
+    validateAnswer(answer)
+    validateAnswerList(answerList)
+    validateMatchingAnswer(leftAnswer, rightAnswer)
+    showOptions(displayHeader, optionsList)
+    showEvaluationResults(radesList, studentGrades, correctAnswersList, studentAnswersList, feedbackList)
+}
+
+class ListExamsManagementService {
+    + findStudentByEmail()
+}
+
+class GradeManagementService{
+    + saveNewGrade(student, course, exam, examGrade, myGrade)
+}
+
+class PersistenceContext {
+    + repositories()
+}
+
+interface RepositoryFactory {
+    + studentRepository()
+    + gradeRepository()
+}
+
+interface StudentRepository {
+    + findStudentByEmail()
+    + save()
+}
+
+interface GradeRepository {
+    + save()
+}
+
+TakeExamAction .down.> TakeExamUI
+TakeExamUI .down.> TakeExamController
+
+TakeExamController -down-> ExamEvaluationListener
+TakeExamController -down-> DisplayExamImpl
+DisplayExamImpl <.down. DisplayExam
+TakeExamController -down-> ListExamsManagementService
+TakeExamController -down-> GradeManagementService
+
+ListExamsManagementService --> PersistenceContext
+GradeManagementService --> PersistenceContext
+PersistenceContext --> RepositoryFactory
+RepositoryFactory --> StudentRepository
+RepositoryFactory --> GradeRepository
+
+@enduml

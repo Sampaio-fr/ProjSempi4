@@ -1,0 +1,88 @@
+@startuml
+
+package Presentation{
+    class EnrollmentStudentUI{
+    + doShow(): boolean
+    + headline(): String
+    }
+}
+
+package application {
+  class StudentEnrollmentController {
+    + allCoursesToEnroll(): Iterable<Course>
+    + enrollStudent(course: Course): boolean
+  }
+}
+
+package service {
+  class CourseManagementService {
+    + enrollStateCourses(): void
+  }
+
+  class EnrollmentManagementService {
+    + saveEnrollment(email: String, course: Course): boolean
+  }
+    class AuthorizationService {
+         + ensureAuthenticatedUserHasAnyOf(Roles:role): void
+         + session(): String
+       }
+}
+
+package persistence{
+  class PersistenceContext {
+    + repositories(): RepositoryFactory
+  }
+
+  interface RepositoryFactory {
+    + courseRepository(): CourseRepository
+    + studentRepository(): StudentRepository
+    + enrollmentRepository(): EnrollmentRepository
+  }
+
+    interface StudentRepository {
+      + findStudentByEmail(email: String): Student
+    }
+    JpaStudentRepository -up-|> StudentRepository
+
+    class JpaStudentRepository{
+    + findStudentByEmail(email: String): Student
+    }
+
+    class JpaCourseRepository {
+      + findEnrollStateCourses(): Iterable<Course>
+    }
+
+    JpaCourseRepository -up-|> CourseRepository
+
+     interface CourseRepository {
+        + findEnrollStateCourses(): Iterable<Course>
+      }
+
+    interface EnrollmentRepository {
+      + save(enrollment: Enrollment): void
+    }
+    JpaEnrollmentRepository -up-|> EnrollmentRepository
+    class JpaEnrollmentRepository {
+          + save(enrollment: Enrollment): void
+        }
+}
+
+package domain {
+  class Enrollment{
+  + create()
+  }
+}
+ StudentEnrollmentController-->CourseManagementService
+ CourseManagementService-->PersistenceContext
+ StudentEnrollmentController---> EnrollmentManagementService
+ EnrollmentManagementService->PersistenceContext
+StudentEnrollmentController---> AuthorizationService
+EnrollmentStudentUI --> StudentEnrollmentController
+EnrollmentManagementService-->Enrollment: creates
+PersistenceContext--->RepositoryFactory
+RepositoryFactory-->CourseRepository
+RepositoryFactory-->StudentRepository
+RepositoryFactory-->EnrollmentRepository
+
+
+@enduml

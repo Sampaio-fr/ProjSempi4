@@ -1,0 +1,21 @@
+@startuml
+
+autonumber
+actor "User" as usr
+
+participant ":System" as sys
+
+
+activate usr
+usr -> sys : requests to see the history of updates in a board
+
+activate sys
+sys --> usr : shows the list of shared boards available
+deactivate sys
+
+usr -> sys: inputs the shared board name
+activate sys
+sys --> usr: shows the history of updates
+deactivate sys
+
+@enduml

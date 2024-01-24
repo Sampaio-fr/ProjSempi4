@@ -1,0 +1,7 @@
+@startuml
+
+:Manager: as Admin
+
+Admin ---> (Open/Close Enrollments)
+
+@enduml

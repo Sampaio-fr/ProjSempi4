@@ -1,0 +1,132 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor Manager as Actor
+participant "AddTeachersToCourseUI" as UI <<presentation>>
+control ":AddTeachersToCourseController" as Controller <<application>>
+
+participant ":CourseManagementService" as course_service <<Service>>
+participant ":TeacherManagementService" as teacher_service <<Service>>
+
+participant ":CourseTeachersManagementService" as courseteachers_service <<Service>>
+
+participant ":PersistenceContext" as pc <<persistence>>
+participant ":RepositoryFactory " as repofactory <<factory>>
+participant "factory: RepositoryFactory " as factory <<factory>>
+
+database CourseRepository as CRep <<repository>>
+database TeacherRepository as TRep <<repository>>
+
+participant "selectedCourse:Course" as course <<domain>>
+participant "chargeTeacher:TeacherInCharge" as charge <<domain>>
+participant "courseteacher:TeacherRepository" as teacher <<domain>>
+
+' LIST OPEN COURSES =======================================
+activate Actor
+Actor -> UI: asks to set teachers to a course
+activate UI
+UI-> Controller: listOpenCourses()
+activate Controller
+Controller->course_service: openCourses()
+activate course_service
+course_service->pc: factory = repositories()
+activate pc
+pc -> repofactory: create()
+pc --> course_service: factory
+deactivate pc
+course_service -> factory: courseRepository = courseRepository()
+activate factory
+factory --> course_service: courseRepository
+deactivate factory
+course_service -> CRep: findOpen()
+deactivate course_service
+Controller --> UI : allOpenCourses
+deactivate Controller
+UI--> Actor: asks to select the course : shows allOpenCourses
+deactivate UI
+Actor -> UI: selects Course to set teachers to
+activate UI
+UI->UI: selectedCourse
+'=================================================================
+
+
+' LIST REGISTERED TEACHERS =======================================
+UI -> Controller: listRegisteredTeachers()
+activate Controller
+Controller->teacher_service: listRegisteredTeachers()
+activate teacher_service
+teacher_service->pc: factory = repositories()
+activate pc
+pc -> repofactory: create()
+pc --> teacher_service: factory
+deactivate pc
+teacher_service -> factory: teacherRepository = teacherRepository()
+activate factory
+factory --> teacher_service: teacherRepository
+deactivate factory
+teacher_service -> TRep: findAll()
+'=================================================================
+
+
+
+deactivate teacher_service
+Controller --> UI : allRegisteredTeachers
+deactivate Controller
+UI --> Actor : asks to choose the index of the teachers he desires to add
+deactivate UI
+Actor -> UI: List <<selectedteachers>>
+activate UI
+UI --> Actor : Shows selectedteachers list ans asks to choose the charge teacher
+deactivate UI
+Actor -> UI: selectedChargeTeacher
+activate UI
+UI->UI: selectedChargeTeacher
+
+
+
+' SET TEACHERS TO COURSE =======================================
+
+UI -> Controller: addChargeTeacher(selectedChargeTeacher)
+activate Controller
+Controller -> courseteachers_service : setTeachersToCourse(selectedCourse,selectedChargeTeacher,selectedteachers)
+
+activate courseteachers_service
+courseteachers_service->pc: factory = repositories()
+activate pc
+pc -> repofactory: create()
+pc --> courseteachers_service: factory
+deactivate pc
+courseteachers_service -> factory: teacherRepository = teacherRepository()
+activate factory
+factory --> courseteachers_service: teacherRepository
+deactivate factory
+courseteachers_service -> factory: courseRepository = courseRepository()
+activate factory
+factory --> courseteachers_service: courseRepository
+deactivate factory
+
+
+courseteachers_service ->TRep: save(teachers)
+
+courseteachers_service -> CRep: save(course)
+
+courseteachers_service -> TRep: findAll()
+
+
+
+
+Controller -> courseteachers_service : saveRegularTeachers(selectedTeachers)
+
+
+
+
+deactivate courseteachers_service
+Controller --> UI
+deactivate Controller
+UI --> Actor: shows message that it was realized
+deactivate UI
+
+deactivate Actor
+@enduml

@@ -1,0 +1,145 @@
+@startuml
+autonumber
+
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor Teacher as Actor
+participant ":CreateQuestionUI" as UI <<presentation>>
+participant ":CreateQuestionController" as Controller <<application>>
+participant ":QuestionanagementService" as QuestionManagementService <<application>>
+participant ":AuthzRegistry" as AuthzRegistry <<application>>
+participant ":Question" as Question<<Domain>>
+participant ":PersistenceContext" as Persistence <<persistence>>
+participant ":RepositoryFactory" as RepositoryFactory <<factory>>
+
+database ":QuestionRepository" as QuestionRepository <<repository>>
+database ":TeacherRepository" as TeacherRepository <<repository>>
+database ":CourseRepository" as CourseRepository <<repository>>
+
+database ":JPAQuestionRepository" as JPAQuestionRepository <<repository>>
+database ":JPATeacherRepository" as JPATeacherRepository <<repository>>
+database ":JPACourseRepository" as JPACourseRepository <<repository>>
+
+activate Actor
+Actor -> UI : ask to create question
+activate UI
+UI->Controller:listCourses()
+
+activate Controller
+Controller->QuestionManagementService:listCourses()
+
+activate QuestionManagementService
+QuestionManagementService->AuthzRegistry: AuthzRegistry.authorizationService()
+
+activate AuthzRegistry
+deactivate AuthzRegistry
+QuestionManagementService --> Persistence: create()
+activate Persistence
+
+
+Persistence -> RepositoryFactory: getRepositoryFactory();
+activate RepositoryFactory
+
+RepositoryFactory->CourseRepository: courseRepository()
+activate CourseRepository
+deactivate CourseRepository
+RepositoryFactory->QuestionRepository:questionRepository()
+activate QuestionRepository
+deactivate QuestionRepository
+RepositoryFactory->TeacherRepository:teacherRepository()
+activate TeacherRepository
+deactivate TeacherRepository
+
+deactivate RepositoryFactory
+deactivate Persistence
+
+QuestionManagementService->TeacherRepository:findTeacherByEmail(systemUser.email())
+activate TeacherRepository
+TeacherRepository->JPATeacherRepository:findTeacherByEmail(systemUser.email())
+activate JPATeacherRepository
+deactivate JPATeacherRepository
+
+deactivate TeacherRepository
+
+QuestionManagementService->CourseRepository:coursesByTeachers(teacher)
+activate CourseRepository
+CourseRepository->JPACourseRepository:coursesByTeachers(teacher)
+activate JPACourseRepository
+deactivate JPACourseRepository
+deactivate CourseRepository
+
+
+deactivate TeacherRepository
+deactivate QuestionManagementService
+
+
+UI --> Actor : shows list of course and asks to select one
+deactivate UI
+
+Actor -> UI : selects course
+activate UI
+UI -->Actor : asks for the question input
+deactivate UI
+
+Actor -> UI : inputs the question
+activate UI
+
+
+
+
+
+UI->Controller:createQuestion(selectedCourse, path)
+activate Controller
+
+Controller->QuestionManagementService:validateQuestion(path)
+activate QuestionManagementService
+deactivate QuestionManagementService
+
+Controller->QuestionManagementService:createQuestion(path,selectedCourse);
+activate QuestionManagementService
+
+QuestionManagementService->QuestionManagementService:readFileToString(String filePath)
+activate QuestionManagementService
+deactivate QuestionManagementService
+QuestionManagementService->Question:new Question(QuestionType.valueOf(question.get(0)),question.get(1),selectedCourse)
+activate Question
+deactivate Question
+deactivate QuestionManagementService
+
+
+
+
+deactivate QuestionManagementService
+
+
+
+
+deactivate  QuestionManagementService
+deactivate Controller
+
+UI->Controller:saveQuestion(question)
+activate Controller
+Controller->QuestionManagementService:saveQuestion(question)
+activate QuestionManagementService
+QuestionManagementService->QuestionRepository:save(question)
+activate QuestionRepository
+QuestionRepository-> JPAQuestionRepository:save(question)
+activate JPAQuestionRepository
+deactivate JPAQuestionRepository
+deactivate QuestionRepository
+
+
+
+
+deactivate QuestionManagementService
+deactivate Controller
+
+UI --> Actor : informs operation success or failure
+deactivate UI
+deactivate Actor
+
+@enduml

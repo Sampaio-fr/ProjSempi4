@@ -1,0 +1,25 @@
+@startuml
+title AuthenticationService Subsequence Diagram
+
+participant AuthzRegistry
+participant "authorizationService: AuthorizationService" as AuthorizationService
+participant "userSession: UserSession" as UserSession
+note right of UserSession: represents the session of the authenticated user
+
+[-> AuthzRegistry:  authorizationService()
+activate AuthzRegistry
+
+[<--AuthzRegistry : return authorizationService
+deactivate AuthzRegistry
+
+[-> AuthorizationService: session()
+activate AuthorizationService
+[<-- AuthorizationService : return userSession
+deactivate AuthorizationService
+
+[-> UserSession: authenticatedUser()
+activate UserSession
+[<--UserSession: return systemUser
+deactivate UserSession
+
+@enduml

@@ -1,0 +1,100 @@
+@startuml
+
+actor "User" as user
+participant "ListCoursesUI" as UUI <<presentation>>
+participant "ListCoursesController" as CCT <<application>>
+participant "AuthenticationService" as auth <<service>>
+participant "sysuser SystemUser" as sys
+participant "listService:ListUserCourseService" as listS <<service>>
+participant "PersistenceContext" as pc <<persistence>>
+participant "RepositoryFactory" as repFac <<factory>>
+participant "factory :RepositoryFactory" as fRepFac <<factory>>
+database "CourseRepository" as courseRepo <<repository>>
+database "StudentRepository" as studentRepo <<repository>>
+database "TeacherRepository" as teacherRepo <<repository>>
+
+
+autonumber
+activate user
+
+activate UUI
+user -> UUI: selects listing of available courses
+UUI --> CCT: courseList = listCourseByUser()
+activate CCT
+
+CCT -> auth: sysuser = getSystemUser()
+activate auth
+ref over auth
+Sequence Diagram - SD_Authentication
+end
+auth--> CCT: sysuser
+deactivate auth
+
+alt roleTypes = Student
+CCT->sys : sysuser.email()
+activate sys
+sys-->CCT: email
+deactivate sys
+CCT -> listS: listCoursesEnrolled(email)
+activate listS
+CCT -> listS: listCoursesAvailable()
+listS->pc: factory = repositories()
+activate pc
+pc->repFac: create
+pc->listS: factory
+deactivate pc
+listS->fRepFac: repoStudent = studentRepository()
+fRepFac-->listS: repoStudent
+listS->studentRepo: findStudentByEmail(email)
+listS->fRepFac: courseRepo = courseRepository()
+fRepFac-->listS: courseRepo
+listS->courseRepo: findEnrolledCoursesStudent(student)
+listS->courseRepo: listCourseAvailableByStudent()
+listS-->CCT: coursesList
+deactivate listS
+
+else roleTypes = Teacher
+CCT->sys : sysuser.email
+activate sys
+sys-->CCT: email
+deactivate sys
+CCT -> listS: listCourseByTeacher(email)
+activate listS
+listS->pc: factory = repositories()
+activate pc
+pc->repFac: create
+pc->listS: factory
+deactivate pc
+listS->fRepFac: repoTeacher = teacherRepository()
+fRepFac-->listS: repoTeacher
+listS->teacherRepo: teacherByEmail(email)
+listS->fRepFac: courseRepo = courseRepository()
+fRepFac-->listS: courseRepo
+listS->courseRepo: coursesByTeacher(teacher)
+listS-->CCT: coursesList
+deactivate listS
+
+else roleTypes = Manager
+CCT -> listS: listCourses()
+activate listS
+listS->pc: factory = repositories()
+activate pc
+pc->repFac: create
+pc->listS: factory
+deactivate pc
+
+listS->fRepFac: courseRepo = courseRepository()
+fRepFac-->listS: courseRepo
+listS->courseRepo: listCourses()
+listS-->CCT: coursesList
+deactivate listS
+end
+
+
+deactivate courseRepo
+CCT --> UUI: coursesList
+deactivate CCT
+UUI --> user: presents available Courses List
+deactivate UUI
+deactivate user
+@enduml

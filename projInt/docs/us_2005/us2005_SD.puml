@@ -1,0 +1,46 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor "User" as user
+participant "studentGradesUI" as ui <<presentation>>
+participant "StudentGradeController" as ctrl <<application>>
+participant "AuthenticationService" as auth <<service>>
+participant "sysuser SystemUser" as sys
+participant "GradeManagementService" as gradeService <<service>>
+participant "PersistenceContext" as pc <<persistence>>
+participant "RepositoryFactory" as repFac <<factory>>
+database "StudentRepository" as stdRepo <<repository>>
+
+
+autonumber
+
+activate user
+user -> ui : Requests listing of grades
+activate ui
+ui -> ctrl : listStudentGrades()
+activate ctrl
+ctrl -> auth: sysuser = getSystemUser()
+activate auth
+ref over auth
+Sequence Diagram - SD_Authentication
+end
+auth--> ctrl: sysuser
+deactivate auth
+ctrl -> gradeService: listStudentGrades(sysuser.email())
+activate gradeService
+gradeService->pc: factory = repositories()
+activate pc
+pc->repFac: create
+pc->gradeService: factory
+deactivate pc
+gradeService -> stdRepo : findStudentByEmail(email)
+stdRepo --> gradeService : student
+gradeService -> Student : getGradeList()
+Student --> gradeService : GradesList
+gradeService --> ctrl : GradesList
+deactivate gradeService
+ctrl --> ui : GradesList
+deactivate ctrl
+ui --> user : List of grades
+deactivate ui
+@enduml

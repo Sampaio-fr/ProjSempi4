@@ -1,0 +1,27 @@
+@startuml
+autonumber
+
+actor "Teacher" as Manager
+
+
+activate Manager
+Manager -> ":System" : ask to create exam
+activate ":System"
+":System" --> Manager : shows list of course and asks to select one
+deactivate ":System"
+Manager -> ":System" : selects course
+activate ":System"
+
+":System" -->Manager : request data(title,description, number of sections,\n sections title,description,number of questions and type)
+deactivate ":System"
+
+Manager -> ":System" : inputs the request data
+activate ":System"
+
+":System" --> Manager : informs operation of success
+deactivate ":System"
+
+
+deactivate Manager
+
+@enduml

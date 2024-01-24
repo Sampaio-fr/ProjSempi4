@@ -1,0 +1,83 @@
+@startuml
+'skinparam section
+
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+class CreateCourseUI {
+    +doShow()
+    +create()
+    +createCourses(Designation,Description, Edition, minimumCapacity, maximumCapacity)
+}
+
+class CreateCourseController {
+    +createCourses()
+    +findCourseByIdBoolean()
+    +createCourse(Designation,Description, Edition, minimumCapacity, maximumCapacity)
+    +repositories()
+    +courses()
+
+}
+
+class CreateCourseService {
+    +create()
+    +createCourse(Designation,Description,\n Edition, minimumCapacity,\n maximumCapacity)
+    +saveCourse(course)
+}
+
+
+
+class CourseBuilder {
+    +withCourseTitle()
+    +withCourseDescription()
+    +withEdition()
+    +withMinimumCapacity()
+    +withMaximumCapacity()
+    +build()
+    +createCourse(Designation,\nDescription, Edition,\n minimumCapacity, maximumCapacity)
+}
+
+class Course {
++createCourse(Designation,\nDescription, Edition,\n minimumCapacity, maximumCapacity)
+}
+
+class PersistenceContext {
++create()
++ repositories(): RepositoryFactory
+}
+
+interface RepositoryFactory {
++create()
++ courseRepository(): CourseRepository
+
+}
+
+interface CourseRepository {
++create()
++saveCourse(course)
+}
+
+ class JpaCourseRepository {
+
+}
+
+CreateCourseUI .down.> CreateCourseController
+
+CreateCourseController -down-> CreateCourseService
+CreateCourseService -down-> CourseBuilder
+CourseBuilder -down-> Course
+
+
+ JpaCourseRepository -up-|> CourseRepository
+CreateCourseService --> PersistenceContext
+PersistenceContext --> RepositoryFactory
+RepositoryFactory --> CourseRepository
+
+
+
+
+
+
+
+@enduml

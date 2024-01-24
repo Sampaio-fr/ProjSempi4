@@ -1,0 +1,125 @@
+@startuml
+
+
+skinparam defaultFontName FG Virgil
+
+class Student {
+    -id: int
+    -name: string
+    -email: string
+}
+
+class EnrollmentApprovalUI {
+    +create(): void
+    +findEnrollmentApplication(): List<EnrollmentApplication>
+    +createEnrollmentApproval(enrollment: Enrollment, answer: string, explanation: string): void
+    +informOperationSuccess(): void
+}
+
+class EnrollmentApprovalController {
+    -enrollmentApprovalService: EnrollmentApprovalService
+    -enrollmentManagementService: EnrollmentManagementService
+    +create(): void
+    +findEnrollmentApplicationToEvaluate(): List<EnrollmentApplication>
+    +saveEnrollmentApproved(enrollmentApproval: EnrollmentApproval): void
+    +saveEnrollmentDenied(enrollmentApproval: EnrollmentApproval): void
+}
+
+class EnrollmentApprovalService {
+    -enrollmentApprovalRepository: EnrollmentApprovalRepository
+    +findEnrollmentApplicationToEvaluate(): List<EnrollmentApplication>
+    +saveEnrollmentApproved(enrollmentApproval: EnrollmentApproval): void
+    +saveEnrollmentDenied(enrollmentApproval: EnrollmentApproval): void
+}
+
+class EnrollmentManagementService {
+    -enrollmentRepository: EnrollmentRepository
+    -studentRepository: StudentRepository
+    -courseRepository: CourseRepository
+    +updateEnrollment(enrollment: Enrollment, answer: string): void
+}
+
+Interface EnrollmentApprovalRepository {
+    +findEnrollmentApplicationToEvaluate(): List<EnrollmentApplication>
+    +save(enrollmentApproval: EnrollmentApproval): void
+}
+class JpaEnrollmentApprovalRepository {
+    +findEnrollmentApplicationToEvaluate(): List<EnrollmentApplication>
+    +save(enrollmentApproval: EnrollmentApproval): void
+}
+   JpaEnrollmentApprovalRepository -up-|> EnrollmentApprovalRepository
+
+
+Interface EnrollmentRepository {
+    +save(enrollment: Enrollment): void
+}
+class JpaEnrollmentRepository {
+    +save(enrollment: Enrollment): void
+}
+
+JpaEnrollmentRepository -up-|> EnrollmentRepository
+
+Interface StudentRepository {
+    +save(student: Student): void
+}
+JpaStudentRepository -up-|> StudentRepository
+
+Interface CourseRepository {
+    +save(course: Course): void
+}
+JpaCourseRepository -up-|> CourseRepository
+
+class EnrollmentApprovalBuilder {
+    +createEnrollmentApproval(explanation: string, enrollment: Enrollment, answer: string): EnrollmentApproval
+}
+
+class Course {
+    -id: int
+    -name: string
+}
+
+class Enrollment {
+    -id: int
+    -student: Student
+    -course: Course
+}
+
+class EnrollmentApproval {
+    -id: int
+    -enrollment: Enrollment
+    -answer: string
+    -explanation: string
+}
+
+class PersistenceContext {
+    +repositories(): Persistence
+}
+
+Interface RepositoryFactory {
+    +create(): PersistenceContext
+    +enrollmentApplicationEvaluations(): EnrollmentApprovalRepository
+}
+
+EnrollmentApprovalUI ..> EnrollmentApprovalController
+EnrollmentApprovalController --> EnrollmentApprovalService
+EnrollmentApprovalController --> EnrollmentManagementService
+EnrollmentApprovalService --> PersistenceContext
+EnrollmentManagementService --> PersistenceContext
+PersistenceContext --> RepositoryFactory
+
+RepositoryFactory --> StudentRepository
+RepositoryFactory --> CourseRepository
+RepositoryFactory --> EnrollmentApprovalRepository
+RepositoryFactory --> EnrollmentRepository
+
+EnrollmentApprovalController --> EnrollmentApproval
+EnrollmentApprovalBuilder --> EnrollmentApproval
+
+EnrollmentApprovalService --> Student
+EnrollmentApprovalService --> Course
+EnrollmentApprovalService --> Enrollment
+
+
+
+
+@enduml

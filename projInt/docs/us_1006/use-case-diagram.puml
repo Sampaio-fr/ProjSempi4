@@ -1,0 +1,8 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+:User: as user
+
+user ---> (View a list of all available courses)
+
+@enduml

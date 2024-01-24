@@ -1,0 +1,64 @@
+@startuml
+package "Persistence"{
+class PersistenceContext {
+    + repositories(): RepositoryFactory
+}
+class RepositoryFactory {
+     + courseRepository(): CourseRepository
+     + enrollmentRepository(): EnrollmentRepository
+     + studentRepository(): studentRepository
+}
+class CourseRepository {
+   + getCourseFromCourseID(): List<Course>
+}
+
+class EnrollmentRepository {
+    + save(Enrollment): Enrollment
+}
+
+class StudentRepository {
+    + getStudentFromMecNumber(MecanographicNumber): List<Student>
+}
+
+}
+
+
+package "Service"{
+class ReadCSVFileService {
+     + readCSV(): boolean
+}
+class EnrollmentManagementService{
+ + saveEnrollment(EmailAddress, Course): Enrollment
+ + getSudentFromMecNum(MecanographicNumber): List<Student>
+ + getCourseFromCourseID(Edition): List<Course>
+}
+}
+
+package "Application" {
+class StudentEnrollmentController {
+    + bulkEnrollmentCourse(csvfile, Course): Enrollment
+}
+}
+package "Presentation"  {
+class BulkEnrollmentUI {
+    +doShow(): boolean
+}
+}
+
+
+BulkEnrollmentUI --> StudentEnrollmentController : the controller
+StudentEnrollmentController --> ReadCSVFileService :service
+ReadCSVFileService --> PersistenceContext
+PersistenceContext --> RepositoryFactory
+RepositoryFactory --> CourseRepository
+RepositoryFactory --> EnrollmentRepository
+RepositoryFactory --> StudentRepository
+StudentEnrollmentController --> PersistenceContext
+StudentEnrollmentController --> EnrollmentManagementService
+ReadCSVFileService--> EnrollmentManagementService
+
+
+
+
+
+@enduml

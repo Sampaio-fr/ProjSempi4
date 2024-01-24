@@ -1,0 +1,69 @@
+@startuml
+
+hide field
+hide methods
+
+title Domain Driven Design
+
+skinparam linetype ortho
+
+rectangle "<<Aggregate>> Course" {
+
+    entity Course<<Root>><<Entity>>
+    object Id<<Value Object>><<Identify>>
+    object CourseState<<Value Object>>
+    object CourseEnrollmentState <<Value Object>>
+    object Edition <<Value Object>>
+    object CourseDescription <<Value Object>>
+    object CourseTitle <<Value Object>>
+    object ExamsList <<Value Object>>
+    object CourseEnrollmentsList <<Value Object>>
+
+    Course"1" --> "1"CourseTitle: has a
+    Course"1" --> "1"Id : has a
+    Course"1" --> "1"CourseDescription : has a
+    Course"1"-->"1"CourseState : has a
+    Course"1"-->"1"CourseEnrollmentState: has an
+    Course"1" -->"1"Edition : has a
+    Course"1" -->"*"ExamsList : has an
+    Course"1" -->"*"CourseEnrollmentsList : has an
+}
+
+rectangle "<<Aggregate>> Teacher" {
+
+    entity Teacher<<Entity>><<Root>>
+    object Acronym<<Value Object>>
+
+    Teacher"1" --> "1"Acronym : has a
+}
+
+rectangle "<<Aggregate>> ExamFormative"  {
+    entity ExamFormative <<Root>><<Entity>>
+    object ExamFormativeTitle<<Value Object>>
+
+        object FormativeFeedBackType <<Value Object>>
+        object FormativeGradeType <<Value Object>>
+        object ExamFormativeDescription<<Value Object>>
+        object ExamStructure<<Value Object>>
+
+    ExamFormative"1"-->"1"ExamStructure: has a
+    ExamFormative"1"-->"1"ExamFormativeTitle : needs
+    ExamFormative"1"-->"1"FormativeFeedBackType: has a
+    ExamFormative"1"-->"1"FormativeGradeType: has a
+    ExamFormative"1"-->"0..1"ExamFormativeDescription: contains
+}
+
+rectangle "<<Aggregate>> Student" {
+
+    entity Student<<Entity>><<Root>>
+    object MechanographicNumber<<Value Object>>
+
+    Student "1" -->"1"MechanographicNumber: has a
+}
+
+
+Course"1" --> "*" Teacher : has
+Course"1" --> "*" Student : has
+ExamFormative"1" --> "1" Course: belongs
+
+@enduml

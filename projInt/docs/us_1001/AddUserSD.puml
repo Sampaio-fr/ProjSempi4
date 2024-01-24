@@ -1,0 +1,243 @@
+@startuml
+participant Actor
+Actor -> AddUserUI : doShow(): boolean
+activate AddUserUI
+AddUserUI -> AddUserUI : showRoles(roleTypes: Set<Role>): boolean
+activate AddUserUI
+AddUserUI -> AddUserUI : buildRolesMenu(roleTypes: Set<Role>): Menu
+activate AddUserUI
+AddUserUI --> AddUserUI
+deactivate AddUserUI
+AddUserUI --> AddUserUI
+deactivate AddUserUI
+AddUserUI -> AddUserController : addUser(username: String, password: String, firstName: String, lastName: String, email: String, roles: Set<Role>): SystemUser
+activate AddUserController
+AddUserController -> AddUserController : addUser(username: String, password: String, firstName: String, lastName: String, email: String, roles: Set<Role>, createdOn: Calendar): SystemUser
+activate AddUserController
+AddUserController --> AddUserController
+deactivate AddUserController
+AddUserController --> AddUserUI
+deactivate AddUserController
+create TaxNumber
+AddUserUI -> TaxNumber : <<create>>(taxNumber: String): TaxNumber
+activate TaxNumber
+TaxNumber -> TaxNumber : taxNumberValidation(taxNumber: String): boolean
+activate TaxNumber
+TaxNumber --> TaxNumber
+deactivate TaxNumber
+TaxNumber --> AddUserUI
+deactivate TaxNumber
+AddUserUI -> DateUtil : toDate(rawDate: String): Date
+activate DateUtil
+DateUtil -> DateUtil : getDateFormat(date: String): String
+activate DateUtil
+DateUtil -> DateUtil : patternForSeparator(template: String, sep: String): String
+activate DateUtil
+DateUtil --> DateUtil
+deactivate DateUtil
+DateUtil --> DateUtil
+deactivate DateUtil
+DateUtil -> DateUtil : patternForSeparator(template: String, sep: String): String
+activate DateUtil
+DateUtil --> DateUtil
+deactivate DateUtil
+DateUtil -> DateUtil : tryParse(input: String, pattern: String): Date
+activate DateUtil
+DateUtil --> DateUtil
+deactivate DateUtil
+DateUtil --> AddUserUI
+deactivate DateUtil
+create Acronym
+AddUserUI -> Acronym : <<create>>(acronym: String): Acronym
+activate Acronym
+Acronym -> Acronym : acronymValidation(acronym: String): boolean
+activate Acronym
+Acronym --> Acronym
+deactivate Acronym
+Acronym --> AddUserUI
+deactivate Acronym
+AddUserUI -> AddUserController : addTeacher(username: String, password: String, firstName: String, lastName: String, email: String, roles: Set<Role>, acronym: Acronym, birthdate: Calendar, taxNumber: TaxNumber): Teacher
+activate AddUserController
+AddUserController -> AddUserController : addUser(username: String, password: String, firstName: String, lastName: String, email: String, roles: Set<Role>): SystemUser
+activate AddUserController
+AddUserController -> AddUserController : addUser(username: String, password: String, firstName: String, lastName: String, email: String, roles: Set<Role>, createdOn: Calendar): SystemUser
+activate AddUserController
+AddUserController --> AddUserController
+deactivate AddUserController
+AddUserController --> AddUserController
+deactivate AddUserController
+AddUserController -> UserBuilder : withShortName(name: String): UserBuilder
+activate UserBuilder
+create ShortName
+UserBuilder -> ShortName : <<create>>(shortName: String): ShortName
+activate ShortName
+ShortName -> ShortName : shortNameValidation(shortName: String): boolean
+activate ShortName
+ShortName --> ShortName
+deactivate ShortName
+ShortName --> UserBuilder
+deactivate ShortName
+UserBuilder --> AddUserController
+deactivate UserBuilder
+AddUserController -> UserBuilder : withEmail(emailAddress: String): UserBuilder
+activate UserBuilder
+UserBuilder --> AddUserController
+deactivate UserBuilder
+AddUserController -> UserBuilder : withTaxNumber(taxNumber: TaxNumber): UserBuilder
+activate UserBuilder
+UserBuilder --> AddUserController
+deactivate UserBuilder
+AddUserController -> UserBuilder : withBirthDate(birthDate: Calendar): UserBuilder
+activate UserBuilder
+UserBuilder --> AddUserController
+deactivate UserBuilder
+AddUserController -> UserBuilder : withFullName(firstName: String, lastName: String): UserBuilder
+activate UserBuilder
+create FullName
+UserBuilder -> FullName : <<create>>(firstName: String, lastName: String): FullName
+activate FullName
+FullName --> UserBuilder
+deactivate FullName
+UserBuilder --> AddUserController
+deactivate UserBuilder
+AddUserController -> UserBuilder : build(): ECourseUser
+activate UserBuilder
+create ECourseUser
+UserBuilder -> ECourseUser : <<create>>(email: EmailAddress, shortName: ShortName, fullName: FullName, birthDate: Calendar, taxNumber: TaxNumber): ECourseUser
+activate ECourseUser
+ECourseUser --> UserBuilder
+deactivate ECourseUser
+UserBuilder --> AddUserController
+deactivate UserBuilder
+create TimeTable
+AddUserController -> TimeTable : <<create>>(): TimeTable
+activate TimeTable
+TimeTable --> AddUserController
+deactivate TimeTable
+AddUserController -> TeacherManagementService : registerNewTeacher(acronym: Acronym, user: ECourseUser, systemUser: SystemUser, timeTable: TimeTable): Teacher
+activate TeacherManagementService
+TeacherManagementService -> TeacherBuilder : withAcronym(acronym: Acronym): TeacherBuilder
+activate TeacherBuilder
+TeacherBuilder --> TeacherManagementService
+deactivate TeacherBuilder
+TeacherManagementService -> TeacherBuilder : withUser(user: ECourseUser): TeacherBuilder
+activate TeacherBuilder
+TeacherBuilder --> TeacherManagementService
+deactivate TeacherBuilder
+TeacherManagementService -> TeacherBuilder : withSystemUser(systemUser: SystemUser): TeacherBuilder
+activate TeacherBuilder
+TeacherBuilder --> TeacherManagementService
+deactivate TeacherBuilder
+TeacherManagementService -> TeacherBuilder : withTimeTable(timeTable: TimeTable): TeacherBuilder
+activate TeacherBuilder
+TeacherBuilder --> TeacherManagementService
+deactivate TeacherBuilder
+TeacherManagementService -> TeacherBuilder : build(): Teacher
+activate TeacherBuilder
+create Teacher
+TeacherBuilder -> Teacher : <<create>>(acronym: Acronym, login: SystemUser, user: ECourseUser, timeTable: TimeTable): Teacher
+activate Teacher
+Teacher --> TeacherBuilder
+deactivate Teacher
+TeacherBuilder --> TeacherManagementService
+deactivate TeacherBuilder
+TeacherManagementService --> AddUserController
+deactivate TeacherManagementService
+AddUserController --> AddUserUI
+deactivate AddUserController
+create MecanographicNumber
+AddUserUI -> MecanographicNumber : <<create>>(mecanographicNumber: String): MecanographicNumber
+activate MecanographicNumber
+MecanographicNumber --> AddUserUI
+deactivate MecanographicNumber
+AddUserUI -> AddUserController : addStudent(username: String, password: String, firstName: String, lastName: String, email: String, roles: Set<Role>, mecanographicNumber: MecanographicNumber, birthdate: Calendar, taxNumber: TaxNumber): Student
+activate AddUserController
+AddUserController -> AddUserController : addUser(username: String, password: String, firstName: String, lastName: String, email: String, roles: Set<Role>): SystemUser
+activate AddUserController
+AddUserController -> AddUserController : addUser(username: String, password: String, firstName: String, lastName: String, email: String, roles: Set<Role>, createdOn: Calendar): SystemUser
+activate AddUserController
+AddUserController --> AddUserController
+deactivate AddUserController
+AddUserController --> AddUserController
+deactivate AddUserController
+AddUserController -> UserBuilder : withShortName(name: String): UserBuilder
+activate UserBuilder
+create ShortName
+UserBuilder -> ShortName : <<create>>(shortName: String): ShortName
+activate ShortName
+ShortName -> ShortName : shortNameValidation(shortName: String): boolean
+activate ShortName
+ShortName --> ShortName
+deactivate ShortName
+ShortName --> UserBuilder
+deactivate ShortName
+UserBuilder --> AddUserController
+deactivate UserBuilder
+AddUserController -> UserBuilder : withEmail(emailAddress: String): UserBuilder
+activate UserBuilder
+UserBuilder --> AddUserController
+deactivate UserBuilder
+AddUserController -> UserBuilder : withTaxNumber(taxNumber: TaxNumber): UserBuilder
+activate UserBuilder
+UserBuilder --> AddUserController
+deactivate UserBuilder
+AddUserController -> UserBuilder : withBirthDate(birthDate: Calendar): UserBuilder
+activate UserBuilder
+UserBuilder --> AddUserController
+deactivate UserBuilder
+AddUserController -> UserBuilder : withFullName(firstName: String, lastName: String): UserBuilder
+activate UserBuilder
+create FullName
+UserBuilder -> FullName : <<create>>(firstName: String, lastName: String): FullName
+activate FullName
+FullName --> UserBuilder
+deactivate FullName
+UserBuilder --> AddUserController
+deactivate UserBuilder
+AddUserController -> UserBuilder : build(): ECourseUser
+activate UserBuilder
+create ECourseUser
+UserBuilder -> ECourseUser : <<create>>(email: EmailAddress, shortName: ShortName, fullName: FullName, birthDate: Calendar, taxNumber: TaxNumber): ECourseUser
+activate ECourseUser
+ECourseUser --> UserBuilder
+deactivate ECourseUser
+UserBuilder --> AddUserController
+deactivate UserBuilder
+create TimeTable
+AddUserController -> TimeTable : <<create>>(): TimeTable
+activate TimeTable
+TimeTable --> AddUserController
+deactivate TimeTable
+AddUserController -> StudentManagementService : registerNewStudent(mecanographicNumber: MecanographicNumber, user: ECourseUser, systemUser: SystemUser, timeTable: TimeTable): Student
+activate StudentManagementService
+StudentManagementService -> StudentBuilder : withMecanographicNumber(mecanographicNumber: MecanographicNumber): StudentBuilder
+activate StudentBuilder
+StudentBuilder --> StudentManagementService
+deactivate StudentBuilder
+StudentManagementService -> StudentBuilder : withUser(user: ECourseUser): StudentBuilder
+activate StudentBuilder
+StudentBuilder --> StudentManagementService
+deactivate StudentBuilder
+StudentManagementService -> StudentBuilder : withSystemUser(systemUser: SystemUser): StudentBuilder
+activate StudentBuilder
+StudentBuilder --> StudentManagementService
+deactivate StudentBuilder
+StudentManagementService -> StudentBuilder : withTimeTable(timeTable: TimeTable): StudentBuilder
+activate StudentBuilder
+StudentBuilder --> StudentManagementService
+deactivate StudentBuilder
+StudentManagementService -> StudentBuilder : build(): Student
+activate StudentBuilder
+create Student
+StudentBuilder -> Student : <<create>>(mechanographic: MecanographicNumber, login: SystemUser, user: ECourseUser, timeTable: TimeTable): Student
+activate Student
+Student --> StudentBuilder
+deactivate Student
+StudentBuilder --> StudentManagementService
+deactivate StudentBuilder
+StudentManagementService --> AddUserController
+deactivate StudentManagementService
+AddUserController --> AddUserUI
+deactivate AddUserController
+return
+@enduml

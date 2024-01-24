@@ -1,0 +1,22 @@
+@startuml
+
+autonumber
+actor "User" as usr
+
+participant ":System" as sys
+
+
+activate usr
+usr -> sys : starts creating a board
+
+activate sys
+sys --> usr : requests data (shared board title, number of rows and number of columns)
+deactivate sys
+usr -> sys : types requested data
+
+activate sys
+sys --> usr : informs operation success
+deactivate sys
+
+
+@enduml

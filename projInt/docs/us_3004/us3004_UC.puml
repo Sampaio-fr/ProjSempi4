@@ -1,0 +1,8 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+actor User as User
+
+User --> (Share a Board)
+
+@enduml

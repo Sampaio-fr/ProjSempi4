@@ -1,0 +1,71 @@
+@startuml
+
+title Change Lecture Schedule
+
+actor Teacher as usr
+participant ":ChangeLectureScheduleUI" as ui
+participant ":ChangeLectureScheduleController" as ctr
+participant ":ListLecturesService" as svc
+database ":TeacherRepository" as tr
+participant ":selectedLecture" as sl
+participant Teacher
+participant TimeTable
+participant Schedule
+participant Lecture
+database ":ScheduleRepository" as sr
+database ":LectureRepository" as lr
+
+usr -> ui : show()
+activate ui
+ui -> ui : doShow()
+ui -> ctr : myDetails()
+activate ctr
+ctr -> svc : myDetails(systemUser)
+activate svc
+svc -> tr : myDetails()
+activate tr
+tr --> ctr : Teacher
+deactivate tr
+deactivate svc
+ctr -> Teacher : getTimeTable()
+activate Teacher
+Teacher --> ctr : TimeTable
+deactivate Teacher
+ctr ->  TimeTable : getLecturesSchedules()
+activate TimeTable
+TimeTable --> ctr : Lectures List
+deactivate TimeTable
+ctr --> ui : Lectures List
+deactivate ctr
+ui --> usr : asks the user to select the lecture
+usr -> ui : selects lecture
+ui --> usr : asks the user to enter new date and duration
+usr -> ui : enters the data
+ui -> ctr : changeSchedule(selectedClass, newDateTime, newDuration)
+activate ctr
+ctr -> Lecture : getSchedule()
+activate Lecture
+Lecture --> ctr : Schedule
+deactivate Lecture
+ctr -> Schedule : changeInitialDate(newDateTime)
+activate Schedule
+Schedule --> ctr
+deactivate Schedule
+ctr -> Schedule : changeDuration(newDuration)
+activate Schedule
+Schedule --> ctr
+deactivate Schedule
+ctr -> sr : save(selectedSchedule)
+activate sr
+sr --> ctr
+deactivate sr
+ctr -> lr : save(selectedLecture)
+activate lr
+lr --> ctr
+deactivate lr
+ctr --> ui
+deactivate ctr
+ui --> usr : informs operation success
+deactivate ui
+
+@enduml

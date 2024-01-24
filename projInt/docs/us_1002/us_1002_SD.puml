@@ -1,0 +1,112 @@
+@startuml
+'http://plantuml.com/skinparam.html
+
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+
+actor Manager as Actor
+participant ":CreateCourseUI" as UI <<presentation>>
+participant ":CreateCourseController" as Controller <<application>>
+participant ":CreateCourseService" as CourseService <<service>>
+participant ":CourseBuilder" as CourseBuilder <<builder>>
+participant "course:Course" as Course <<domain>>
+participant ":PersistenceContext" as Persistence <<persistence>>
+participant "factory: RepositoryFactory" as RepositoryFactory <<factory>>
+database "courseRepository: CourseRepository" as CourseRepository <<repository>>
+
+database "AuthzRegistry: AuthzRegistry" as AuthzRegistry <<AuthzRegistry>>
+database "JPACourseRepository: JPACourseRepository" as JPACourseRepository <<repository>>
+
+activate Actor
+
+    Actor -> UI: starts specifying a new course
+    activate UI
+    UI --> Controller: create()
+    activate Controller
+    deactivate Controller
+
+    UI --> Actor: request data related to creation of the course
+    deactivate UI
+
+    Actor -> UI: inserts requested data
+    activate UI
+
+    UI --> Actor: request confirmation of data
+    deactivate UI
+
+    Actor -> UI: confirms data related to creation of the course
+    activate UI
+
+    UI -> Controller: createCourses(Designation,Description, Edition, minimumCapacity, maximumCapacity)
+    activate Controller
+
+    Controller --> CourseService: create()
+    activate CourseService
+    deactivate CourseService
+
+    Controller --> CourseService: findCourseByIdBoolean(Id)
+    activate CourseService
+    CourseService --> CourseRepository: findCourseByIdBoolean(Id)
+
+    activate CourseRepository
+    CourseRepository-->AuthzRegistry: AuthzRegistry.authorizationService()
+
+    deactivate CourseRepository
+    activate AuthzRegistry
+    deactivate AuthzRegistry
+    CourseService --> Persistence: create()
+    activate Persistence
+    Persistence --> RepositoryFactory: getRepositoryFactory()
+    activate RepositoryFactory
+    RepositoryFactory-->CourseRepository: courseRepository()
+    activate CourseRepository
+
+    CourseRepository --> JPACourseRepository: findCourseByIdBoolean(Id)
+    activate JPACourseRepository
+    deactivate JPACourseRepository
+    deactivate CourseRepository
+    deactivate RepositoryFactory
+    deactivate Persistence
+    deactivate CourseService
+
+    Controller -> CourseService:createCourse(Designation,Description, Edition, minimumCapacity, maximumCapacity)
+    activate CourseService
+
+    CourseService --> CourseBuilder: course =  createCourse(Designation,Description,\n Edition, minimumCapacity,\n maximumCapacity)
+    activate CourseBuilder
+
+    CourseBuilder --> Course: course = createCourse(Designation,\nDescription, Edition,\n minimumCapacity, maximumCapacity)
+    activate Course
+
+    deactivate Course
+    deactivate CourseBuilder
+    deactivate CourseService
+
+
+
+
+
+
+
+    deactivate RepositoryFactory
+
+    CourseService --> CourseRepository: saveCourse(course)
+    activate CourseService
+
+    activate CourseRepository
+    deactivate CourseRepository
+
+    CourseService --> Controller: course
+    deactivate CourseService
+    deactivate Controller
+
+    UI --> Actor: informs the success or insuccess of the creation of the course
+    deactivate UI
+    deactivate Actor
+
+
+@enduml

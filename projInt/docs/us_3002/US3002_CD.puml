@@ -1,0 +1,74 @@
+@startuml
+
+package presentation {
+  class CreateSharedBoardUI {
+    + doShow(): boolean
+     + headline(): String
+  }
+}
+
+package application {
+  class CreateSharedBoardController {
+    + createBoard(user: SystemUser, title: String, rows: Set<CellColumn>, columns: Set<CellRow>): void
+  }
+}
+
+package builder {
+  class SharedBoardBuilder {
+    + withBoardTitle(title: String)
+    + withOwnerBoard(user: User): void
+    + create(user: SystemUser, title: String)
+    + build(): SharedBoard
+  }
+}
+
+package domain {
+  class SharedBoard {
+    + create(user: SystemUser, title: String): void
+  }
+
+  class Cell {
+    + create(): void
+  }
+}
+
+package persistence {
+  class PersistenceContext {
+    + repositories(): RepositoryFactory
+  }
+
+  interface RepositoryFactory {
+    + sharedBoardRepository(): SharedBoardRepository
+    + cellRepository(): CellRepository
+  }
+
+  interface SharedBoardRepository {
+    + save(sharedBoard: SharedBoard): void
+  }
+  JpaSharedBoardRepository -up-|> SharedBoardRepository
+  class JpaSharedBoardRepository {
+      + save(sharedBoard: SharedBoard): void
+    }
+
+  interface CellRepository {
+    + save(cell: Cell): void
+  }
+  JpaCellRepository -up-|> CellRepository
+
+  class JpaCellRepository {
+      + save(cell: Cell): void
+    }
+}
+
+
+CreateSharedBoardUI --> CreateSharedBoardController
+CreateSharedBoardController -> SharedBoardBuilder
+CreateSharedBoardController --> PersistenceContext
+SharedBoardBuilder -left-> SharedBoard
+CreateSharedBoardController --> SharedBoard: create
+CreateSharedBoardController --> Cell: create
+SharedBoard "1"->"*"Cell
+PersistenceContext -->RepositoryFactory
+RepositoryFactory --> SharedBoardRepository
+RepositoryFactory --> CellRepository
+@enduml

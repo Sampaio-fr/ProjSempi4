@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="us-ascii" standalone="no"?>
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" contentStyleType="text/css"
+     height="293px" preserveAspectRatio="none" style="width:697px;height:293px;background:#FFFFFF;" version="1.1"
+     viewBox="0 0 697 293" width="697px" zoomAndPan="magnify">
+    <defs/>
+    <g><!--cluster <<Aggregate>> Course-->
+        <g id="cluster_&lt;&lt;Aggregate&gt;&gt; Course">
+            <rect fill="#87CEFA" height="280" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;" width="684"
+                  x="7" y="7"/>
+            <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing"
+                  textLength="144" x="277" y="24.1074">&#171;Aggregate&#187; Course
+            </text>
+        </g><!--class Course-->
+        <g id="elem_Course">
+            <rect codeLine="4" fill="#F1F1F1" height="76.543" id="Course" rx="2.5" ry="2.5"
+                  style="stroke:#181818;stroke-width:0.5;" width="78" x="292" y="44"/>
+            <ellipse cx="307" cy="74.2715" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/>
+            <path d="M305.8594,75.0684 L305.8594,77.5684 L310.1875,77.5684 L310.1875,76.6465 Q310.1875,76.0371 310.4219,75.7715 Q310.6719,75.5059 311.0469,75.5059 Q311.4219,75.5059 311.6563,75.7715 Q311.8906,76.0371 311.8906,76.6465 L311.8906,79.2715 L303.8906,79.2715 Q303.2656,79.2715 303,79.0371 Q302.75,78.8027 302.75,78.4121 Q302.75,78.0371 303.0156,77.8027 Q303.2813,77.5684 303.8906,77.5684 L304.1563,77.5684 L304.1563,70.9121 L303.8906,70.9121 Q303.2656,70.9121 303,70.6777 Q302.75,70.4434 302.75,70.0527 Q302.75,69.6777 303,69.4434 Q303.2656,69.209 303.8906,69.209 L311.5156,69.209 L311.5156,71.8027 Q311.5156,72.4121 311.2813,72.6777 Q311.0625,72.9277 310.6719,72.9277 Q310.2969,72.9277 310.0625,72.6777 Q309.8281,72.4121 309.8281,71.8027 L309.8281,70.9121 L305.8594,70.9121 L305.8594,73.3652 L307.3438,73.3652 Q307.3438,72.709 307.4688,72.5215 Q307.7344,72.1152 308.2031,72.1152 Q308.5781,72.1152 308.8125,72.3809 Q309.0469,72.6309 309.0469,73.2402 L309.0469,75.209 Q309.0469,75.7559 308.9219,75.9434 Q308.6563,76.334 308.2031,76.334 Q307.7344,76.334 307.4688,75.9277 Q307.3438,75.7402 307.3438,75.0684 L305.8594,75.0684 Z "
+                  fill="#000000"/>
+            <text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing"
+                  textLength="40" x="324" y="61.9492">&#171;Root&#187;
+            </text>
+            <text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing"
+                  textLength="44" x="322" y="77.9102">&#171;Entity&#187;
+            </text>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="46" x="321"
+                  y="96.0293">Course
+            </text>
+            <line style="stroke:#181818;stroke-width:0.5;" x1="293" x2="369" y1="104.543" y2="104.543"/>
+            <line style="stroke:#181818;stroke-width:0.5;" x1="293" x2="369" y1="112.543" y2="112.543"/>
+        </g>
+        <g id="elem_Id">
+            <rect fill="#F1F1F1" height="70.543" style="stroke:#181818;stroke-width:0.5;" width="95" x="23.5" y="200"/>
+            <text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing"
+                  textLength="85" x="28.5" y="212.9492">&#171;Value Object&#187;
+            </text>
+            <text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing"
+                  textLength="54" x="44" y="228.9102">&#171;Identify&#187;
+            </text>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="11" x="65.5"
+                  y="249.0293">Id
+            </text>
+            <line style="stroke:#181818;stroke-width:0.5;" x1="24.5" x2="117.5" y1="254.543" y2="254.543"/>
+        </g>
+        <g id="elem_CourseState">
+            <rect fill="#F1F1F1" height="54.582" style="stroke:#181818;stroke-width:0.5;" width="95" x="153.5" y="208"/>
+            <text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing"
+                  textLength="85" x="158.5" y="220.9492">&#171;Value Object&#187;
+            </text>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="79"
+                  x="161.5" y="241.0684">CourseState
+            </text>
+            <line style="stroke:#181818;stroke-width:0.5;" x1="154.5" x2="247.5" y1="246.582" y2="246.582"/>
+        </g>
+        <g id="elem_Edition">
+            <rect fill="#F1F1F1" height="54.582" style="stroke:#181818;stroke-width:0.5;" width="95" x="283.5" y="208"/>
+            <text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing"
+                  textLength="85" x="288.5" y="220.9492">&#171;Value Object&#187;
+            </text>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="43"
+                  x="309.5" y="241.0684">Edition
+            </text>
+            <line style="stroke:#181818;stroke-width:0.5;" x1="284.5" x2="377.5" y1="246.582" y2="246.582"/>
+        </g>
+        <g id="elem_CourseDescription">
+            <rect fill="#F1F1F1" height="54.582" style="stroke:#181818;stroke-width:0.5;" width="131" x="413.5"
+                  y="208"/>
+            <text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing"
+                  textLength="85" x="436.5" y="220.9492">&#171;Value Object&#187;
+            </text>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="117"
+                  x="420.5" y="241.0684">CourseDescription
+            </text>
+            <line style="stroke:#181818;stroke-width:0.5;" x1="414.5" x2="543.5" y1="246.582" y2="246.582"/>
+        </g>
+        <g id="elem_CourseTitle">
+            <rect fill="#F1F1F1" height="54.582" style="stroke:#181818;stroke-width:0.5;" width="95" x="579.5" y="208"/>
+            <text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing"
+                  textLength="85" x="584.5" y="220.9492">&#171;Value Object&#187;
+            </text>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="73"
+                  x="590.5" y="241.0684">CourseTitle
+            </text>
+            <line style="stroke:#181818;stroke-width:0.5;" x1="580.5" x2="673.5" y1="246.582" y2="246.582"/>
+        </g><!--link Course to CourseTitle-->
+        <g id="link_Course_CourseTitle">
+            <path codeLine="11"
+                  d="M370.36,103.04 C416.44,125.99 494.98,165.32 562,200 C566.17,202.16 570.47,204.4 574.8,206.67 "
+                  fill="none" id="Course-to-CourseTitle" style="stroke:#181818;stroke-width:1.0;"/>
+            <polygon fill="#181818"
+                     points="579.49,209.14,573.3856,201.411,575.0645,206.813,569.6625,208.4919,579.49,209.14"
+                     style="stroke:#181818;stroke-width:1.0;"/>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="32" x="499"
+                  y="166.0283">has a
+            </text>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7"
+                  x="377.9944" y="102.2796">1
+            </text>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7"
+                  x="564.3603" y="200.669">1
+            </text>
+        </g><!--link Course to Id-->
+        <g id="link_Course_Id">
+            <path codeLine="12" d="M291.79,106.27 C246.9,132.34 173.16,175.17 123.38,204.08 " fill="none"
+                  id="Course-to-Id" style="stroke:#181818;stroke-width:1.0;"/>
+            <polygon fill="#181818"
+                     points="118.94,206.66,128.7299,205.5843,123.2599,204.1424,124.7018,198.6724,118.94,206.66"
+                     style="stroke:#181818;stroke-width:1.0;"/>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="32" x="209"
+                  y="166.0283">has a
+            </text>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7"
+                  x="276.9153" y="106.1827">1
+            </text>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7"
+                  x="126.4953" y="198.2589">1
+            </text>
+        </g><!--link Course to CourseDescription-->
+        <g id="link_Course_CourseDescription">
+            <path codeLine="13" d="M367.96,121.21 C393,146.75 425.64,180.06 449.05,203.94 " fill="none"
+                  id="Course-to-CourseDescription" style="stroke:#181818;stroke-width:1.0;"/>
+            <polygon fill="#181818"
+                     points="452.72,207.69,449.2775,198.4624,449.2204,204.1189,443.5638,204.0618,452.72,207.69"
+                     style="stroke:#181818;stroke-width:1.0;"/>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="32" x="414"
+                  y="166.0283">has a
+            </text>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7"
+                  x="366.0836" y="142.5246">1
+            </text>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7"
+                  x="439.2056" y="196.8531">1
+            </text>
+        </g><!--link Course to CourseState-->
+        <g id="link_Course_CourseState">
+            <path codeLine="14" d="M298.53,121.21 C276.63,146.65 248.1,179.79 227.56,203.65 " fill="none"
+                  id="Course-to-CourseState" style="stroke:#181818;stroke-width:1.0;"/>
+            <polygon fill="#181818"
+                     points="224.08,207.69,232.982,203.4764,227.341,203.8998,226.9177,198.2588,224.08,207.69"
+                     style="stroke:#181818;stroke-width:1.0;"/>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="32" x="270"
+                  y="166.0283">has a
+            </text>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7"
+                  x="286.0221" y="142.5246">1
+            </text>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7"
+                  x="221.3631" y="196.8531">1
+            </text>
+        </g><!--link Course to Edition-->
+        <g id="link_Course_Edition">
+            <path codeLine="15" d="M331,121.21 C331,146.23 331,178.7 331,202.46 " fill="none" id="Course-to-Edition"
+                  style="stroke:#181818;stroke-width:1.0;"/>
+            <polygon fill="#181818" points="331,207.69,335,198.69,331,202.69,327,198.69,331,207.69"
+                     style="stroke:#181818;stroke-width:1.0;"/>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="32" x="332"
+                  y="166.0283">has a
+            </text>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7"
+                  x="323.4641" y="142.5246">1
+            </text>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7"
+                  x="323.2344" y="196.8531">1
+            </text>
+        </g><!--SRC=[ZT2n3e8m40RWlKznmPd1rJHDZ38mcQXnBxIMAg6cFGPYV7TB0KCGYLqkkNxtjpahS-ILAYL4b6wLib9nb8p1pjJMoGXMfLO5kdkJbRLy4WB-o0erDZsXz6WCCaPf4jgC1MEocu-6L51wuNuK3g7HkbIq0TU9xD9Ew9-VZenP8ZHgKy6IwQBsqkLMF_xKPur-2Lykm7uNwmZYc86lev4D5Dm1dtUfWCNxxu_ESgy_E2peTwelmuO6yoBa3G00]-->
+    </g>
+</svg>

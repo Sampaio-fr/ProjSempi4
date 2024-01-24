@@ -1,0 +1,54 @@
+@startuml
+
+class CloseEnrollmentsAction{
+    + show()
+}
+class ListStudenExamsUI {
+    + doShow()
+}
+
+class ListStudentExamsController {
+    + listMyExams()
+}
+
+class Student{
+    + findEnrollments()
+}
+
+class Enrollment{
+    + getCourse()
+}
+
+class Course{
+    + findExamList()
+}
+
+class ListExamsManagementService {
+    + findStudentByEmail()
+}
+
+class PersistenceContext {
+    + repositories()
+}
+
+interface RepositoryFactory {
+    + studentRepository()
+}
+
+interface StudentRepository {
+    + findStudentByEmail()
+}
+
+CloseEnrollmentsAction .down.> ListStudenExamsUI
+ListStudenExamsUI .down.> ListStudentExamsController
+
+ListStudentExamsController -down-> ListExamsManagementService
+ListStudentExamsController -down-> Student
+ListStudentExamsController -down-> Enrollment
+ListStudentExamsController -down-> Course
+
+ListExamsManagementService --> PersistenceContext
+PersistenceContext --> RepositoryFactory
+RepositoryFactory --> StudentRepository
+
+@enduml

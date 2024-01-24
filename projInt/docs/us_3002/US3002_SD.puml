@@ -1,0 +1,72 @@
+@startuml
+
+autonumber
+actor "User" as usr
+
+participant ":CreateSharedBoardUI" as ui <<presentation>>
+participant ":CreateSharedBoardController" as ctrl <<application>>
+participant "systemUser: AuthorizationService" as auth
+participant ":SharedBoardBuilder" as builder <<builder>>
+participant "board :SharedBoard" as sharedboard <<domain>>
+participant ":PersistenceContext" as persist <<persistence>>
+participant ":RepositoryFactory" as factory <<factory>>
+participant "factory:RepositoryFactory" as repoI <<repository>>
+participant "cell: Cell" as cell <<domain>>
+database "cellRepo :CellRepository" as repoCell <<repository>>
+database "boardRepo :SharedBoardRepository" as repoBoard <<repository>>
+
+
+activate usr
+usr -> ui : starts creating a sharedboard
+activate ui
+ui->auth: authorizationService()
+activate auth
+ref over auth
+Sequence Diagram - SD_Authentication
+end
+auth -->ui: sysUser
+deactivate auth
+ui --> usr : requests data (shared sharedboard title, number of rows, number of columns, rows titles and column titles)
+deactivate ui
+usr -> ui : types requested data
+
+activate ui
+ui->ctrl : createBoard(sysUser,title, rows, columns)
+activate ctrl
+note right of builder: SharedBoardBuilder is used to create an entity of the type SharedBoard is a valid state
+ctrl->builder: create
+ctrl->builder: withBoardTitle(title)
+ctrl->builder: withOwnerBoard(sysUser)
+ctrl -> builder: build()
+activate builder
+builder->sharedboard**: create(sysUser,title)
+
+builder-->ctrl: sharedboard
+deactivate builder
+ctrl -> persist : factory = repositories()
+activate persist
+persist->factory: create
+persist-->ctrl: factory
+deactivate persist
+ctrl->repoI: boardRepo = sharedBoardRepository()
+activate repoI
+repoI->repoBoard: create
+repoI --> ctrl: boardRepo
+deactivate repoI
+ctrl->repoBoard: save(boardRepo)
+ctrl->repoI: cellRepo = cellRepository()
+activate repoI
+repoI->repoCell: create
+repoI-->ctrl: cellRepo
+deactivate repoI
+create cell
+ctrl -> cell: create
+deactivate cell
+ctrl->repoCell:save(cellRepo)
+ui --> usr : informs operation success
+
+deactivate ui
+
+
+
+@enduml

@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+actor Manager as Actor
+
+activate Actor
+Actor -> System: asks to change course state
+activate System
+System--> Actor: show all courses and asks to select one
+Actor -> System: selects wanted course
+System --> Actor: asks if he wants to open or close
+alt open
+Actor -> System: open
+else close
+Actor -> System: close
+end
+System --> Actor: shows course actual state
+deactivate System
+
+deactivate Actor
+@enduml

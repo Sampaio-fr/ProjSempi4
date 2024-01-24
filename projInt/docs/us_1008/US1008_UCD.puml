@@ -1,0 +1,8 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+:Student: as u
+
+u ---> (Enroll in a Course)
+
+@enduml

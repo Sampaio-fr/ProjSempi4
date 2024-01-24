@@ -1,0 +1,90 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+actor "Student" as usr
+
+participant ":EnrollmentStudentUI" as ui <<persistence>>
+participant ":StudentEnrollmentController" as ctrl <<application>>
+participant ":CourseManagementService" as courseService <<service>>
+participant "user :SystemUser" as user
+participant ":EnrollmentManagementService" as enrollmentManage <<service>>
+participant ":PersistenceContext" as persist <<persistence>>
+participant ":RepositoryFactory " as rfcls <<factory>>
+participant "factory: RepositoryFactory " as factory <<factory>>
+participant "systemUser: AuthorizationService" as auth
+participant "enrollment: Enrollment" as Enrollment <<domain>>
+database "studentRepo: StudentRepository" as studentRepo <<repository>>
+database "courseRepo: CourseRepository" as courseRepo <<repository>>
+database "enrollRepo: EnrollmentRepository" as enrollRepo <<repository>>
+
+
+activate usr
+usr -> ui : starts requesting the enrollment in a course
+activate ui
+ui->ctrl: courseList = allCoursesToEnroll()
+activate ctrl
+ctrl -> courseService: enrollStateCourses()
+activate courseService
+courseService->persist: factory = repositories()
+activate persist
+persist->rfcls: create
+persist-->courseService: factory
+deactivate persist
+courseService->factory: courseRepo = courseRepository()
+activate factory
+factory--> courseService: courseRepo
+deactivate factory
+courseService-> courseRepo: findEnrollStateCourses()
+
+deactivate courseRepo
+deactivate courseService
+ctrl-->ui: courseList
+deactivate ctrl
+ui --> usr : list all the courses with open enrollments
+deactivate ui
+usr -> ui : selects the course to enroll
+activate ui
+ui->ctrl: enrollStudent(course)
+activate ctrl
+ctrl-> auth: authorizationService()
+activate auth
+ref over auth
+Sequence Diagram - SD_Authentication
+end
+auth-->ctrl: systemUser
+deactivate auth
+ctrl -> user: email()
+activate user
+user-->ctrl: emailStudent
+deactivate user
+ctrl -> enrollmentManage: saveEnrollment(emailStudent,course)
+activate enrollmentManage
+enrollmentManage->persist: factory = repositories()
+activate persist
+persist->rfcls: create
+persist-->enrollmentManage: factory
+deactivate persist
+enrollmentManage->factory: studentRepo = studentRepository()
+activate factory
+factory--> enrollmentManage: studentRepo
+deactivate factory
+enrollmentManage-> studentRepo: findStudentByEmail(emailStudent)
+
+create Enrollment
+enrollmentManage -> Enrollment: create
+deactivate Enrollment
+enrollmentManage -> factory: enrollRepo = enrollmentRepository()
+activate factory
+factory-> enrollRepo: create
+factory--> enrollmentManage: enrollRepo
+deactivate factory
+enrollmentManage->enrollRepo: save(enrollRepo)
+enrollmentManage-->ctrl
+deactivate enrollmentManage
+ctrl-->ui
+deactivate ctrl
+ui --> usr : informs operation success
+deactivate ui
+
+@enduml

@@ -1,0 +1,62 @@
+@startuml
+
+actor Teacher as usr
+participant ":ListCourseGradesUI" as ui
+participant ":ListCourseGradesController" as ctr
+participant ":ListUserCourseService" as serv
+participant ":PersistenceContext" as pc
+participant ":RepositoryFactory" as rf
+database ":CourseRepository" as crr
+participant ":Course" as cr
+participant ":Student" as st
+
+usr -> ui : show()
+
+activate ui
+ui -> ui : doShow()
+ui -> ctr : myCourses()
+
+activate ctr
+ctr -> serv : listCoursesByTeacher(emailAddress)
+
+activate serv
+serv -> pc : repositories()
+
+activate pc
+pc -> rf : CourseRepository()
+
+activate rf
+rf -> crr : get()
+activate crr
+deactivate rf
+deactivate pc
+deactivate serv
+
+crr --> ctr : List of Courses
+deactivate crr
+ctr --> ui : List of Courses
+deactivate ctr
+ui --> usr : Asks the user to select the pretended Course
+usr -> ui : Selects Course
+ui -> ctr : listStudentGrades(course)
+activate ctr
+ctr -> cr : findCourseStudents()
+activate cr
+cr --> ctr : Students List
+deactivate cr
+
+loop
+ctr -> st : getStudentGrade(course)
+activate st
+st --> ctr : List of student grades
+deactivate st
+end
+
+ctr --> ui : List of all Student Grades
+deactivate ctr
+ui --> usr : Shows the student grades
+deactivate ui
+
+deactivate usr
+
+@enduml

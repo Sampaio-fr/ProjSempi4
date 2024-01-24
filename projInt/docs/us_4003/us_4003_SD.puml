@@ -1,0 +1,170 @@
+@startuml
+'http://plantuml.com/skinparam.html
+autonumber
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor "Manager/Teacher/Student" as Manager
+participant MeetingRequestsUI as UI <<presentation>>
+participant MeetingRequestsController as Controller <<application>>
+participant ":NotificationAcceptanceService" as Service2 <<Service>>
+participant ":ParticipantService" as Service3 <<Service>>
+participant ":AuthorizationService" as AuthorizationService <<Service>>
+participant ":AuthzRegistry" as AuthzRegistry <<application>>
+
+
+participant ":PersistenceContext" as Persistence <<persistence>>
+participant ":RepositoryFactory" as RepositoryFactory <<factory>>
+
+
+database ":MeetingRepository" as MeetingRepository <<repository>>
+database ":NotificationRepository" as NotificationRepository <<repository>>
+database ":ScheduleRepository" as ScheduleRepository <<repository>>
+database ":TimetableRepository" as TimetableRepository <<repository>>
+database ":ECourseUserRepository" as ECourseUserRepository <<repository>>
+database ":ParticipantRepository" as ParticipantRepository <<repository>>
+
+
+database ":JPAMeetingRepository" as JPAMeetingRepository <<repository>>
+database ":JPANotificationRepository" as JPANotificationRepository <<repository>>
+database ":JPAScheduleRepository" as JPAScheduleRepository <<repository>>
+database ":JPATimetableRepository" as JPATimetableRepository <<repository>>
+database ":JPAECourseUserRepository" as JPAECourseUserRepository <<repository>>
+database ":JPAParticipantRepository" as JPAParticipantRepository <<repository>>
+
+
+
+
+activate Manager
+
+Manager -> UI : ask to view a list of Notifications
+activate UI
+UI -> Controller : listOfNotifications()
+activate Controller
+Controller --> Service2 :Create()
+activate Service2
+
+Service2->AuthzRegistry: authorizationService()
+activate AuthzRegistry
+deactivate AuthzRegistry
+
+Service2 --> Persistence: create()
+activate Persistence
+Persistence -> RepositoryFactory: getRepositoryFactory();
+activate RepositoryFactory
+
+RepositoryFactory->MeetingRepository: meetingRepository()
+activate MeetingRepository
+deactivate MeetingRepository
+
+RepositoryFactory->ScheduleRepository: scheduleRepository()
+activate ScheduleRepository
+deactivate ScheduleRepository
+
+RepositoryFactory->TimetableRepository: timetableRepository()
+activate TimetableRepository
+deactivate TimetableRepository
+
+RepositoryFactory->ECourseUserRepository: eCourseUserRepository()
+activate ECourseUserRepository
+deactivate ECourseUserRepository
+deactivate RepositoryFactory
+deactivate Persistence
+deactivate Service2
+
+
+Controller -> Service2 : viewNotifications()
+activate Service2
+
+Service2 -> Service2 : findUser()
+activate Service2
+deactivate Service2
+
+Service2 -> AuthorizationService : session().get().authenticatedUser().email()
+activate AuthorizationService
+deactivate AuthorizationService
+
+Service2 -> ECourseUserRepository : ofIdentity(email)
+activate ECourseUserRepository
+deactivate ECourseUserRepository
+
+Service2 -> NotificationRepository : findListNotificationsByUser(eCourseUser)
+activate NotificationRepository
+NotificationRepository -> JPANotificationRepository : findListNotificationsByUser(eCourseUser)
+
+activate JPANotificationRepository
+deactivate JPANotificationRepository
+deactivate NotificationRepository
+
+deactivate Service2
+deactivate Controller
+UI --> Manager :shows list of Notifications
+
+deactivate UI
+Manager -> UI : selects a Notification
+activate UI
+UI --> Manager :Asks to accept or reject a Notification
+deactivate UI
+Manager -> UI: responds to the Notification
+
+activate UI
+UI -> Controller: notificationOption(current,answer)
+activate Controller
+
+Controller -> Service2: notificationOption(current,flag)
+
+activate Service2
+Service2 -> NotificationRepository: save(notification)
+activate NotificationRepository
+
+NotificationRepository -> JPANotificationRepository: save(notification)
+activate JPANotificationRepository
+deactivate JPANotificationRepository
+
+Service2 -> Service3: createParticipant(notification)
+activate Service3
+Service3 -> ParticipantRepository: save(participant)
+activate ParticipantRepository
+ParticipantRepository -> JPAParticipantRepository: save(participant)
+
+activate JPAParticipantRepository
+deactivate JPAParticipantRepository
+deactivate ParticipantRepository
+deactivate Service3
+
+Service2 -> MeetingRepository: save(meeting)
+activate MeetingRepository
+MeetingRepository -> JPAMeetingRepository: save(meeting)
+activate JPAMeetingRepository
+deactivate JPAMeetingRepository
+deactivate MeetingRepository
+
+alt successful case
+Service2 -> TimetableRepository: save(timeTable)
+activate TimetableRepository
+TimetableRepository -> JPATimetableRepository: save(timeTable)
+
+activate JPATimetableRepository
+deactivate JPATimetableRepository
+deactivate TimetableRepository
+
+Service2 -> ECourseUserRepository: save(eCourseUser)
+activate ECourseUserRepository
+ECourseUserRepository -> JPAECourseUserRepository: save(eCourseUser)
+activate JPAECourseUserRepository
+deactivate JPAECourseUserRepository
+deactivate ECourseUserRepository
+deactivate Service2
+end
+deactivate Controller
+
+
+UI --> Manager :informs success or failure to the notification
+deactivate UI
+deactivate Manager
+
+
+@enduml

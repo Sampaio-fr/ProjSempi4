@@ -1,0 +1,125 @@
+@startuml
+
+
+skinparam defaultFontName FG Virgil
+
+
+
+class CreateMeetingUI {
+    +scheduleCreation(initialDate: DateTime, durationMinutes: int): Schedule
+    +searchUsersavailable(schedule: Schedule): List<User>
+    +createMeeting(id: int, classTitle: string, schedule: Schedule, eCourseUsers: List<User>): void
+    +informOperationResult(success: boolean): void
+}
+
+class CreateMeetingController {
+    -meetingManagementService: MeetingManagementService
+    +scheduleCreation(initialDate: DateTime, durationMinutes: int): Schedule
+    +searchUsersavailable(schedule: Schedule): List<User>
+    +createMeeting(id: int, classTitle: string, schedule: Schedule, eCourseUsers: List<User>): void
+    +saveMeeting(meeting: Meeting): void
+}
+
+class MeetingManagementService {
+    -meetingRepository: MeetingRepository
+    -scheduleRepository: ScheduleRepository
+    -studentRepository: StudentRepository
+    -teacherRepository: TeacherRepository
+    +searchUsersavailable(schedule: Schedule): List<User>
+    +saveSchedule(schedule: Schedule): void
+    +saveMeeting(meeting: Meeting): void
+    +saveStudentTeacherSchedule(meeting: Meeting): void
+}
+
+class AuthorizationService {
+    +authorize(user: User): void
+}
+
+class Meeting {
+    -id: int
+    -designation: Designation
+    -state: MeetingState
+    -test: string
+    -eCourseUsers: List<User>
+}
+
+class Schedule {
+    -initialDate: DateTime
+    -durationMinutes: int
+}
+
+class PersistenceContext {
+    +getRepositoryFactory(): RepositoryFactory
+}
+
+class RepositoryFactory {
+    +meetingRepository(): MeetingRepository
+    +scheduleRepository(): ScheduleRepository
+    +studentRepository(): StudentRepository
+    +teacherRepository(): TeacherRepository
+}
+
+interface MeetingRepository {
+    +saveMeeting(meeting: Meeting): void
+}
+
+interface ScheduleRepository {
+    +saveSchedule(schedule: Schedule): void
+}
+
+interface StudentRepository {
+    +findAll(): List<Student>
+    +findStudentByEmail(email: string): Student
+    +save(student: Student): void
+}
+
+interface TeacherRepository {
+    +findAll(): List<Teacher>
+    +findTeacherByEmail(email: string): Teacher
+    +save(teacher: Teacher): void
+}
+
+class JPAMeetingRepository {
+    +saveMeeting(meeting: Meeting): void
+}
+
+class JPAScheduleRepository {
+    +saveSchedule(schedule: Schedule): void
+}
+
+class JPAStudentRepository {
+    +findAll(): List<Student>
+    +findStudentByEmail(email: string): Student
+    +save(student: Student): void
+}
+
+class JPATeacherRepository {
+    +findAll(): List<Teacher>
+    +findTeacherByEmail(email: string): Teacher
+    +save(teacher: Teacher): void
+}
+
+
+CreateMeetingUI --> CreateMeetingController
+CreateMeetingController --> MeetingManagementService
+
+CreateMeetingController --> Meeting
+CreateMeetingController --> Schedule
+
+MeetingManagementService --> AuthorizationService
+MeetingManagementService -->PersistenceContext
+
+PersistenceContext -->RepositoryFactory
+
+RepositoryFactory --> StudentRepository
+RepositoryFactory --> TeacherRepository
+RepositoryFactory --> MeetingRepository
+RepositoryFactory --> ScheduleRepository
+
+StudentRepository --> JPAStudentRepository
+TeacherRepository --> JPATeacherRepository
+MeetingRepository --> JPAMeetingRepository
+ScheduleRepository --> JPAScheduleRepository
+
+
+@enduml

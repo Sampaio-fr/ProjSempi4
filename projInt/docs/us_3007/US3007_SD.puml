@@ -1,0 +1,291 @@
+    @startuml
+    'http://plantuml.com/skinparam.html
+    autonumber
+    skinparam handwritten true
+    skinparam monochrome true
+    skinparam packageStyle rect
+    skinparam defaultFontName FG Virgil
+    skinparam shadowing false
+
+    actor "Manager/Teacher/Student" as Manager
+
+    participant ":Client" as Client <<presentation>>
+    participant ":ClientHandler" as ClientHandler <<presentation>>
+    participant ":Server" as Server <<presentation>>
+
+    participant ":UpdatePostItUI" as UI <<presentation>>
+    participant ":UpdatePostItController" as Controller <<application>>
+    participant ":PostItManagementService" as PostItManagementService <<service>>
+    participant ":RcompService" as RcompService <<service>>
+
+    participant ":FormatMessage" as FormatMessage <<domain>>
+    participant ":PostIt" as PostIt <<domain>>
+    participant ":PostItLog" as PostItLog <<domain>>
+    participant ":CellLog" as CellLog <<domain>>
+    participant ":SharedBoardLog" as SharedBoardLog <<domain>>
+
+    participant ":PersistenceContext" as Persistence <<persistence>>
+    participant ":RepositoryFactory" as RepositoryFactory <<factory>>
+
+
+    database ":SharedBoardRepository" as SharedBoardRepository <<repository>>
+    database ":CellRepository" as CellRepository <<repository>>
+    database ":PostItRepository" as PostItRepository <<repository>>
+    database ":SharedBoardLogRepository" as SharedBoardLogRepository <<repository>>
+    database ":CellLogRepository" as CellLogRepository <<repository>>
+    database ":PostItLogRepository" as PostItLogRepository <<repository>>
+
+    database ":JPASharedBoardRepository" as JPASharedBoardRepository <<repository>>
+    database ":JPACellRepository" as JPACellRepository <<repository>>
+    database ":JPAPostItRepository" as JPAPostItRepository <<repository>>
+    database ":JPASharedBoardLogRepository" as JPASharedBoardLogRepository <<repository>>
+    database ":JPACellLogRepository" as JPACellLogRepository <<repository>>
+    database ":JPAPostItLogRepository" as JPAPostItLogRepository <<repository>>
+    activate Server
+    activate Manager
+
+    Manager -> Client: ask to Update a Post-It
+    activate Client
+
+    Client -> UI: createPostIt(socket, inputStream, outputStream, bufferedReader)
+    activate UI
+    UI -> RcompService: sendMessage(socket,FormatMessage(1,SharedBoardUtils.SB_SHAREDBOARDFINDER,""),outputStream)
+    activate RcompService
+    RcompService -> ClientHandler: readData(socket,inputStream)
+    activate ClientHandler
+    ClientHandler -> ClientHandler:  updatePostIT(message)
+    activate ClientHandler
+    deactivate ClientHandler
+
+    ClientHandler -> Controller:  findWriteAdminPermissionBoards()
+    activate Controller
+    Controller -> PostItManagementService:  create()
+    activate PostItManagementService
+    PostItManagementService --> Persistence: create()
+    activate Persistence
+
+    Persistence -> RepositoryFactory: getRepositoryFactory()
+    activate RepositoryFactory
+
+    RepositoryFactory->SharedBoardRepository : sharedBoardRepository()
+    activate SharedBoardRepository
+    deactivate SharedBoardRepository
+    RepositoryFactory->CellRepository: cellRepository()
+    activate CellRepository
+    deactivate CellRepository
+    RepositoryFactory->PostItRepository: postItRepository()
+    activate PostItRepository
+    deactivate PostItRepository
+    RepositoryFactory->SharedBoardLogRepository: sharedBoardLogRepository()
+    activate SharedBoardLogRepository
+    deactivate SharedBoardLogRepository
+    RepositoryFactory->CellLogRepository: cellLogRepository()
+    activate CellLogRepository
+    deactivate CellLogRepository
+    RepositoryFactory->PostItLogRepository: postItLogRepository()
+    activate PostItLogRepository
+    deactivate PostItLogRepository
+
+    deactivate RepositoryFactory
+    deactivate Persistence
+    deactivate PostItManagementService
+
+    Controller -> PostItManagementService:  findWriteAdminPermissionBoards()
+    activate PostItManagementService
+
+    PostItManagementService -> SharedBoardRepository:  findWriteAdminPermissionBoards()
+    activate SharedBoardRepository
+
+    SharedBoardRepository -> JPASharedBoardRepository:  findWriteAdminPermissionBoards()
+    activate JPASharedBoardRepository
+    deactivate JPASharedBoardRepository
+
+    deactivate SharedBoardRepository
+    deactivate PostItManagementService
+
+    ClientHandler -> RcompService: sendMessage(socket,FormatMessage(1, 110, sharedBoardList), dataOutputStream)
+    activate RcompService
+    RcompService -> UI: readData(socket,inputStream)
+    deactivate RcompService
+    alt has SharedBoards
+    UI --> Manager :shows list of SharedBoards where to Update a Post-It
+    activate Manager
+    Manager -> UI : selects a SharedBoard where to Update a Post-It
+    deactivate Manager
+
+    UI -> RcompService: sendMessage(socket,FormatMessage(1, SharedBoardUtils.SB_CELLSEMPTYS, board), outputStream)
+    activate RcompService
+    RcompService -> ClientHandler: readData(socket,inputStream)
+    deactivate RcompService
+
+    ClientHandler -> Controller:  findSharedBoardString((message.message())
+    activate Controller
+    Controller -> PostItManagementService:  findSharedBoardString((message.message())
+
+    activate PostItManagementService
+    PostItManagementService -> SharedBoardRepository:  findSharedBoardString((message.message())
+
+    activate SharedBoardRepository
+    SharedBoardRepository -> JPASharedBoardRepository:  findSharedBoardString((message.message())
+    activate JPASharedBoardRepository
+    deactivate JPASharedBoardRepository
+
+    deactivate SharedBoardRepository
+    deactivate PostItManagementService
+    deactivate Controller
+
+    ClientHandler -> Controller:  findOccupiedCells(sharedBoard)
+    activate Controller
+
+    Controller -> PostItManagementService:  findOccupiedCells(sharedBoard)
+    activate PostItManagementService
+
+    PostItManagementService -> CellRepository:  findOccupiedCells(sharedBoard)
+    activate CellRepository
+
+    CellRepository -> JPACellRepository: findOccupiedCells(sharedBoard)
+    activate JPACellRepository
+    deactivate JPACellRepository
+
+    deactivate CellRepository
+    deactivate PostItManagementService
+    deactivate Controller
+
+    ClientHandler -> RcompService: sendMessage(socket,FormatMessage(1, 103, cells), dataOutputStream)
+    activate RcompService
+    RcompService -> UI: readData(socket,inputStream)
+    deactivate RcompService
+
+    alt has Cells
+
+    UI --> Manager : shows list of Cells where to Update a Post-It
+    activate Manager
+    Manager -> UI : selects a Cell where to Update a Post-It and also the content
+    deactivate Manager
+    UI -> RcompService: sendMessage(socket, FormatMessage(1, SharedBoardUtils.SB_UPDATEPOSTIT, url), outputStream)
+    activate RcompService
+    RcompService -> ClientHandler: readData(socket,inputStream)
+    deactivate RcompService
+    ClientHandler -> Controller: findCell(Long.parseLong(cellIDRC.get(0))
+    activate Controller
+    Controller -> PostItManagementService: findCell(Long.parseLong(cellIDRC.get(0))
+    activate PostItManagementService
+    deactivate Controller
+    ClientHandler -> Controller: findCell(Long.parseLong(cellIDRC.get(0))
+    activate Controller
+    Controller -> PostItManagementService: findCell(Long.parseLong(cellIDRC.get(0))
+    activate PostItManagementService
+    PostItManagementService -> CellRepository: findCell(id)
+    activate CellRepository
+
+    CellRepository -> JPACellRepository: findCell(id)
+    activate JPACellRepository
+    deactivate JPACellRepository
+
+    deactivate CellRepository
+    deactivate PostItManagementService
+    deactivate Controller
+
+
+        ClientHandler -> Controller: UpdatePostIt(cell, cellIDRC.get(1), cellIDRC.get(2))
+        activate Controller
+
+        Controller -> PostItManagementService: UpdatePostIt(Cell cell,String title,String description)
+        activate PostItManagementService
+
+        PostItManagementService -> PostItRepository:  save(postIt)
+        activate PostItRepository
+
+        PostItRepository -> JPAPostItRepository: save(postIt)
+        activate JPAPostItRepository
+        deactivate JPAPostItRepository
+
+        deactivate PostItRepository
+        deactivate Controller
+
+
+        PostItManagementService -> CellRepository:  save(cell)
+        activate CellRepository
+
+        CellRepository -> JPACellRepository: save(cell)
+        activate JPACellRepository
+        deactivate JPACellRepository
+
+        deactivate CellRepository
+
+        PostItManagementService -> PostItLog:  new PostItLog(Calendar.getInstance(), cell, postIt, PostItStateLog.Create,title,description)
+        activate PostItLog
+        deactivate PostItLog
+        PostItManagementService -> PostItLogRepository:  save(postItLog)
+        activate PostItLogRepository
+
+        PostItLogRepository -> JPAPostItLogRepository: save(postItLog)
+        activate JPAPostItLogRepository
+        deactivate JPAPostItLogRepository
+
+        deactivate PostItLogRepository
+
+
+        PostItManagementService -> SharedBoardRepository:  findSharedBoardLogContainsSharedBoard(sharedBoard)
+        activate SharedBoardRepository
+        SharedBoardRepository -> JPASharedBoardRepository: findSharedBoardLogContainsSharedBoard(sharedBoard)
+        activate JPASharedBoardRepository
+        deactivate JPASharedBoardRepository
+
+        deactivate SharedBoardRepository
+
+        PostItManagementService -> CellLogRepository:findCellLogContainsCell(cell)
+        activate CellLogRepository
+
+        CellLogRepository -> JPACellLogRepository:findCellLogContainsCell(cell)
+        activate JPACellLogRepository
+        deactivate JPACellLogRepository
+
+        deactivate CellLogRepository
+
+
+
+        PostItManagementService -> CellLogRepository:save(cellLog)
+        activate CellLogRepository
+        CellLogRepository -> JPACellLogRepository:save(cellLog)
+        activate JPACellLogRepository
+        deactivate JPACellLogRepository
+
+        deactivate CellLogRepository
+
+        UI --> Manager : Informs the success or failure of the post-It
+        activate Manager
+        deactivate Manager
+else doesn't have Cells
+        UI -> RcompService: sendMessage(socket,FormatMessage(1, SharedBoardUtils.ERR, ""), outputStream)
+        activate RcompService
+        RcompService -> ClientHandler: rcompService.readData(socket, inputStream);
+        deactivate RcompService
+        ClientHandler -> RcompService: sendMessage(socket,FormatMessage(1, SharedBoardUtils.ERR, ""), outputStream)
+        activate RcompService
+        RcompService -> UI: rcompService.readData(socket, inputStream);
+        deactivate RcompService
+        UI --> Manager : Informs the failure of the post-It
+        activate Manager
+        deactivate Manager
+
+end
+else doesn't have SharedBoards
+           UI -> RcompService: sendMessage(socket,FormatMessage(1, SharedBoardUtils.ERR, ""), outputStream)
+           activate RcompService
+           RcompService -> ClientHandler: rcompService.readData(socket, inputStream);
+           deactivate RcompService
+
+           ClientHandler -> RcompService: sendMessage(socket,FormatMessage(1, SharedBoardUtils.ERR, ""), outputStream)
+           activate RcompService
+           RcompService -> UI: rcompService.readData(socket, inputStream);
+           deactivate RcompService
+           UI --> Manager : Informs the failure of the post-It
+
+end
+deactivate UI
+deactivate ClientHandler
+deactivate Client
+deactivate Manager
+deactivate Server
+@enduml

@@ -1,0 +1,103 @@
+@startuml
+
+autonumber
+actor "User" as user
+
+participant "Client" as client
+participant "ArchiveBoardUI" as ui
+participant ":ClientHandler" as clientHandler
+participant ":RcompService" as rcompService
+participant ":ArchiveBoardController" as ctrl
+participant ":PostItManagementService" as manageService
+participant "systemUser: AuthorizationService" as auth
+participant "sysuser :SystemUser" as sysuser
+participant "formatMessage:FormateMessage" as msg
+participant ":PersistenceContext" as pc <<persistence>>
+participant ":RepositoryFactory " as repFac <<factory>>
+database "permissionRepo: PermissionRepository" as permissionRepo <<repository>>
+database "boardRepo: SharedBoardRepository" as boardRepo <<repository>>
+
+activate user
+
+user -> client : Requests to share a board owned by the user
+client -> ui : archiveBoardUI(socket, inputStream,\n outputStream, bufferedReader)
+deactivate client
+activate ui
+
+ui -> rcompService : sendMessage(socket, formatMessage, outputStream)
+activate rcompService
+rcompService --> clientHandler: readData(socket, dataInputStream)
+deactivate rcompService
+
+activate clientHandler
+clientHandler -> clientHandler : archiveSharedBoard(message)
+
+clientHandler->ctrl: findAdminPermissionBoards()
+activate ctrl
+ctrl -> manageService: findAdminPermissionBoards(findAutenticatedUser())
+activate manageService
+manageService -> auth: findAutenticatedUser()
+activate auth
+ref over auth
+Sequence Diagram - SD_Authentication
+end
+auth--> manageService: email
+deactivate auth
+manageService->pc: factory = repositories()
+activate pc
+pc->repFac: create
+pc->manageService: factory
+deactivate pc
+manageService -> permissionRepo: permissionRepo = PermissionRepository
+permissionRepo -> manageService : permissionRepo
+manageService -> permissionRepo: findWriteAdmin(email)
+activate permissionRepo
+permissionRepo --> manageService: ListAdminBoards
+deactivate permissionRepo
+
+deactivate auth
+manageService --> ctrl: shared board list
+ctrl --> clientHandler: shared boar list
+
+clientHandler -> rcompService : sendMessage(socket, formatMessage, outputStream)
+deactivate clientHandler
+activate rcompService
+rcompService --> ui: readData(socket, dataInputStream)
+deactivate rcompService
+
+ui--> user: shows the list of shared boards available
+user-->ui: inputs the shared board name
+
+ui -> rcompService : sendMessage(socket, formatMessage, outputStream)
+activate rcompService
+rcompService --> clientHandler: readData(socket, dataInputStream)
+deactivate rcompService
+activate clientHandler
+clientHandler -> clientHandler: archiveBoard(message)
+clientHandler-> ctrl : archiveSharedBoard(boardName)
+ctrl->manageService : archiveSharedBoard(boardName)
+
+manageService -> boardRepo: SharedBoardRepository
+boardRepo -> manageService : boardRepo
+manageService -> boardRepo: findSharedBoardByTitle(boardName)
+activate boardRepo
+boardRepo --> manageService: SharedBoard
+deactivate boardRepo
+
+manageService-> SharedBoard**: disable()
+
+manageService-> boardRepo: save(SharedBoard)
+
+manageService-->ctrl: operation success
+deactivate manageService
+ctrl-->clientHandler: operation success
+deactivate ctrl
+
+clientHandler -> rcompService : sendMessage(socket, formatMessage, outputStream)
+deactivate clientHandler
+activate rcompService
+rcompService --> ui: readData(socket, dataInputStream)
+deactivate rcompService
+
+ui--> user: Operation success
+@enduml

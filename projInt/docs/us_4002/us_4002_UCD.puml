@@ -1,0 +1,10 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+
+
+Admin ---> (Cancel Meeting)
+Teacher ---> (Cancel Meeting)
+Student ---> (Cancel Meeting)
+
+@enduml

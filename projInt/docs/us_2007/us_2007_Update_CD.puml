@@ -1,0 +1,112 @@
+@startuml
+
+
+skinparam defaultFontName FG Virgil
+
+class Teacher {
+    -id: int
+    -name: string
+    -email: string
+}
+
+class UpdateQuestionUI {
+    +listCourses(): List<Course>
+    +listQuestions(selectedCourse: Course): List<Question>
+    +updateQuestion(question: Question, path: string): void
+    +informOperationResult(success: boolean): void
+}
+
+class UpdateQuestionController {
+    -questionManagementService: QuestionManagementService
+    +listCourses(): List<Course>
+    +listQuestions(selectedCourse: Course): List<Question>
+    +updateQuestion(question: Question, path: string): void
+    +saveQuestion(question: Question): void
+}
+
+class QuestionManagementService {
+    -questionRepository: QuestionRepository
+    -teacherRepository: TeacherRepository
+    -courseRepository: CourseRepository
+    +listCourses(): List<Course>
+    +listQuestions(selectedCourse: Course): List<Question>
+    +readFileToString(path: string): string
+    +setQuestion(question: Question): void
+    +saveQuestion(question: Question): void
+}
+
+class AuthzRegistry {
+    +authorizationService(): void
+}
+
+class Question {
+    -id: int
+    -type: QuestionType
+    -text: string
+    -course: Course
+}
+
+class Course {
+    -id: int
+    -name: string
+}
+
+class PersistenceContext {
+    +getRepositoryFactory(): RepositoryFactory
+}
+
+Interface RepositoryFactory {
+    +courseRepository(): CourseRepository
+    +questionRepository(): QuestionRepository
+    +teacherRepository(): TeacherRepository
+}
+
+Interface QuestionRepository {
+    +listQuestions(selectedCourse: Course): List<Question>
+    +save(question: Question): void
+}
+
+Interface TeacherRepository {
+    +findTeacherByEmail(email: string): Teacher
+}
+
+Interface CourseRepository {
+    +coursesByTeachers(teacher: Teacher): List<Course>
+}
+
+class JPAQuestionRepository {
+    +listQuestions(selectedCourse: Course): List<Question>
+    +save(question: Question): void
+}
+
+class JPATeacherRepository {
+    +findTeacherByEmail(email: string): Teacher
+}
+
+class JPACourseRepository {
+    +coursesByTeachers(teacher: Teacher): List<Course>
+}
+
+UpdateQuestionUI ..> UpdateQuestionController
+UpdateQuestionController --> QuestionManagementService
+
+QuestionManagementService --> AuthzRegistry
+QuestionManagementService --> PersistenceContext
+
+QuestionManagementService --> Question
+QuestionManagementService --> Teacher
+QuestionManagementService --> Course
+
+PersistenceContext --> RepositoryFactory
+
+RepositoryFactory --> CourseRepository
+RepositoryFactory --> QuestionRepository
+RepositoryFactory --> TeacherRepository
+
+CourseRepository --> JPACourseRepository
+QuestionRepository --> JPAQuestionRepository
+TeacherRepository --> JPATeacherRepository
+
+
+
+@enduml

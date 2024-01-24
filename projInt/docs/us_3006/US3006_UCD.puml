@@ -1,0 +1,8 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+:User: as u
+
+u ---> (I want to view, in real-time, the updates in the shared boards)
+
+@enduml

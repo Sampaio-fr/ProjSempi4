@@ -1,0 +1,14 @@
+@startuml
+
+actor "User" as user
+participant "System" as sys
+
+autonumber
+
+user -> sys: requests list of available courses
+activate sys
+sys --> user: presents list of available courses
+deactivate sys
+
+
+@enduml

@@ -1,0 +1,79 @@
+:: LPROG   ;
+
+:: LPROG Exam 22/23;
+
+//Section Number 1;//
+Multiple choice group;
+
+#MULTIPLE CHOICE;
+#2;
+QUESTION DESCRIPTION;
+
+{   =ANSWER1;>Feedback answer1;
+    ~ANSWER2;
+>feedback answer2;
+    ~Answer3;
+    >feedback answer3;}
+
+#MULTIPLE choice;
+#10;
+
+QUESTION DESCRIPTION;
+{=ANSWER1; >feedback 1;
+=ANSWER2; >feedback2;
+~Answer3;
+>feedback 3;
+}
+
+
+//Section Number 2;
+
+//True/False group;
+
+#TRUE/FALSE;
+# 06;
+QUESTION DESCRIPTION;
+
+T UESTION ___{=T;}
+TRUE UESTION ___ {=F;>feedback; } QUESTION ___{=true;>feedback;
+}
+
+//Section Number 3;
+
+//Short and numerical questions group;
+
+#SHORT;
+#10;
+QUESTION DESCRIPTION;
+{
+=%100%ANSWER1; =%50% ANSWER2;
+=%25%
+ANSWER3;
+}
+
+#NUMERICAL;#15;
+QUESTION DESCRIPTION ;
+{
+=%100%ANSWER1; =%50% ANSWER2;
+=%25%
+ANSWER3;
+}
+
+//Section Number 4;
+
+//missing words and matching questions group;
+
+#MISSING WORDS;
+#20;
+QUESTION DESCRIPTION ;
+SOMETHING___ {~ANSWER1; =ANSWER2; ~ANSWER3;}
+SOMETHING ___{=ANSWER1; ~ANSWER2; ~ANSWER;} SOMETHING ___ {~ANSWER1; =ANSWER2; ~ANSWER3;}
+
+#MATCHING;
+#20;
+QUESTION DESCRIPTION;
+
+{QUESTION1; = Answer3;
+QUESTION2; = Answer2;
+QUESTION3; = Answer1;
+}

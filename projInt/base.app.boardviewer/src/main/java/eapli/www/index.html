@@ -1,0 +1,52 @@
+<html><head><title>E-Course Shared Board</title>
+    <script src="rcomp-ajax.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="dashboard.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open Sans">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        h1,h2,h3,h4,h5,h6 {font-family: "Oswald";
+        }
+        h1{
+            font-size:60px;
+        }
+        header{
+        background-color: #FFCA9E;
+        }
+        body {font-family: "Open Sans";}
+        .w3-content {max-width: 2000px;}
+        table {
+            font-family: "Oswald";
+            border-collapse: collapse;
+            width: 100%;
+        }
+        td,th{
+            border: 2px solid #000000;
+            text-align: left;
+            padding: 60px;
+            font-size:45px;
+        }
+        td {
+            position: relative;
+            width: 250px; /* Adjust the width of the cell */
+            height: 200px; /* Adjust the height of the cell */
+        }
+        div.scrollmenu :hover {
+            background-color: #777;
+        }
+    </style>
+</head>
+
+<body onload="getBoardTitleHTML(); getMatrix()">
+<div class="w3-content">
+    <header class="w3-container w3-center w3-padding-48">
+        <h1 class="w3-xxxlarge"><b id="board"></b></h1>
+    </header>
+    <table id="matrix">
+    </table>
+</div>
+</body>
+</html>

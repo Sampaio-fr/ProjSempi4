@@ -1,0 +1,16 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor User as user
+participant System as sys
+
+autonumber
+user -> sys : Does Login
+sys --> user : shows User menu
+user -> sys: Requests to share a board owned by the user
+sys --> user: Lists boards owned by the user and asks to select one
+user -> sys: Selects a board
+user <-- sys: Requests data (email, permission)
+user -> sys: Types requested data (email, permission)
+user <-- sys: shows operation success
+@enduml

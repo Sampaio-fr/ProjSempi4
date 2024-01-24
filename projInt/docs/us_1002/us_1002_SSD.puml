@@ -1,0 +1,29 @@
+@startuml
+'http://plantuml.com/skinparam.html
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+Actor Manager
+
+activate Manager
+Manager -> System: i want to create a course
+activate System
+System-> Manager: request data related to creation of the course
+deactivate System
+
+Manager -> System: inserts requested data
+activate System
+
+System -> Manager: request confirmation of data
+deactivate System
+
+Manager -> System: confirms data related to creation of the course
+activate System
+
+System -> Manager: informs the success or insuccess of the creation of the course
+deactivate System
+deactivate Manager
+@enduml

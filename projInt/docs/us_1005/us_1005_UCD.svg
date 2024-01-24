@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="us-ascii" standalone="no"?>
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" contentStyleType="text/css"
+     height="254px" preserveAspectRatio="none" style="width:203px;height:254px;background:#FFFFFF;" version="1.1"
+     viewBox="0 0 203 254" width="203px" zoomAndPan="magnify">
+    <defs/>
+    <g><!--entity Admin-->
+        <g id="elem_Admin">
+            <ellipse cx="101.5" cy="14" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+            <path d="M101.5,22 L101.5,49 M88.5,30 L114.5,30 M101.5,49 L88.5,64 M101.5,49 L114.5,64 " fill="none"
+                  style="stroke:#181818;stroke-width:0.5;"/>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="56" x="73.5"
+                  y="80.6074">Manager
+            </text>
+        </g>
+        <g id="elem_Set Teachers to course">
+            <ellipse cx="101.6884" cy="227.0377" fill="#F1F1F1" rx="95.6884" ry="21.5377"
+                     style="stroke:#181818;stroke-width:0.5;"/>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="148"
+                  x="25.2253" y="231.6811">Set Teachers to course
+            </text>
+        </g><!--link Admin to Set Teachers to course-->
+        <g id="link_Admin_Set Teachers to course">
+            <path d="M101.5,84.61 C101.5,119.57 101.5,170.09 101.5,200.32 " fill="none"
+                  id="Admin-to-Set Teachers to course" style="stroke:#181818;stroke-width:1.0;"/>
+            <polygon fill="#181818" points="101.5,205.36,105.5,196.36,101.5,200.36,97.5,196.36,101.5,205.36"
+                     style="stroke:#181818;stroke-width:1.0;"/>
+        </g><!--SRC=[7SKn3e0W3030lQ_efWwLdS741pZf1nfeq4J0qF9_ZSlTS9ezwfrxRYxMyps7cbrNeS0VyUBKE0FuZGidQHvPSOtvAW1_I4GBZhiO7iBXbAPe5KFjJMM25m00]-->
+    </g>
+</svg>

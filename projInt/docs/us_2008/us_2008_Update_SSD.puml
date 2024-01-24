@@ -1,0 +1,32 @@
+@startuml
+autonumber
+
+actor "Teacher" as Manager
+
+activate Manager
+
+Manager -> ":System" : ask to update formative exam
+activate ":System"
+":System" --> Manager : shows list of course and asks to select one
+
+deactivate ":System"
+Manager -> ":System" : selects course
+
+activate ":System"
+":System" --> Manager : shows list of formative exams and asks to select one
+deactivate ":System"
+
+Manager -> ":System" : selects a formative exam
+activate ":System"
+
+":System" -->Manager : asks for the changes in formative exam input \n (new Section Title and new Description))
+deactivate ":System"
+
+Manager -> ":System" : inputs the formative exam
+activate ":System"
+
+":System" --> Manager : informs operation success or failure
+deactivate ":System"
+deactivate Manager
+
+@enduml

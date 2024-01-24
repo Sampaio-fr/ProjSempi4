@@ -1,0 +1,9 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+:Manager: as Admin
+
+Admin ---> (open courses)
+Admin ---> (close courses)
+
+@enduml

@@ -1,0 +1,19 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+actor "Manager" as man
+participant "System" as sys
+
+man->sys:requests bulk enrollment of students via csv file
+activate sys
+sys-->man: requests file path
+deactivate sys
+man->sys: types requested data
+activate sys
+sys-->man: shows operation success
+deactivate sys
+
+
+
+@enduml

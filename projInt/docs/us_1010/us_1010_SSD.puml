@@ -1,0 +1,17 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+actor Teacher as Actor
+
+activate Actor
+Actor -> System: asks to schedule a class
+activate System
+System--> Actor: shows list of courses he teaches that are inprogress
+Actor -> System: selects course
+System --> Actor: asks the schedule of the class
+Actor -> System: gives starting date (date and time) and duration
+System --> Actor: warns if there's any overlap
+deactivate System
+deactivate Actor
+@enduml

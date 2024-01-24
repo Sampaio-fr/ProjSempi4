@@ -1,0 +1,7 @@
+@startuml
+
+:Student: as Student
+
+Student ---> (List my future Exams)
+
+@enduml

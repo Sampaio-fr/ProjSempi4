@@ -1,0 +1,8 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+:Teacher:
+
+Teacher ---> (I want to create/update an question)
+
+@enduml

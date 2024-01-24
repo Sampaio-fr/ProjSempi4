@@ -1,0 +1,8 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+:Teacher: as t
+
+t ---> (View a list of all exams in a course)
+
+@enduml

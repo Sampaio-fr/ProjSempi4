@@ -1,0 +1,77 @@
+@startuml
+package "Presentation"  {
+class ListCourseExamsUI {
+    +doShow(): boolean
+    +headline(): boolean
+}
+}
+
+package "Application" {
+class ListCourseExamsController {
+    + listCoursesByUser(): List<Course>
+    + listExamsByCourse(course: Course): List<Exam>
+}
+}
+
+
+package "Persistence"{
+class PersistenceContext {
+    + repositories(): RepositoryFactory
+}
+interface RepositoryFactory {
+    + courseRepository(): CourseRepository
+     + examRepository(): ExamRepository
+     +teacherRepository(): teacherRepository
+}
+interface CourseRepository {
+    + coursesByTeachers(email: EmailAddress): Iterable<Course>
+}
+JpaCourseRepository -up-|> CourseRepository
+class JpaCourseRepository {
+    + coursesByTeachers(email: EmailAddress): Iterable<Course>
+}
+
+interface ExamRepository {
+    + examsByCourse(course: Course): List<Exam>
+}
+JpaExamRepository -up-|> ExamRepository
+class JpaExamRepository {
+       + examsByCourse(course: Course): List<Exam>
+}
+interface TeacherRepository{
+ + findTeacherByEmail(email: EmailAddress): Teacher
+}
+JpaTeacherRepository -up-|> TeacherRepository
+class JpaTeacherRepository{
+ + findTeacherByEmail(email: EmailAddress): Teacher
+}
+}
+
+
+package "Service"{
+class ListUserCourseService {
+    + listCoursesByTeacher(email: EmailAddress): List<Course>
+}
+class AuthenticationService{
+ + authorizationService(): SystemUser
+}
+}
+
+
+
+ListCourseExamsUI --> ListCourseExamsController : the controller
+ListCourseExamsController --> ListUserCourseService :service
+ListUserCourseService --> PersistenceContext
+PersistenceContext --> RepositoryFactory
+RepositoryFactory --> CourseRepository
+RepositoryFactory --> ExamRepository
+RepositoryFactory --> TeacherRepository
+ListCourseExamsController --> PersistenceContext
+ListCourseExamsController --> AuthenticationService
+
+
+
+
+
+
+@enduml

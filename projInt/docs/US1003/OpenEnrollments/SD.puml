@@ -1,0 +1,37 @@
+@startuml
+
+title Open Enrollments
+
+actor Admin as usr
+participant ":CloseEnrollmentsUI" as ui
+participant ":ChangeStateManagementController" as ctr
+participant ":CourseManagementService" as svc
+participant ":selectedCourse" as crs
+database ":CourseRepository" as cr
+
+usr -> ui : show()
+activate ui
+ui-> ui : doShow()
+ui -> ctr : listOpenCourses()
+activate ctr
+ctr -> svc : openCourses()
+activate svc
+svc -> cr : findOpen()
+activate cr
+cr --> ui : displays courses in OPEN State
+deactivate cr
+deactivate svc
+deactivate ctr
+ui --> usr : asks the user to select the course
+usr --> ui : selects course
+ui -> ctr : changeCourseStatetoEnroll(selectedCourse)
+activate ctr
+ctr -> crs : changeState()
+ctr -> cr : save(selectedCourse)
+ctr --> ui
+deactivate ctr
+
+ui --> usr
+deactivate ui
+
+@enduml

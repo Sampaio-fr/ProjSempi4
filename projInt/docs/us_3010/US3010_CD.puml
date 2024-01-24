@@ -1,0 +1,86 @@
+@startuml
+
+package presentation {
+  class ArchiveBoardUI {
+    + archiveBoardUI(Socket socket, DataOutputStream outputStream, \nDataInputStream inputStream, BufferedReader bufferedReader): void
+  }
+}
+
+package application {
+  class ArchiveBoardController {
+    + findAdminPermissionBoards(): List<String>
+    + findAutenticatedUser(): EmailAddress
+    + archiveSharedBoard(String sharedBoard): void
+  }
+}
+
+package service {
+  class PostItManagement {
+    + findAdminPermissionBoards(EmailAddress emailAddress): List<String>
+    + archiveSharedBoard(String title): void
+  }
+}
+
+package persistence {
+  class PersistenceContext {
+    + repositories(): RepositoryFactory
+  }
+
+  interface RepositoryFactory {
+    + sharedBoardRepository(): SharedBoardRepository
+    + permissionRepository(): PermissionRepository
+  }
+
+  interface SharedBoardRepository {
+    + save(sharedBoard: SharedBoard): void
+    + findSharedBoardByTitle(Designation title): SharedBoard
+  }
+  JpaSharedBoardRepository -up-|> SharedBoardRepository
+  class JpaSharedBoardRepository {
+      + save(sharedBoard: SharedBoard): void
+      + findSharedBoardByTitle(Designation title): SharedBoard
+    }
+
+  interface PermissionRepository {
+    + findWriteAdmin(EmailAddress emailAddress): Iterable<Permission>
+  }
+  JpaPermissionRepository -up-|> PermissionRepository
+
+  class JpaPermissionRepository {
+      + findWriteAdmin(EmailAddress emailAddress): Iterable<Permission>
+    }
+}
+
+
+Client .down.> ArchiveBoardUI : Uses
+
+
+class Client {
+  + main(String[] args): void
+}
+
+class ClientHandler {
+  + archiveSharedBoard(FormatMessage message): void
+}
+
+class RcompService {
+  +sendMessage(socket, message, outputStream)
+  +readData(socket, inputStream)
+}
+
+class FormatMessage
+
+
+ClientHandler -down-> RcompService : Sends/Receives Messages
+ArchiveBoardUI -down-> RcompService : Sends/Receives Messages
+Server -down-> ClientHandler : Uses
+RcompService -down-> FormatMessage : Uses
+
+
+ArchiveBoardUI --> ArchiveBoardController
+ArchiveBoardController --> PostItManagement
+PostItManagement --> PersistenceContext
+PersistenceContext -->RepositoryFactory
+RepositoryFactory --> SharedBoardRepository
+RepositoryFactory --> PermissionRepository
+@enduml

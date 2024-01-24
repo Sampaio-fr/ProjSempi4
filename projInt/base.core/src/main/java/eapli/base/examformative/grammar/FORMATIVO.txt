@@ -1,0 +1,60 @@
+:: LPROG;
+
+:: LPROG Formative Exam 22/23;
+
+//Section Number 1;
+
+#MULTIPLE CHOICE
+#2;
+What is the capital of France?
+{&Paris;>Correct! Paris is the capital of France.;
+~London;>Incorrect. London is the capital of the United Kingdom.;
+~Berlin;>Incorrect. Berlin is the capital of Germany.}
+
+#MULTIPLE CHOICE
+#10;
+What is the largest planet in our solar system?
+{&Jupiter;>Correct! Jupiter is the largest planet.;
+=Saturn;>Incorrect. Saturn is not the largest planet.;
+~Mars;>Incorrect. Mars is much smaller than Jupiter.}
+
+//Section Number 2;
+
+#TRUE/FALSE;
+#06;
+The Earth is flat.
+{F;>Correct! The Earth is not flat.;
+T;>Incorrect. The Earth is not flat.;
+True;>Incorrect. The Earth is not flat.}
+
+//Section Number 3;
+
+#SHORT;
+#10;
+Name three primary colors.
+{&Red; &Blue; &Yellow;}
+
+#NUMERICAL;
+#15;
+What is the square root of 16?
+{&4;}
+
+//Section Number 4;
+
+#MISSING WORDS;
+#20;
+The ________ is a large mammal that lives in the ocean.
+{~Elephant; &Whale; ~Lion;}
+A ________ is a flying insect that can sting.
+{&Bee; ~Butterfly; ~Spider;}
+A ________ is a four-legged animal that barks.
+{~Cat; &Dog; ~Horse;}
+
+//Section Number 5;
+
+#MATCHING;
+#20;
+Match the programming language with its description:
+{Python; &A high-level, interpreted language;
+Java; &A popular object-oriented language;
+C++; &A powerful language for system-level programming;}

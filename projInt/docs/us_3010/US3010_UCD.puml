@@ -1,0 +1,8 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+:User: as u
+
+u ---> (I want to archive a board I own)
+
+@enduml

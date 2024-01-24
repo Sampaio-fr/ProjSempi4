@@ -1,0 +1,22 @@
+@startuml
+
+autonumber
+actor "User" as usr
+
+participant ":System" as sys
+
+
+activate usr
+usr -> sys : starts requesting the view of a board
+
+activate sys
+sys --> usr : shows the list of shared boards available
+deactivate sys
+usr -> sys: inputs the shared board name
+activate sys
+sys --> usr: shows the view of a board
+deactivate sys
+
+
+
+@enduml

@@ -1,0 +1,60 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor User as Actor
+participant ListMeetingParticipantsUI as UI
+control ListMeetingParticipantsController as Controller
+participant MeetingParticipantsService as meetingsService
+participant ":PersistenceContext" as pc
+participant ":RepositoryFactory " as factory
+
+database MeetingRepository as MRep <<repository>>
+database ParticipantRepository as PRep <<repository>>
+
+activate Actor
+Actor -> UI: asks to view meeting participants
+activate UI
+UI->Controller: userMeetings()
+activate Controller
+Controller->meetingsService: userMeetings()
+activate meetingsService
+meetingsService->pc: meetingRepository = repositoryFactory()
+activate pc
+pc -> factory: meetingRepository()
+activate factory
+deactivate factory
+deactivate pc
+meetingsService -> meetingsService: findownerMeeting()
+meetingsService -> MRep: meetingOwnerList(owner)
+activate MRep
+MRep --> meetingsService :
+deactivate MRep
+meetingsService --> Controller:
+deactivate meetingsService
+Controller --> UI :
+deactivate Controller
+UI--> Actor: asks to select the meeting : shows userMeetings
+deactivate UI
+Actor -> UI: selects wanted meeting
+activate UI
+UI -> Controller: meetingParticipants()
+activate Controller
+Controller ->pc: participantRepository = repositoryFactory()
+activate pc
+pc -> factory: participantRepository()
+activate factory
+deactivate factory
+deactivate pc
+Controller -> PRep: meetingParticipants()
+activate PRep
+PRep --> Controller
+deactivate PRep
+Controller --> UI:
+deactivate Controller
+UI --> Actor: shows list of participants(with their status)
+deactivate UI
+
+deactivate Actor
+@enduml

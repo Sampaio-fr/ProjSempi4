@@ -1,0 +1,143 @@
+@startuml
+'http://plantuml.com/skinparam.html
+autonumber
+skinparam handwritten true
+skinparam monochrome true
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing false
+
+actor "Manager/Teacher/Student" as Manager
+participant ":CreateMeetingUI" as UI <<presentation>>
+participant ":CreateMeetingController" as Controller <<application>>
+participant ":MeetingManagementService" as Service <<application>>
+participant ":AuthorizationService" as Service2 <<application>>
+
+participant "Meeting:\nMeeting" as Meeting <<domain>>
+participant "Schedule: Schedule" as Schedule <<domain>>
+participant ":PersistenceContext" as Persistence <<persistence>>
+participant ":RepositoryFactory" as RepositoryFactory <<factory>>
+
+
+database ":MeetingRepository" as MeetingRepository <<repository>>
+database ":ScheduleRepository" as ScheduleRepository <<repository>>
+database ":StudentRepository" as StudentRepository <<repository>>
+database ":TeacherRepository" as TeacherRepository <<repository>>
+database ":JPAScheduleRepository" as JPAScheduleRepository <<repository>>
+database ":JPAStudentRepository" as JPAStudentRepository <<repository>>
+database ":JPATeacherRepository" as JPATeacherRepository <<repository>>
+database ":JPAMeetingRepository" as JPAMeetingRepository <<repository>>
+
+
+
+activate Manager
+Manager -> UI : ask to create a Meeting
+activate UI
+UI --> Manager : asks for input information
+deactivate UI
+Manager -> UI: inputs the information
+activate UI
+UI -> Controller:scheduleCreation( initialDate,durationMinutes)
+activate Controller
+
+Controller -> Schedule:scheduleCreation( initialDate,durationMinutes)
+deactivate Controller
+activate Schedule
+deactivate Schedule
+
+UI -> Controller:searchUsersavailable(schedule);
+activate Controller
+
+
+Controller -> Service:searchUsersavailable(schedule);
+activate Service
+Service -> TeacherRepository:findAll();
+activate TeacherRepository
+TeacherRepository -> JPATeacherRepository:findAll();
+activate JPATeacherRepository
+deactivate JPATeacherRepository
+deactivate TeacherRepository
+Service -> StudentRepository:findAll();
+activate StudentRepository
+StudentRepository -> JPAStudentRepository:findAll();
+activate JPAStudentRepository
+deactivate JPAStudentRepository
+deactivate StudentRepository
+
+Service -> Service:availableUsers(listTeacher, listStudent,schedule)
+
+
+
+UI -->Manager : shows list of Users
+deactivate Controller
+deactivate Service
+deactivate UI
+
+Manager -> UI : selects Users for a meeting
+activate UI
+
+
+UI -> Controller:createMeeting(id,classTitle,schedule,eCourseUsers)
+activate Controller
+
+Controller -> Service:createMeeting(id,classTitle,schedule,eCourseUsers)
+activate Service
+Service -> Service:saveSchedule(schedule)
+activate Service
+deactivate Service
+
+Service -> Meeting:Meeting(id,Designation.valueOf(classTitle), MeetingState.SCHEDULED, test, eCourseUsers)
+activate Meeting
+deactivate Service
+deactivate Controller
+
+deactivate Meeting
+UI -> Controller:saveMeeting(meeting)
+activate Controller
+Controller -> Service:saveMeeting(meeting)
+activate Service
+
+Service -> MeetingRepository :saveMeeting(meeting)
+activate MeetingRepository
+MeetingRepository -> JPAMeetingRepository :saveMeeting(meeting)
+activate JPAMeetingRepository
+deactivate JPAMeetingRepository
+deactivate MeetingRepository
+
+Service -> Service:saveStudentTeacherSchedule(meeting)
+activate Service
+deactivate Service
+Service -> StudentRepository:findStudentByEmail(user.identity()
+activate StudentRepository
+StudentRepository -> JPAStudentRepository:findStudentByEmail(user.identity()
+activate JPAStudentRepository
+deactivate JPAStudentRepository
+deactivate StudentRepository
+
+Service -> TeacherRepository:findTeacherByEmail(user.identity())
+activate TeacherRepository
+TeacherRepository -> JPATeacherRepository:findTeacherByEmail(user.identity())
+activate JPATeacherRepository
+deactivate JPATeacherRepository
+deactivate TeacherRepository
+Service -> StudentRepository:save(student)
+activate StudentRepository
+StudentRepository -> JPAStudentRepository:save(student)
+activate JPAStudentRepository
+deactivate JPAStudentRepository
+deactivate StudentRepository
+Service -> TeacherRepository:save(teacher)
+activate TeacherRepository
+TeacherRepository -> JPATeacherRepository:save(teacher)
+activate JPATeacherRepository
+deactivate JPATeacherRepository
+deactivate TeacherRepository
+deactivate Service
+deactivate Controller
+
+UI --> Manager : informs operation success or uncess
+deactivate UI
+deactivate Manager
+
+
+@enduml

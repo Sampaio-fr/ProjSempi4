@@ -1,0 +1,18 @@
+@startuml
+participant Actor
+Actor -> ListUsersUI : elements(): Iterable<SystemUser>
+activate ListUsersUI
+ListUsersUI -> ListUsersController : allUsers(): Iterable<SystemUser>
+activate ListUsersController
+ListUsersController -> AuthorizationService : ensureAuthenticatedUserHasAnyOf(actions: ): void
+activate AuthorizationService
+AuthorizationService --> ListUsersController
+deactivate AuthorizationService
+ListUsersController -> UserManagementService : allUsers(): Iterable<SystemUser>
+activate UserManagementService
+UserManagementService --> ListUsersController
+deactivate UserManagementService
+ListUsersController --> ListUsersUI
+deactivate ListUsersController
+return
+@enduml

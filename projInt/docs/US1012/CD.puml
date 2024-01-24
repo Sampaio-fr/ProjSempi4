@@ -1,0 +1,63 @@
+@startuml
+
+class ChangeLectureScheduleAction{
+    + show()
+}
+class ChangeLectureScheduleUI {
+    + doShow()
+}
+
+class ChangeLectureScheduleController {
+    + myLectures()
+    + myDetails()
+    + changeLectureSchedule()
+}
+
+class Lecture {
+    + getSchedule()
+}
+
+class Schedule {
+    + changeInitialDate(newDateTime)
+    + changeDuration(newDuration)
+}
+
+class ListLecturesService {
+    + myDetails()
+}
+
+class PersistenceContext {
+    + repositories()
+}
+
+interface RepositoryFactory {
+    + courseRepository()
+}
+
+interface TeacherRepository {
+    + myDetails()
+}
+
+interface LectureRepository {
+    + save()
+}
+
+interface ScheduleRepository {
+    + save()
+}
+
+ChangeLectureScheduleAction .down.> ChangeLectureScheduleUI
+ChangeLectureScheduleUI .down.> ChangeLectureScheduleController
+
+ChangeLectureScheduleController -down-> ListLecturesService
+ChangeLectureScheduleController -down-> Lecture
+ChangeLectureScheduleController -down-> Schedule
+
+ListLecturesService --> PersistenceContext
+PersistenceContext --> RepositoryFactory
+RepositoryFactory --> TeacherRepository
+RepositoryFactory --> LectureRepository
+RepositoryFactory --> ScheduleRepository
+
+
+@enduml

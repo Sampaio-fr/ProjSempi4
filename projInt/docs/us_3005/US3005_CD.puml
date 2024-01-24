@@ -1,0 +1,89 @@
+@startuml
+class ShowSharedBoardUI {
++showSharedBoardUI(): void
+}
+class ClientHandler {
+   +showSharedBoard(): void
+  }
+
+class ShowSharedBoardController {
+  + findWriteAdminPermissionBoards(): Iterable<Board>
+  + findSharedBoardByTitle(boardTitle: String): SharedBoard
+
+}
+
+class SharedBoardService {
+  + findAuthenticatedUser(): SystemUser
+}
+
+
+class RcompService {
+  + sendMessage(message: FormateMessage, outputStream: OutputStream): void
+  + readData(inputStream: InputStream): void
+}
+
+class AuthorizationService {
+  + ensureAuthenticatedUserHasAnyOf(roles: Role): void
+  + session(): String
+}
+
+
+class FormateMessage {
+  +FormateMessage(version,code,message)
+}
+
+class PersistenceContext {
+  + repositories(): RepositoryFactory
+}
+interface RepositoryFactory {
+  + sharedBoardRepository(): SharedBoardRepository
+  + cellRepository(): CellRepository
+}
+
+interface CellRepository {
+  + findBoardCells(board: SharedBoard): Permission
+}
+class JPACellRepository {
+  + findBoardCells(board: SharedBoard): Permission
+}
+
+interface SharedBoardRepository {
+  + getBoardWithTitle(boardTitle: String): Board
+}
+class JPASharedBoardRepository {
+  + getBoardWithTitle(boardTitle: String): Board
+}
+class HttpServerBoard{
++start(): void
++getBoardTitlesHTML(): String
++boardCells(): String
+}
+class HttpsBoardRequest{
++run(): void
+}
+class GetSharedBoardApp{
++getRowTitles(): List<String>
++getSharedBoardTitle(): String
++getColumnTitles(): List<String>
++getCellContent(title :String, column:String):String
+}
+HttpServerBoard --> HttpsBoardRequest
+HttpServerBoard--> GetSharedBoardApp
+ShowSharedBoardUI-->HttpServerBoard
+ShowSharedBoardUI-->ClientHandler
+ShowSharedBoardUI-->RcompService
+ClientHandler-->ShowSharedBoardController
+ClientHandler-->RcompService
+ClientHandler-->FormateMessage
+RcompService-->FormateMessage:uses
+ShowSharedBoardController--> PersistenceContext
+ShowSharedBoardController-->SharedBoardService
+SharedBoardService--> PersistenceContext
+PersistenceContext-->RepositoryFactory
+RepositoryFactory-->SharedBoardRepository
+RepositoryFactory-->CellRepository
+SharedBoardService-->AuthorizationService
+JPACellRepository-up-|>CellRepository
+JPASharedBoardRepository-up-|>SharedBoardRepository
+@enduml
+

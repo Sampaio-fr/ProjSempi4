@@ -1,0 +1,22 @@
+@startuml
+
+autonumber
+actor "Student" as usr
+
+participant ":System" as sys
+
+
+activate usr
+usr -> sys : starts requesting the enrollment in a course
+
+activate sys
+sys --> usr : list all the courses with open enrollments
+deactivate sys
+usr -> sys : selects the course to enroll
+
+activate sys
+sys --> usr : informs operation success
+deactivate sys
+
+
+@enduml

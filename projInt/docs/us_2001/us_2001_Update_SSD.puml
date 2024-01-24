@@ -1,0 +1,37 @@
+@startuml
+autonumber
+
+actor "Teacher" as Manager
+
+activate Manager
+
+Manager -> ":System" : ask to update exam
+activate ":System"
+":System" --> Manager : shows list of course and asks to select one
+
+deactivate ":System"
+Manager -> ":System" : selects course
+
+
+activate ":System"
+
+":System" --> Manager : shows list of exam and asks to select one
+deactivate ":System"
+
+
+
+Manager -> ":System" : selects exam
+activate ":System"
+
+
+":System" -->Manager : asks for the changes in exam input
+deactivate ":System"
+
+Manager -> ":System" : inputs the exam
+activate ":System"
+
+":System" --> Manager : informs operation success or failure
+deactivate ":System"
+deactivate Manager
+
+@enduml

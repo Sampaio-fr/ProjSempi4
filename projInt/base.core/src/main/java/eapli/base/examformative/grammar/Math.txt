@@ -1,0 +1,43 @@
+:: Math;
+
+:: Math Exam;
+
+//title1;
+
+//description1;
+
+#TRUE/FALSE;
+# 06;
+QUESTION DESCRIPTION;
+
+T UESTION ___{=T;}
+TRUE UESTION ___ {=F;>feedback; } QUESTION ___{=true;>feedback;
+}
+
+
+//title2;
+
+//description1;
+
+#MULTIPLE choice;
+#10;
+
+QUESTION DESCRIPTION;
+{=ANSWER1; >feedback 1;
+=ANSWER2; >feedback2;
+~Answer3;
+>feedback 3;
+}
+
+
+#MULTIPLE CHOICE;
+#2;
+QUESTION DESCRIPTION;
+
+{=ANSWER1;>Feedback answer1;
+    ~ANSWER2;
+>feedback answer2;
+    ~Answer3;
+    >feedback answer3;}
+
+

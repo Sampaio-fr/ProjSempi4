@@ -1,0 +1,8 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+
+
+Manager ---> (As Manager, I want to be able to register, disable/enable, and list users of the system )
+
+@enduml

@@ -1,0 +1,67 @@
+@startuml
+
+title List Future Exams
+
+participant ":User" as usr
+participant ":ListStudenExamsUI" as ui
+participant ":ListStudentExamsController" as ctr
+participant ":ListExamsManagementService" as serv
+participant ":PersistenceContext" as pc
+participant ":RepositoryFactory" as rf
+participant ":StudentRepository" as sr
+participant ":Enrollment" as er
+participant ":Course" as cr
+participant ":Exams" as ex
+
+usr -> ui : show()
+
+activate ui
+ui -> ui : doShow()
+ui -> ctr : listMyExams()
+
+activate ctr
+ctr -> serv : findStudentByEmail()
+
+activate serv
+serv -> pc : repositories()
+
+activate pc
+pc -> rf : studentRepostory()
+
+activate rf
+rf -> sr : get()
+activate sr
+deactivate rf
+deactivate pc
+deactivate serv
+
+sr --> ctr : Student
+deactivate sr
+
+
+ctr -> er : Student.findEnrollments()
+activate er
+er --> ctr : Student Enrollments
+deactivate er
+
+loop
+
+ctr -> cr : Enrollment.getCourse()
+activate cr
+cr --> ctr : Course
+deactivate cr
+
+ctr -> ex : Course.findExamsList()
+activate ex
+ex --> ctr : Course Exams
+deactivate ex
+
+end
+
+ctr --> ui : All Exams List
+deactivate ctr
+
+ui --> usr : Show List
+deactivate ui
+
+@enduml

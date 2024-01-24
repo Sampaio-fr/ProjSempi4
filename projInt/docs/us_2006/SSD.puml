@@ -1,0 +1,17 @@
+@startuml
+
+Actor Teacher
+
+activate Teacher
+Teacher -> System: I want to view grades from course
+activate System
+System --> Teacher: Shows available courses
+deactivate System
+Teacher -> System: Selects the course
+
+activate System
+System --> Teacher: Prints grades details
+deactivate System
+deactivate Teacher
+
+@enduml
